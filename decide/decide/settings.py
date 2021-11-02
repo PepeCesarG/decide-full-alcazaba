@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATICFILES_DIRS=['/home/fraviltor/alcazabaCode/decide-full-alcazaba/decide/catalog/static']
+# STATICFILES_DIRS=['/home/fraviltor/alcazabaCode/decide-full-alcazaba/decide/catalog/static']
+STATICFILES_DIRS= [os.path.join(BASE_DIR,'../catalog/static')]
 
 
 # Application definition
@@ -90,7 +91,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            '/home/fraviltor/alcazabaCode/decide-full-alcazaba/decide/catalog/templates',
+            os.path.join(BASE_DIR,'../catalog/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
