@@ -1,0 +1,126 @@
+{% load static %}
+{% load admin_urls %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <title>Decide</title>
+    <link rel="shortcut icon" href="decidelogo" type="image/x-icon">
+    <link rel="stylesheet" href="{% static '/estilo.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href='#'>Inicio</a>
+            <a href='#'>Acerca de</a>
+            <a href='#'>Portafolio</a>
+            <a href='#'>Servicios</a>
+            <a href='#'>Contacto</a>
+        </nav>
+        <section class="textos-header">
+            <h1>Vota en Decide</h1>
+
+            <div class="wave" style="height: 150px;overflow:hidden"><svg viewBox="0 0 500 150" preserveAspectRatio="none" 
+                style="height:100%;width: 100%;"><path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00, 49.98 
+                L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill:#fff;"></path></svg></div>
+        </section>
+    </header>
+    <main>
+        <section class="portafolio">
+            <div class="contenedor">
+                <h2 class="titulo">Redirección a los módulos</h2>
+                <div class="galeria-port">
+                    <div class="imagen-port">
+                        <img src="{% static '/img/admin.png' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/admin" style="color:#fff;">admin/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/doc.webp' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/doc" style="color:#fff;">doc/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/gateway.jpeg' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/gateway" style="color:#fff;">gateway/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/auth.jpg' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/authentication" style="color:#fff;">authentication/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/base.webp' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/base" style="color:#fff;">base/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/booth.jpg' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/booth" style="color:#fff;">booth/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/imgcenso.webp' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/census" style="color:#fff;">census/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/mixnet.png' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/mixnet" style="color:#fff;">mixnet/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/postproc.png' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/postproc" style="color:#fff;">postproc/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/store.png' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/store" style="color:#fff;">store/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/visualizer.jpg' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/visualizer" style="color:#fff;">visualizer/</a>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static '/img/voting.jpg' %}" alt="">
+                        <div class="hover-galeria">
+                            <img src="{% static '/img/icono1.png' %}" alt="">
+                            <a href="/voting" style="color:#fff;">voting/</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
