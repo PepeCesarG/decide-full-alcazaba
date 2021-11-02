@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,6 +26,8 @@ SECRET_KEY = '^##ydkswfu0+=ofw0l#$kv^8n)0$i(qd&d&ol#p9!b$8*5%j1+'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+STATICFILES_DIRS=['/home/fraviltor/alcazabaCode/decide-full-alcazaba/decide/catalog/static']
 
 
 # Application definition
@@ -87,7 +89,9 @@ ROOT_URLCONF = 'decide.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            '/home/fraviltor/alcazabaCode/decide-full-alcazaba/decide/catalog/templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
