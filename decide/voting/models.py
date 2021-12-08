@@ -8,9 +8,15 @@ from base.models import Auth, Key
 
 
 class Question(models.Model):
-    desc = models.TextField()
+    TYPES = [
+        ('O', 'Options'),
+        ('B', 'Binary')
+    ]
 
-    def __str__(self):
+    desc = models.TextField()
+    type = models.CharField(max_length=1, choices=TYPES, default='O')  
+    
+    def __str__(self): 
         return self.desc
 
 
