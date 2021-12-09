@@ -44,8 +44,17 @@ class CensusDetail(generics.RetrieveDestroyAPIView):
 
     def retrieve(self, request, voting_id, *args, **kwargs):
         voter = request.GET.get('voter_id')
-        try:
-            Census.objects.get(voting_id=voting_id, voter_id=voter)
-        except ObjectDoesNotExist:
-            return Response('Invalid voter', status=ST_401)
-        return Response('Valid voter')
+        print("La votacion es " + str(voting_id) + " y el votante es " + voter)
+        censuss = Census.objects.all()
+        for c in censuss:
+            print("Se esta mirando el censo " + c.name)
+            voters = c.voter_ids.all()
+            votings = c.voting_ids.all()
+            print("Los votantes permitidos son " + str(voters))
+            print("Las votaciones que incluye son " + str(votings))            
+                
+            if(any(person.id == int(voter) for person in voters) and any(voting.id == voting_id for voting in votings)):
+                print("El votante es valido")
+                return Response('Valid voter')
+            else:
+                return Response('Invalid voter', status=ST_401)
