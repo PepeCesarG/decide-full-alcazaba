@@ -18,27 +18,31 @@ class CensusCreate(generics.ListCreateAPIView):
     permission_classes = (UserIsStaff,)
 
     def create(self, request, *args, **kwargs):
-        voting_id = request.data.get('voting_id')
+        name = request.data.get('name')
+        votings = request.data.get('votings')
         voters = request.data.get('voters')
         try:
+            census = Census(name = name)
+            census.save()
+            for voting in votings:
+                census.votings_id.add(voting)
             for voter in voters:
-                census = Census(voting_id=voting_id, voter_id=voter)
-                census.save()
+                census.voters_id.add(voter)
         except IntegrityError:
             return Response('Error try to create census', status=ST_409)
         return Response('Census created', status=ST_201)
 
     def list(self, request, *args, **kwargs):
         voting_id = request.GET.get('voting_id')
-        voters = Census.objects.filter(voting_id=voting_id).values_list('voter_id', flat=True)
+        voters = Census.objects.filter(votings_id__id=voting_id).values_list('voters_id', flat=True)
         return Response({'voters': voters})
 
 
 class CensusDetail(generics.RetrieveDestroyAPIView):
 
     def destroy(self, request, voting_id, *args, **kwargs):
-        voters = request.data.get('voters')
-        census = Census.objects.filter(voting_id=voting_id, voter_id__in=voters)
+        name = request.data.get('name')
+        census = Census.objects.filter(name=name)
         census.delete()
         return Response('Voters deleted from census', status=ST_204)
 
