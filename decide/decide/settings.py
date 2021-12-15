@@ -70,12 +70,19 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-full-alcazaba-main.herokuapp.com/'
+BASEURL = 'https://decide-full-alcazaba-main.herokuapp.com'
 
-APIS = {...}
-
-import django_heroku
-django_heroku.settings(locals())
+APIS = {
+    'authentication': BASEURL,
+    'base': BASEURL,
+    'booth': BASEURL,
+    'census': BASEURL,
+    'mixnet': BASEURL,
+    'postproc': BASEURL,
+    'store': BASEURL,
+    'visualizer': BASEURL,
+    'voting': BASEURL
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -185,3 +192,6 @@ if os.path.exists("config.jsonnet"):
 
 
 INSTALLED_APPS = INSTALLED_APPS + MODULES
+
+import django_heroku
+django_heroku.settings(locals())
