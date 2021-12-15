@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+*/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -52,8 +53,7 @@ coverage.xml
 
 # Django stuff:
 *.log
-local_settings.py
-
+decide/local_settings.py
 # Flask stuff:
 instance/
 .webassets-cache
