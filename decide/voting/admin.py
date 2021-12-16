@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.utils import timezone
 from django import forms
 
+import logging, sys
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
 from .models import QuestionOption
 from .models import Question
 from .models import Voting
@@ -10,6 +13,7 @@ from census.models import Census
 from .filters import StartedFilter
 
 PROVINCIAS = [
+    ('', 'Seleccionar provincia...'),
     ('Alava', 'Álava'),
     ('Albacete', 'Albacete'),
     ('Alicante', 'Alicante'),
@@ -93,18 +97,8 @@ class VotingAdminForm(forms.ModelForm):
         model = Voting
         fields = "__all__"
         
-    location = forms.ChoiceField(widget=forms.Select, choices=PROVINCIAS)
+    location = forms.ChoiceField(widget=forms.Select, choices=PROVINCIAS, required=False)
     
-    def insert_in_census(self):
-        if self.cleaned_data["location"] == "":
-            print("No se ha seleccionado provincia")
-            return
-        else:
-            print("Se ha seleccionado la provincia de " + self.cleaned_data["location"])
-            censo = Census.objects.get(name=self.cleaned_data["location"])
-            return
-    
-
 
 class VotingAdmin(admin.ModelAdmin):
     list_display = ('name', 'start_date', 'end_date')
@@ -117,6 +111,26 @@ class VotingAdmin(admin.ModelAdmin):
     actions = [ start, stop, tally ]
     
     form = VotingAdminForm
+    
+    def save_related(self, request, form, formsets, change):
+        location = request.POST.get("location")
+        logging.debug(location)
+        if location == '':
+            logging.debug("No se ha seleccionado provincia")
+        else:
+            logging.debug("Se ha seleccionado la provincia de " + location)
+            name = request.POST.get("name")
+            voting = Voting.objects.get(name=name)
+            try:
+                censo = Census.objects.get(name=location)
+                censo.voting_ids.add(voting)
+                censo.save()
+            except:
+                censo = Census(name = location)
+                censo.save()
+                censo.voting_ids.add(voting)
+                censo.save()
+        super(VotingAdmin, self).save_related(request, form, formsets, change)
 
 
 admin.site.register(Voting, VotingAdmin)
