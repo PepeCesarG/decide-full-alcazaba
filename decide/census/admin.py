@@ -1,10 +1,14 @@
-from django.contrib import admin
+import csv
+from io import StringIO
+
 from django import forms
+from django.contrib import admin, messages
+from django.db import transaction
+from django.shortcuts import redirect, render
 from django.urls import path
-from django.shortcuts import render, redirect
 
 from .models import Census
-import csv
+
 
 class CsvImportForm(forms.Form):
     csv_file = forms.FileField()
@@ -24,14 +28,32 @@ class CensusAdmin(admin.ModelAdmin):
     def import_csv(self, request):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
-            reader = csv.reader(csv_file)
+            csvf = StringIO(csv_file.read().decode())
+            reader = csv.reader(csvf, delimiter=',')
+            try:
+                with transaction.atomic():
+                    for row in reader:
+                        name = row[0]
+                        voting_ids = row[1].split(" ")
+                        voter_ids = row[2].split(" ")
 
-            census = Census(name="csv-test") #TODO: CSV parsing (this line is temporal)
-            census.save()
+                        census = Census(name=name)
+                        census.save()
 
-            self.message_user(request, "Your csv file has been imported")
-            return redirect("..")
+                        for id in voting_ids:
+                            census.voting_ids.add(id)
 
+                        for id in voter_ids:
+                            census.voter_ids.add(id)
+                    
+                self.message_user(request, "Your csv file has been imported successfully")
+                return redirect("..")
+
+            except Exception as e:
+                print(e)
+                self.message_user(request, "Your csv file could not be imported",  level=messages.ERROR)
+                return redirect(".")
+        
         form = CsvImportForm()
         payload = {"form": form}
         return render(request, "csv_form.html", payload)
