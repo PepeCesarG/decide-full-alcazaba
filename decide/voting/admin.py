@@ -114,7 +114,6 @@ class VotingAdmin(admin.ModelAdmin):
     
     def save_related(self, request, form, formsets, change):
         location = request.POST.get("location")
-        logging.debug(location)
         if location == '':
             logging.debug("No se ha seleccionado provincia")
         else:

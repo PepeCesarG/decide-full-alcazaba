@@ -82,6 +82,11 @@ class VotingTestCase(BaseTestCase):
                 voter = voters.pop()
                 mods.post('store', json=data)
         return clear
+    
+    def add_location(self, v):
+        v.location = "Sevilla"
+        v.save()
+        return v
 
     def test_complete_voting(self):
         v = self.create_voting()
@@ -208,3 +213,32 @@ class VotingTestCase(BaseTestCase):
         response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), 'Voting already tallied')
+    
+    def test_create_voting_with_location(self):
+        data = {'name': 'Example with location'}
+        response = self.client.post('/voting/', data, format='json')
+        self.assertEqual(response.status_code, 401)
+
+        # login with user no admin
+        self.login(user='noadmin')
+        response = mods.post('voting', params=data, response=True)
+        self.assertEqual(response.status_code, 403)
+
+        # login with user admin
+        self.login()
+        response = mods.post('voting', params=data, response=True)
+        self.assertEqual(response.status_code, 400)
+
+        data = {
+            'name': 'Example',
+            'desc': 'Description example',
+            'question': 'I want a ',
+            'question_opt': ['cat', 'dog', 'horse'],
+            'location': 'Sevilla'
+        }
+
+        response = self.client.post('/voting/', data, format='json')
+        self.assertEqual(response.status_code, 201)
+        census = Census(name='Sevilla')
+        census.voting_ids.add(Voting.objects.get(name='Example'))
+        self.assertEqual(census, Census.objects.get(name='Sevilla'))
