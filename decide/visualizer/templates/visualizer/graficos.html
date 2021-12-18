@@ -34,6 +34,10 @@
                         </div>
                     </div>
 
+                    <br>
+                    <br>
+                    <br>
+
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
@@ -41,6 +45,10 @@
                             </div>
                         </div>
                     </div>
+
+                    <br>
+                    <br>
+                    <br>
 
                 <!-- Gráficas de sectores para votos y puntuaciones-->
 
@@ -51,6 +59,10 @@
                             </div>
                         </div>
                     </div>
+
+                    <br>
+                    <br>
+                    <br>
 
                     <div class="container-fluid">
                         <div class="row">
@@ -66,7 +78,7 @@
                                 type: 'bar'
                             },
                             title: {
-                                text: 'Comparación de votos en gráfico de barras'
+                                text: '<b>Gráfica de votos en gráfico de barras</b>'
                             },
                             xAxis: {
                                 categories: {{opcion|safe}},
@@ -109,7 +121,7 @@
                                 type: 'bar'
                             },
                             title: {
-                                text: 'Comparación de puntuaciones en gráfico de barras'
+                                text: '<b>Gráfica de puntuaciones en gráfico de barras</b>'
                             },
                             xAxis: {
                                 categories: {{opcion|safe}},
@@ -118,7 +130,7 @@
                             yAxis: {
                                 min: 0,
                                 title: {
-                                    text: 'Puntuaciones'
+                                    text: 'Número de Puntuaciones'
                                 }
                             },
                             tooltip: {
@@ -155,7 +167,7 @@
                                 type: 'pie'
                             },
                             title: {
-                                text: 'Comparación de votos en gráfico de sectores'
+                                text: '<b>Gráfica de votos en gráfico de sectores</b>'
                             },
                             tooltip: {
                                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -192,7 +204,7 @@
                                 type: 'pie'
                             },
                             title: {
-                                text: 'Comparación de puntuaciones en gráfico de sectores'
+                                text: '<b>Gráfica de puntuaciones en gráfico de sectores</b>'
                             },
                             tooltip: {
                                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -213,7 +225,7 @@
                                 }
                             },
                             series: [{
-                                name: 'Puntuaciones',
+                                name: 'Puntuación',
                                 colorByPoint: true,
                                 data: {{dataPuntuaciones|safe}}
                             }]
