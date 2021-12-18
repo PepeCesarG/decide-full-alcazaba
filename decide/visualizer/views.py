@@ -29,7 +29,7 @@ class VisualizerView(TemplateView):
 
 
 class VisualizerView2(TemplateView):
-    template_name = 'visualizer/visualizer.html'
+    template_name = 'visualizer/graficos.html'
 
     def grafica_votos(self, id):
 
