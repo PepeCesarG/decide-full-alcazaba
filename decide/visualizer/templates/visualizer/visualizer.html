@@ -47,6 +47,8 @@
                     </tbody>
                 </table>
 
+                <!-- Gráficas de barras para votos y puntuaciones-->
+
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
@@ -59,6 +61,16 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div id="container2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- Gráficas de sectores para votos y puntuaciones-->
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="container3"></div>
                             </div>
                         </div>
                     </div>
@@ -145,6 +157,43 @@
                                 colorByPoint: true,
                                 data: {{puntuacion|safe}}
 
+                            }]
+                        });
+                    </script>
+
+                    <script type="application/javascript">
+                        Highcharts.chart('container3', {
+                            chart: {
+                                plotBackgroundColor: null,
+                                plotBorderWidth: null,
+                                plotShadow: false,
+                                type: 'pie'
+                            },
+                            title: {
+                                text: 'Comparación de votos en gráfico de sectores'
+                            },
+                            tooltip: {
+                                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                            },
+                            accessibility: {
+                                point: {
+                                    valueSuffix: '%'
+                                }
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: true,
+                                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                                    }
+                                }
+                            },
+                            series: [{
+                                name: 'Votos',
+                                colorByPoint: true,
+                                data: {{dataVotos|safe}}
                             }]
                         });
                     </script>
