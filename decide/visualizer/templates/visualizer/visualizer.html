@@ -75,6 +75,14 @@
                         </div>
                     </div>
 
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="container4"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <script type="application/javascript">
                         Highcharts.chart('container', {
                             chart: {
@@ -194,6 +202,43 @@
                                 name: 'Votos',
                                 colorByPoint: true,
                                 data: {{dataVotos|safe}}
+                            }]
+                        });
+                    </script>
+
+                    <script type="application/javascript">
+                        Highcharts.chart('container4', {
+                            chart: {
+                                plotBackgroundColor: null,
+                                plotBorderWidth: null,
+                                plotShadow: false,
+                                type: 'pie'
+                            },
+                            title: {
+                                text: 'Comparación de puntuaciones en gráfico de sectores'
+                            },
+                            tooltip: {
+                                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                            },
+                            accessibility: {
+                                point: {
+                                    valueSuffix: '%'
+                                }
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: true,
+                                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                                    }
+                                }
+                            },
+                            series: [{
+                                name: 'Puntuaciones',
+                                colorByPoint: true,
+                                data: {{dataPuntuaciones|safe}}
                             }]
                         });
                     </script>
