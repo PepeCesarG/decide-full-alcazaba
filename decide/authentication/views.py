@@ -17,11 +17,23 @@ from .serializers import UserSerializer
 
 class GetUserView(APIView):
     def post(self, request):
-        key = request.data.get('token', '')
-        tk = get_object_or_404(Token, key=key)
+        
+        if(request.data.get('token')!=None):
+            key = request.data.get('token', '')
+            tk = get_object_or_404(Token, key=key)
+        
+        else:
+            if request.user.is_authenticated:
+                user = request.user
+        
         return Response(UserSerializer(tk.user, many=False).data)
 
-
+class ProfileView(TemplateView):
+    template_name="profile.html"
+    def get_context_data(self):
+        context=super().get_context_data()
+        return context
+        
 class LogoutView(APIView):
     def post(self, request):
         key = request.data.get('token', '')
