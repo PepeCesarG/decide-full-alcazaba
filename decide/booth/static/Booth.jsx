@@ -21,6 +21,13 @@ class Booth extends React.Component {
         y: BigInt.fromJSONObject(this.props.voting.pub_key.y.toString()),
       },
     };
+    this.onSelect = this.onSelect.bind(this);
+    this.onUsernameChange = this.onUsernameChange.bind(this);
+    this.onPasswordChange = this.onPasswordChange.bind(this);
+    this.decideSend = this.decideSend.bind(this);
+    this.onSubmitLogin = this.onSubmitLogin.bind(this);
+    this.onClickAlert = this.onClickAlert.bind(this);
+    this.decideLogout = this.decideLogout.bind(this);
   }
 
   componentDidMount() {
@@ -61,10 +68,101 @@ class Booth extends React.Component {
     });
   }
 
+  onSubmitLogin(e) {
+    e.preventDefault();
+    this.postData("/gateway/authentication/login/", this.state.form)
+      .then((data) => {
+        document.cookie = "decide=" + data.token + ";";
+        this.setState({ token: data.token }, () => this.getUser());
+      })
+      .catch((error) => {
+        this.showAlert("danger", "Error: " + error);
+      });
+  }
+
+  decideLogout(e) {
+    e.preventDefault();
+    var data = { token: this.state.token };
+    this.postData("/gateway/authentication/logout/", data);
+    this.setState({ token: null });
+    this.setState({ user: null });
+    document.cookie = "decide=;";
+    this.setState({ signup: true });
+  }
+
+  getUser(e) {
+    var data = { token: this.state.token };
+    this.postData("/gateway/authentication/getuser/", data)
+      .then((data) => {
+        this.setState({ user: data });
+        this.setState({ signup: false });
+      })
+      .catch((error) => {
+        this.showAlert("danger", "Error: " + error);
+      });
+  }
+
   decideEncrypt() {
     var bigmsg = BigInt.fromJSONObject(this.state.selected.toString());
     var cipher = ElGamal.encrypt(this.state.bigpk, bigmsg);
     return cipher;
+  }
+
+  decideSend(e) {
+    e.preventDefault();
+    var v = this.decideEncrypt();
+    var data = {
+      vote: { a: v.alpha.toString(), b: v.beta.toString() },
+      voting: this.state.voting.id,
+      voter: this.state.user.id,
+      token: this.state.token,
+    };
+    this.postData("/gateway/store/", data)
+      .then((data) => {
+        this.showAlert("success", "Conglatulations. Your vote has been sent");
+      })
+      .catch((error) => {
+        this.showAlert("danger", "Error: " + error);
+      });
+  }
+
+  showAlert(lvl, msg) {
+    this.setState({ alertLvl: lvl });
+    this.setState({ alertMsg: msg });
+    this.setState({ alertShow: true });
+  }
+
+  onSelect(e) {
+    this.setState({ selected: e.target.value });
+  }
+
+  onUsernameChange(e) {
+    this.setState((state) => ({
+      form: { username: e.target.value, password: state.form.password },
+    }));
+  }
+
+  onPasswordChange(e) {
+    this.setState((state) => ({
+      form: { username: state.form.username, password: e.target.value },
+    }));
+  }
+
+  onClickAlert(e) {
+    this.setState({ alertShow: false });
+  }
+
+  Navbar(props) {
+    return (
+      <div className="navbar">
+        <h1>Decide</h1>
+        {!this.state.signup && (
+          <a href="#" onClick={this.decideLogout}>
+            logout
+          </a>
+        )}
+      </div>
+    );
   }
 
   LoginForm(props) {
@@ -88,6 +186,33 @@ class Booth extends React.Component {
           />
           <button type="submit">Login</button>
         </form>
+      </div>
+    );
+  }
+
+  VotingForm(props) {
+    return (
+      <div id="votingForm">
+        <h2>{this.state.voting.question.desc}</h2>
+        <form>
+          {this.state.voting.question.options.map((opt) => (
+            <div className="radio" key={opt.number}>
+              <label>
+                <input
+                  type="radio"
+                  id={"q" + opt.number}
+                  name={this.state.voting.question}
+                  value={opt.number}
+                  onChange={this.onSelect}
+                />
+                {opt.option}
+              </label>
+            </div>
+          ))}
+        </form>
+        <button type="button" onClick={this.decideSend}>
+          Vote
+        </button>
       </div>
     );
   }
