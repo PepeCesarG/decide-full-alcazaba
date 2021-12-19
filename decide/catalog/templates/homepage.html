@@ -1,5 +1,6 @@
 {% load static %}
 {% load admin_urls %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -15,14 +16,13 @@
 <body>
     <header>
         <nav>
-            <a href='#'>Inicio</a>
-            <a href='#'>Acerca de</a>
-            <a href='#'>Portafolio</a>
-            <a href='#'>Servicios</a>
-            <a href='#'>Contacto</a>
+            <a href='#'>{% trans 'Home' %}</a>
+            <a href='#'>{% trans 'Portfolio' %}</a>
+            <a href='#'>{% trans "Services" %}</a>
+            <a href='#'>{% trans "Contact" %}</a>
         </nav>
         <section class="textos-header">
-            <h1>Vota en Decide</h1>
+            <h1>{% trans "Voting in Decide" %}</h1>
 
             <div class="wave" style="height: 150px;overflow:hidden"><svg viewBox="0 0 500 150" preserveAspectRatio="none" 
                 style="height:100%;width: 100%;"><path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00, 49.98 
@@ -32,7 +32,7 @@
     <main>
         <section class="portafolio">
             <div class="contenedor">
-                <h2 class="titulo">Redirección a los módulos</h2>
+                <h2 class="titulo">{% trans "Redirection to modules" %}</h2>
                 <div class="galeria-port">
                     <div class="imagen-port">
                         <img src="{% static '/img/admin.png' %}" alt="">
