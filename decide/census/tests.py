@@ -11,6 +11,10 @@ from django.contrib.auth.models import User
 from base import mods
 from base.tests import BaseTestCase
 
+from .admin import CensusAdmin
+
+import os
+
 
 class CensusTestCase(BaseTestCase):
     
@@ -28,6 +32,9 @@ class CensusTestCase(BaseTestCase):
         self.voter = None
         
     def create_voting(self):
+        return self.create_voting_by_id(1)
+
+    def create_voting_by_id(self, pk):
         q = Question(desc='test question')
         q.save()
         for i in range(5):
@@ -40,14 +47,14 @@ class CensusTestCase(BaseTestCase):
                                           defaults={'me': True, 'name': 'test auth'})
         a.save()
         v.auths.add(a)
-        v.id = 1
+        v.id = pk
         return v
     
     def get_or_create_user(self, pk):
         user, _ = User.objects.get_or_create(pk=pk)
         user.username = 'user{}'.format(pk)
         user.set_password('qwerty')
-        user.id = 1
+        user.id = pk
         user.save()
         return user
     
@@ -123,3 +130,18 @@ class CensusTestCase(BaseTestCase):
         response = self.client.delete('/census/{}/'.format(1), data, format='json')
         self.assertEqual(response.status_code, 204)
         self.assertEqual(0, Census.objects.count())
+    '''
+    def test_csv_import_success(self):
+        self.login()
+        for i in range(1,5):
+            self.create_voting_by_id(i)
+            self.get_or_create_user(i)
+        with open('./census/test_csv/positive.csv') as f:  
+            data = {
+                "nametest" : "csv_file",
+                "file_data" : f
+            }
+            response = self.client.post('/census/import-csv/', data, format = 'json')
+            print(response.status_code)
+            self.assertEqual(3, Census.objects.count())
+    '''
