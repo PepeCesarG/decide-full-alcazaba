@@ -12,6 +12,9 @@ class Census(models.Model):
     
     def voters(self):
         return "\n".join([p.username for p in self.voter_ids.all()])
+    
+    def __str__(self):
+        return self.name
 
     #class Meta:
         #unique_together = (('voting_ids', 'voter_ids'),)

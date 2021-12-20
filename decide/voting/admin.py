@@ -1,16 +1,20 @@
 from django.contrib import admin
 from django.utils import timezone
 from django import forms
+from census.models import Census
+from django.contrib.auth.models import User
 
+ 
 import logging, sys
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 from .models import QuestionOption
 from .models import Question
 from .models import Voting
-from census.models import Census
 
 from .filters import StartedFilter
+
+import datetime
 
 PROVINCIAS = [
     ('', 'Seleccionar provincia...'),
@@ -84,6 +88,12 @@ def tally(ModelAdmin, request, queryset):
         token = request.session.get('auth-token', '')
         v.tally_votes(token)
 
+def censusName():
+#    Crear nombre único para el censo
+    current_time = datetime.datetime.now()
+    name = 'V'+str(current_time.day)+'/'+str(current_time.month)+'/'+str(current_time.year)+'-'+str(current_time.minute)+str(current_time.second)
+    logging.debug("Census ID: " + name)
+    return name
 
 class QuestionOptionInline(admin.TabularInline):
     model = QuestionOption
@@ -97,7 +107,11 @@ class VotingAdminForm(forms.ModelForm):
         model = Voting
         fields = "__all__"
         
+    incl_census = forms.ModelMultipleChoiceField(queryset=Census.objects.all(), label="Inclusive Census", to_field_name="name")
+    excl_census = forms.ModelMultipleChoiceField(queryset=Census.objects.all(), label="Exclusive Census", to_field_name="name", required=False)
+        
     location = forms.ChoiceField(widget=forms.Select, choices=PROVINCIAS, required=False)
+    
     
 
 class VotingAdmin(admin.ModelAdmin):
@@ -113,12 +127,23 @@ class VotingAdmin(admin.ModelAdmin):
     form = VotingAdminForm
     
     def save_related(self, request, form, formsets, change):
+        voting_id = form.instance.id
+        logging.debug("Voting ID: "+ str(voting_id))
+        
         location = request.POST.get("location")
+        name = request.POST.get("name")
+        
+        excl_censuses = request.POST.getlist("excl_census")
+        excl_voters = []
+        incl_censuses = request.POST.getlist("incl_census")
+        incl_voters = []
+#        Censo final con las personas que pueden votar
+        final_census = Census.objects.create(name=censusName())
+        
         if location == '':
             logging.debug("No se ha seleccionado provincia")
         else:
             logging.debug("Se ha seleccionado la provincia de " + location)
-            name = request.POST.get("name")
             voting = Voting.objects.get(name=name)
             try:
                 censo = Census.objects.get(name=location)
@@ -129,6 +154,35 @@ class VotingAdmin(admin.ModelAdmin):
                 censo.save()
                 censo.voting_ids.add(voting)
                 censo.save()
+#           añadir el censo de localidad a la lista de censos inclusivos
+            incl_censuses.add(censo)
+#       votantes de los censos inclusivos
+        logging.debug("Añadiendo censos inclusivos")
+        for census in incl_censuses:
+            census = Census.objects.get(name=census)
+            logging.debug("Censo: " + str(census))
+            incl_voters += census.voter_ids.all()
+        incl_voters = set(incl_voters)
+#        votantes de los censos exclusivos
+        logging.debug("Añadiendo censos exclusivos")
+        for census in excl_censuses:
+            census = Census.objects.get(name=census)
+            logging.debug("Censo: " + str(census))
+            excl_voters += census.voter_ids.all()
+        excl_voters = set(excl_voters)
+        
+        voters = list(incl_voters)
+        for voter in excl_voters:
+            if voter in voters:
+                voters.remove(voter)
+        
+#        añadimos las relaciones con voting y voters al censo final
+        for voter in voters:
+            voter = User.objects.get(username=voter)
+            final_census.voter_ids.add(voter)
+        final_census.voting_ids.add(Voting.objects.get(id=voting_id))
+        final_census.save()
+        
         super(VotingAdmin, self).save_related(request, form, formsets, change)
 
 
