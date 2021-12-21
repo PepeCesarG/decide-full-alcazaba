@@ -10,7 +10,6 @@ class Migration(migrations.Migration):
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('voting', '0003_auto_20180605_0842'),
         ('census', '0001_initial'),
-        ('voter',  '0003_voter'),
     ]
 
     operations = [
