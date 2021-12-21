@@ -7,7 +7,7 @@ from django.db import transaction
 from django.shortcuts import redirect, render
 from django.urls import path
 
-from .models import Census
+from .models import Census,Voter
 
 
 class CsvImportForm(forms.Form):
@@ -48,7 +48,6 @@ class CensusAdmin(admin.ModelAdmin):
                     
                 self.message_user(request, "Your csv file has been imported successfully")
                 return redirect("..")
-
             except Exception as e:
                 print(e)
                 self.message_user(request, "Your csv file could not be imported",  level=messages.ERROR)
@@ -58,4 +57,8 @@ class CensusAdmin(admin.ModelAdmin):
         payload = {"form": form}
         return render(request, "csv_form.html", payload)
 
+class VoterAdmin(admin.ModelAdmin):
+    list_display = ('user','location','edad','genero')
+    
 admin.site.register(Census, CensusAdmin)
+admin.site.register(Voter, VoterAdmin)
