@@ -8,9 +8,15 @@ from base.models import Auth, Key
 
 
 class Question(models.Model):
-    desc = models.TextField()
+    TYPES = [
+        ('O', 'Options'),
+        ('B', 'Binary')
+    ]
 
-    def __str__(self):
+    desc = models.TextField()
+    type = models.CharField(max_length=1, choices=TYPES, default='O')  
+    
+    def __str__(self): 
         return self.desc
 
 
@@ -41,6 +47,8 @@ class Voting(models.Model):
 
     tally = JSONField(blank=True, null=True)
     postproc = JSONField(blank=True, null=True)
+    
+    location = models.TextField(blank=True, null=True)
 
     def create_pubkey(self):
         if self.pub_key or not self.auths.count():
