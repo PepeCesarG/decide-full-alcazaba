@@ -7,9 +7,33 @@
     <link type="text/css" rel="stylesheet"
          href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
     <link type="text/css" rel="stylesheet" href="{% static "booth/style.css" %}" />
+
 {% endblock %}
 
 {% block content %}
+
+    <div class="switch">
+
+        <ul>
+            <li>
+                <span>Dark</span>
+                <span>Light</span>
+
+            </li>
+        </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('ul').click(function(){
+                $('ul').toggleClass('active')
+                $('body').toggleClass('dark')
+                $('button').toggleClass('dark')
+        })
+        })
+    </script>
+
     <div id="app-visualizer">
         <!-- Navbar -->
         <b-navbar type="dark" variant="secondary">
@@ -24,23 +48,22 @@
             <div v-else>
                 <h2 class="heading">Resultados:</h2>
 
-                <table class="table table-bordered table-striped">
+                <table class="table table-algo">
                     <thead>
-                        <tr>
-                            <th>Opción</th>
+                        <tr class="text-muted">
+                            <th> Opción</th>
                             <th>Puntuación</th>
                             <th>Votos</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="opt in voting.postproc" :key="opt.number">
-                            <th>[[opt.option]]</th>
-                            <td>[[opt.postproc]]</td>
+                            <th class="text-muted">[[opt.option]]</th>
+                            <td class="text-muted">[[opt.postproc]]</td>
                             <td class="text-muted">[[opt.votes]]</td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
 
         </div>
     </div>
