@@ -19,15 +19,25 @@ class Question(models.Model):
     def __str__(self): 
         return self.desc
 
+@receiver(post_save, sender=Question)
+def my_handler(sender, instance, **kwargs):
+    if instance.tipo == 'B':
+        instance.options.all().delete()
+        instance.options.create(option='Yes')
+        instance.options.create(option='No')
+
 
 class QuestionOption(models.Model):
     question = models.ForeignKey(Question, related_name='options', on_delete=models.CASCADE)
     number = models.PositiveIntegerField(blank=True, null=True)
     option = models.TextField()
-    def save(self):
+    def save(self, *args, **kwargs):
+        if self.question.tipo == 'B' and self.option != 'Yes' and self.option != 'No':
+            return
+        
         if not self.number:
             self.number = self.question.options.count() + 2
-            return super().save()
+            return super().save(*args, **kwargs)
 
     def __str__(self):
         return '{} ({})'.format(self.option, self.number)
