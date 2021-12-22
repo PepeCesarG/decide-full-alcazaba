@@ -1,6 +1,6 @@
 console.log('Hola')
 
-var select = document.getElementById("id_type");
+var select = document.getElementById("id_tipo");
 var options = document.getElementById("options-group");
 
 select.addEventListener('change',(e)=>{

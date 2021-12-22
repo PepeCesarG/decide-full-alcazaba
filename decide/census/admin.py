@@ -7,7 +7,10 @@ from django.db import transaction
 from django.shortcuts import redirect, render
 from django.urls import path
 from django.http import HttpResponse
+from django.contrib.auth.models import User
 
+from .models import Census
+from voting.models import Voting
 import logging, sys
 
 from voting.models import Voting
@@ -96,25 +99,31 @@ class CensusAdmin(admin.ModelAdmin, ExportCsv):
             reader = csv.reader(csvf, delimiter=',')
             try:
                 with transaction.atomic():
+                    next(reader)
                     for row in reader:
-                        name = row[0]
-                        voting_ids = row[1].split(" ")
-                        voter_ids = row[2].split(" ")
+                        name = row[1]
+                        votings = row[2][1:-1].split(":")
+                        voters = row[3][1:-1].split(":")
 
                         census = Census(name=name)
                         census.save()
 
-                        for id in voting_ids:
-                            census.voting_ids.add(id)
+                        for nombre in votings:
+                            voting = Voting.objects.filter(name = nombre).first()
+                            if (voting):
+                                census.voting_ids.add(voting)
 
-                        for id in voter_ids:
-                            census.voter_ids.add(id)
+                        for nombre in voters:
+                            user = User.objects.filter(username = nombre).first()
+                            voter = Voter.objects.filter(user = user).first()
+                            if (voter):
+                                census.voter_ids.add(voter)
                     
                 self.message_user(request, "Your csv file has been imported successfully")
                 return redirect("..")
             except Exception as e:
                 print(e)
-                self.message_user(request, "Your csv file could not be imported",  level=messages.ERROR)
+                self.message_user(request, "Your csv file could not be imported", level = messages.ERROR)
                 return redirect(".")
         
         form = CsvImportForm()
