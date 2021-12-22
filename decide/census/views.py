@@ -48,7 +48,7 @@ class CensusDetail(generics.RetrieveDestroyAPIView):
         return Response('Voters deleted from census', status=ST_204)
 
     def retrieve(self, request, voting_id, *args, **kwargs):
-        voter = request.GET.get('voter_id')
+        voter = request.GET.get('id')
         print("La votacion es " + str(voting_id) + " y el votante es " + voter)
         censuss = Census.objects.all()
         for c in censuss:
