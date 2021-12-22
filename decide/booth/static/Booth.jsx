@@ -241,4 +241,3 @@ class Booth extends React.Component {
     );
   }
 }
-
