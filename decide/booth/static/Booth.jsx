@@ -191,55 +191,30 @@ class Booth extends React.Component {
   }
 
   VotingForm(props) {
-    if(this.state.voting.question.options.length > 0) {
-      return (
-        <div id="votingForm">
-          <h2>{this.state.voting.question.desc}</h2>
-          <form>
-            {this.state.voting.question.options.map((opt) => (
-              <div className="radio" key={opt.number}>
-                <label>
-                  <input
-                    type="radio"
-                    id={"q" + opt.number}
-                    name={this.state.voting.question}
-                    value={opt.number}
-                    onChange={this.onSelect}
-                  />
-                  {opt.option}
-                </label>
-              </div>
-            ))}
-          </form>
-          <button type="button" onClick={this.decideSend}>
-            Vote
-          </button>
-        </div>
-      );
-    } else {
-      return (
-        <div id="votingForm">
-          <h2>{this.state.voting.question.desc}</h2>
-          <form>
-            <div className="radio" key="2">
+    return (
+      <div id="votingForm">
+        <h2>{this.state.voting.question.desc}</h2>
+        <form>
+          {this.state.voting.question.options.map((opt) => (
+            <div className="radio" key={opt.number}>
               <label>
-                <input type="radio" id="q2" name="Si" value="2"/>Si
+                <input
+                  type="radio"
+                  id={"q" + opt.number}
+                  name={this.state.voting.question}
+                  value={opt.number}
+                  onChange={this.onSelect}
+                />
+                {opt.option}
               </label>
             </div>
-
-            <div className="radio" key="3">
-              <label>
-                <input type="radio" id="q3" name="No" value="3"/>No
-              </label>
-            </div>
-
-          </form>
-          <button type="button" onClick={this.decideSend}>
-            Vote
-          </button>
-        </div>
-      );
-    }
+          ))}
+        </form>
+        <button type="button" onClick={this.decideSend}>
+          Vote
+        </button>
+      </div>
+    );
   }
 
   render() {
@@ -266,4 +241,3 @@ class Booth extends React.Component {
     );
   }
 }
-
