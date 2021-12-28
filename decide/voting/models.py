@@ -8,25 +8,39 @@ from base.models import Auth, Key
 
 
 class Question(models.Model):
-    desc = models.TextField()
+    TYPES = [
+        ('O', 'Options'),
+        ('B', 'Binary')
+    ]
 
-    def __str__(self):
+    desc = models.TextField()
+    tipo = models.CharField(max_length=1, choices=TYPES, default='O')  
+    
+    def __str__(self): 
         return self.desc
+
+@receiver(post_save, sender=Question)
+def my_handler(sender, instance, **kwargs):
+    if instance.tipo == 'B':
+        instance.options.all().delete()
+        instance.options.create(option='Yes')
+        instance.options.create(option='No')
 
 
 class QuestionOption(models.Model):
     question = models.ForeignKey(Question, related_name='options', on_delete=models.CASCADE)
     number = models.PositiveIntegerField(blank=True, null=True)
     option = models.TextField()
-
-    def save(self):
+    def save(self, *args, **kwargs):
+        if self.question.tipo == 'B' and self.option != 'Yes' and self.option != 'No':
+            return
+        
         if not self.number:
             self.number = self.question.options.count() + 2
-        return super().save()
+            return super().save(*args, **kwargs)
 
     def __str__(self):
         return '{} ({})'.format(self.option, self.number)
-
 
 class Voting(models.Model):
     name = models.CharField(max_length=200)
@@ -69,7 +83,6 @@ class Voting(models.Model):
         '''
         The tally is a shuffle and then a decrypt
         '''
-
         votes = self.get_votes(token)
 
         auth = self.auths.first()
