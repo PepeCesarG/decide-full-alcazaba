@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.test import TestCase
 from rest_framework.test import APIClient
+from django.db import transaction
 
 from .models import Census
 from voting.models import Voting, Question, QuestionOption
@@ -10,6 +11,10 @@ from mixnet.models import Auth
 from django.contrib.auth.models import User
 from base import mods
 from base.tests import BaseTestCase
+
+from .admin import CensusAdmin
+
+import os
 
 
 class CensusTestCase(BaseTestCase):
@@ -28,26 +33,29 @@ class CensusTestCase(BaseTestCase):
         self.voter = None
         
     def create_voting(self):
+        return self.create_voting_by_id(1)
+
+    def create_voting_by_id(self, pk):
         q = Question(desc='test question')
         q.save()
         for i in range(5):
             opt = QuestionOption(question=q, option='option {}'.format(i+1))
             opt.save()
-        v = Voting(name='test voting', question=q)
+        v = Voting(name='test voting {}'.format(pk), question=q)
         v.save()
 
         a, _ = Auth.objects.get_or_create(url=settings.BASEURL,
                                           defaults={'me': True, 'name': 'test auth'})
         a.save()
         v.auths.add(a)
-        v.id = 1
+        v.id = pk
         return v
     
     def get_or_create_user(self, pk):
         user, _ = User.objects.get_or_create(pk=pk)
         user.username = 'user{}'.format(pk)
         user.set_password('qwerty')
-        user.id = 1
+        user.id = pk
         user.save()
         return user
     
@@ -91,7 +99,7 @@ class CensusTestCase(BaseTestCase):
 
     def test_add_new_voters_conflict(self):
         self.create_census()
-        data = {'name': 'prueba creacion', 'votings': [self.voting.id], 'voters': [self.voter.id]}
+        data = {'name': 'test census', 'votings': [self.voting.id], 'voters': [self.voter.id]}
         response = self.client.post('/census/', data, format='json')
         self.assertEqual(response.status_code, 401)
 
@@ -102,9 +110,10 @@ class CensusTestCase(BaseTestCase):
         self.login()
         response = self.client.post('/census/', data, format='json')
         self.assertEqual(response.status_code, 409)
-
-    '''def test_add_new_voters(self):
-        data = {'voting_id': 2, 'voters': [1,2,3,4]}
+    '''
+    def test_add_new_voters(self):
+        self.create_census()
+        data = {'name': 'test census 2', 'votings': [self.voting.id], 'voters': [self.voter.id]}
         response = self.client.post('/census/', data, format='json')
         self.assertEqual(response.status_code, 401)
 
@@ -114,7 +123,7 @@ class CensusTestCase(BaseTestCase):
 
         self.login()
         response = self.client.post('/census/', data, format='json')
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 201) #409
         self.assertEqual(len(data.get('voters')), Census.objects.count() - 1)'''
 
     def test_destroy_voter(self):
@@ -123,3 +132,18 @@ class CensusTestCase(BaseTestCase):
         response = self.client.delete('/census/{}/'.format(1), data, format='json')
         self.assertEqual(response.status_code, 204)
         self.assertEqual(0, Census.objects.count())
+    
+    '''
+    def test_csv_import_success(self):
+        self.login()
+        self.create_census()
+        with open('./census/test_csv/positive.csv') as f:  
+            data = {
+                "nametest" : "csv_file",
+                "file_data" : f
+            }
+            response = self.client.post('/census/import-csv/', data, format = 'json')
+        print("Test Csv: {}".format(response.status_code))
+        with transaction.atomic():
+            self.assertEqual(201, response.status_code) #409'''
+    
