@@ -5,12 +5,12 @@ import logging
 class Voter(models.Model):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    location = models.TextField(max_length = 50, blank = True)
-    edad = models.PositiveIntegerField(blank = True)
-    genero = models.TextField(max_length = 50, blank = True)
+    location = models.TextField(max_length = 50, blank = True, null = True)
+    edad = models.PositiveIntegerField(blank = True, null = True)
+    genero = models.TextField(max_length = 50, blank = True, null = True)
     def __str__(self):
         return self.user.username
-
+ 
 class Census(models.Model):
     name = models.TextField(unique = True, default = "undefined census")
     voting_ids = models.ManyToManyField(Voting)

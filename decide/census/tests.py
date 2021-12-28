@@ -10,8 +10,8 @@ from mixnet.models import Auth
 from django.contrib.auth.models import User
 from base import mods
 from base.tests import BaseTestCase
-
-from .admin import CensusAdmin
+from .models import Voter
+from .admin import CensusAdmin, VoterAdmin
 
 import os
 
@@ -61,7 +61,7 @@ class CensusTestCase(BaseTestCase):
     def create_census(self):
         self.voting = self.create_voting()
         self.voting.save()
-        self.voter, _ = User.objects.get_or_create(username='testvoter{}'.format(1))
+        self.voter, _ = Voter.objects.get_or_create(username='testvoter{}'.format(1))
         self.voter.is_active = True
         self.voter.save()
         self.census = Census(name="test census")
