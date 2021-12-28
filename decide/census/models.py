@@ -20,6 +20,13 @@ class Census(models.Model):
         return "\n".join([p.name for p in self.voting_ids.all()])
 
     def voters(self):
+        return "\n".join([p.username for p in self.voter_ids.all()])
+    
+    def __str__(self):
+        return self.name
+
+
+    def voters(self):
     
         return "\n".join([str(p) for p in self.voter_ids.all()])
         
