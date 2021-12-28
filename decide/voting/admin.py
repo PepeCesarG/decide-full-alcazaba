@@ -107,7 +107,7 @@ class VotingAdminForm(forms.ModelForm):
         model = Voting
         fields = "__all__"
         
-    incl_census = forms.ModelMultipleChoiceField(queryset=Census.objects.all(), label="Inclusive Census", to_field_name="name")
+    incl_census = forms.ModelMultipleChoiceField(queryset=Census.objects.all(), label="Inclusive Census", to_field_name="name", required=False)
     excl_census = forms.ModelMultipleChoiceField(queryset=Census.objects.all(), label="Exclusive Census", to_field_name="name", required=False)
         
     location = forms.ChoiceField(widget=forms.Select, choices=PROVINCIAS, required=False)
@@ -139,6 +139,7 @@ class VotingAdmin(admin.ModelAdmin):
         incl_voters = []
 #        Censo final con las personas que pueden votar
         final_census = Census.objects.create(name=censusName())
+        final_census.save()
         
         if location == '':
             logging.debug("No se ha seleccionado provincia")
@@ -154,19 +155,19 @@ class VotingAdmin(admin.ModelAdmin):
                 censo.save()
                 censo.voting_ids.add(voting)
                 censo.save()
-#           añadir el censo de localidad a la lista de censos inclusivos
-            incl_censuses.add(censo)
+#           añadir el censo de localidad a la lista de votantes de censos inclusivos
+            incl_voters += censo.voter_ids.all()
 #       votantes de los censos inclusivos
         logging.debug("Añadiendo censos inclusivos")
-        for census in incl_censuses:
-            census = Census.objects.get(name=census)
+        for c in incl_censuses:
+            census = Census.objects.get(name=c)
             logging.debug("Censo: " + str(census))
             incl_voters += census.voter_ids.all()
         incl_voters = set(incl_voters)
 #        votantes de los censos exclusivos
         logging.debug("Añadiendo censos exclusivos")
-        for census in excl_censuses:
-            census = Census.objects.get(name=census)
+        for c in excl_censuses:
+            census = Census.objects.get(name=c)
             logging.debug("Censo: " + str(census))
             excl_voters += census.voter_ids.all()
         excl_voters = set(excl_voters)
@@ -182,6 +183,7 @@ class VotingAdmin(admin.ModelAdmin):
             final_census.voter_ids.add(voter)
         final_census.voting_ids.add(Voting.objects.get(id=voting_id))
         final_census.save()
+        
         
         super(VotingAdmin, self).save_related(request, form, formsets, change)
 

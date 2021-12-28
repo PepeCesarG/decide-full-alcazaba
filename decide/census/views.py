@@ -61,5 +61,5 @@ class CensusDetail(generics.RetrieveDestroyAPIView):
             if(any(person.id == int(voter) for person in voters) and any(voting.id == voting_id for voting in votings)):
                 print("El votante es valido")
                 return Response('Valid voter')
-            else:
-                return Response('Invalid voter', status=ST_401)
+        
+        return Response('Invalid voter', status=ST_401)

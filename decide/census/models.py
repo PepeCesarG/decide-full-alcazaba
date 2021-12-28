@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Census(models.Model):
     name = models.TextField(unique = True, default = "undefined census")
-    voting_ids = models.ManyToManyField(Voting)
+    voting_ids = models.ManyToManyField(Voting, blank=True)
     voter_ids = models.ManyToManyField(User)
     
     def votings(self):
