@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django import forms
 
 from base import mods
 from base.models import Auth, Key
@@ -56,7 +57,61 @@ class Voting(models.Model):
     tally = JSONField(blank=True, null=True)
     postproc = JSONField(blank=True, null=True)
     
-    location = models.TextField(blank=True, null=True)
+    PROVINCIAS = [
+    ('', 'Seleccionar provincia...'),
+    ('Alava', 'Álava'),
+    ('Albacete', 'Albacete'),
+    ('Alicante', 'Alicante'),
+    ('Almeria', 'Almería'),
+    ('Asturias', 'Asturias'),
+    ('Avila', 'Ávila'),
+    ('Badajoz', 'Badajoz'),
+    ('Barcelona', 'Barcelona'),
+    ('Burgos', 'Burgos'),
+    ('Caceres', 'Cáceres'),
+    ('Cadiz', 'Cádiz'),
+    ('Cantabria', 'Cantabria'),
+    ('Castellon', 'Castellón'),
+    ('Ciudad Real', 'Ciudad Real'),
+    ('Cordoba', 'Córdoba'),
+    ('Cuenca', 'Cuenca'),
+    ('Gerona', 'Gerona'),
+    ('Granada', 'Granada'),
+    ('Guadalajara', 'Guadalajara'),
+    ('Guipuzcoa', 'Guipúzcoa'),
+    ('Huelva', 'Huelva'),
+    ('Huesca', 'Huesca'),
+    ('Islas Baleares', 'Islas Baleares'),
+    ('Jaen', 'Jaén'),
+    ('La Coruna', 'La Coruña'),
+    ('La Rioja', 'La Rioja'),
+    ('Las Palmas', 'Las Palmas'),
+    ('Leon', 'León'),
+    ('Lerida', 'Lérida'),
+    ('Lugo', 'Lugo'),
+    ('Madrid', 'Madrid'),
+    ('Malaga', 'Málaga'),
+    ('Murcia', 'Murcia'),
+    ('Navarra', 'Navarra'),
+    ('Orense', 'Orense'),
+    ('Palencia', 'Palencia'),
+    ('Pontevedra', 'Pontevedra'),
+    ('Salamanca', 'Salamanca'),
+    ('Santa Cruz de Tenerife', 'Santa Cruz de Tenerife'),
+    ('Segovia', 'Segovia'),
+    ('Sevilla', 'Sevilla'),
+    ('Soria', 'Soria'),
+    ('Tarragona', 'Tarragona'),
+    ('Teruel', 'Teruel'),
+    ('Toledo', 'Toledo'),
+    ('Valencia', 'Valencia'),
+    ('Valladolid', 'Valladolid'),
+    ('Vizcaya', 'Vizcaya'),
+    ('Zamora', 'Zamora'),
+    ('Zaragoza', 'Zaragoza'),
+]
+
+    location = models.CharField(choices=PROVINCIAS, max_length=50, blank=True, null=True)
 
     def create_pubkey(self):
         if self.pub_key or not self.auths.count():
