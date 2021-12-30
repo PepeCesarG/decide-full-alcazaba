@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_tags %}
 {% load i18n static %}
 
 {% block extrahead %}
@@ -7,21 +8,35 @@
 {% endblock %}
 
 {% block content %}
+<div class="mb-4 py-3 text-center bg-success text-white">
 <h1>Añadir voting</h1>
-<div id="voting-form">
+</div>
+<div class="card card-body bg-light container" id="voting-form">
     <form role="form" action="." method="POST">
-	{% csrf_token %}
-	<label for="name">Name</label>
-	{{ form.name }}
-	<label for="desc">Desc</label>
-	{{ form.desc }}
-	<label for="question">Question</label>
-	{{ form.question }}
-	<label for="auths">Auths</label>
-	{{ form.auths }}
-	<label for="location">Location</label>
-	{{ form.location }}
-	<button type="submit">Grabar</button>
+	<div class="p-3">
+	    {% csrf_token %}
+	    <div class="mb-3 row form-group">
+	    <label for="name">Nombre</label>
+	    {{ form.name|add_classes:'form-control'}}
+	    </div>
+	    <div class="mb-3 row form-group">
+	    <label for="desc">Descripción</label>
+	    {{ form.desc|add_classes:'form-control' }}
+	    </div>
+	    <div class="mb-3 row form-group">
+	    <label for="question">Pregunta</label>
+	    {{ form.question|add_classes:'form-select' }}
+	    </div>
+	    <div class="mb-3 row form-group">
+	    <label for="auths">Auths</label>
+	    {{ form.auths|add_classes:'form-control' }}
+	    </div>
+	    <div class="mb-3 row form-group">
+	    <label for="location">Localización</label>
+	    {{ form.location|add_classes:'form-select' }}
+	    </div>
+	    <button class="btn btn-success" type="submit">Guardar</button>
+	</div>
     </form> 
 </div>
 {% endblock %}
