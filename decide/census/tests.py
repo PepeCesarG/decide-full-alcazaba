@@ -61,7 +61,8 @@ class CensusTestCase(BaseTestCase):
     def create_census(self):
         self.voting = self.create_voting()
         self.voting.save()
-        self.voter, _ = Voter.objects.get_or_create(username='testvoter{}'.format(1))
+        user = self.get_or_create_user('1')
+        self.voter, _ = Voter.objects.get_or_create(user=user, location='Sevilla',edad='45',genero='Hombre')
         self.voter.is_active = True
         self.voter.save()
         self.census = Census(name="test census")
