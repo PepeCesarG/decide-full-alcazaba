@@ -210,7 +210,7 @@ class Booth extends React.Component {
             </div>
           ))}
         </form>
-        <button type="button" onClick={this.decideSend}>
+        <button id="vote-submit" type="button" onClick={this.decideSend}>
           Vote
         </button>
       </div>
