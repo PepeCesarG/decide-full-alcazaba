@@ -49,13 +49,13 @@ class CensusDetail(generics.RetrieveDestroyAPIView):
 
     def retrieve(self, request, voting_id, *args, **kwargs):
         voter = request.GET.get('id')
-        print("La votacion es " + str(voting_id) + " y el votante es " + voter)
+        print("La votacion es " + str(voting_id))
         censuss = Census.objects.all()
         for c in censuss:
             print("Se esta mirando el censo " + c.name)
             voters = c.voter_ids.all()
             votings = c.voting_ids.all()
-            print("Los votantes permitidos son " + str(voters.values_list('id', flat=True)))
+            print("Los votantes permitidos son " + str(voters.values_list('location', flat=True)))
             print("Las votaciones que incluye son " + str(votings.values_list('id', flat=True)))            
                 
             if(any(person.id == int(voter) for person in voters) and any(voting.id == voting_id for voting in votings)):
