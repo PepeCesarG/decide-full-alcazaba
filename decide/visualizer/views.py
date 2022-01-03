@@ -1,4 +1,5 @@
 import json
+from django.http import JsonResponse
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.http import Http404
@@ -26,7 +27,17 @@ class VisualizerView(TemplateView):
 
         return context
 
+class VisualizerGetAll(TemplateView):
 
+   def get(self, request):
+    responseData = {
+        'id': 4,
+        'name': 'Test Response',
+        'roles' : ['Admin','User']
+    }
+    voting = get_object_or_404(Voting)
+
+    return JsonResponse(responseData)
 
 class VisualizerView2(TemplateView):
     template_name = 'visualizer/graficos.html'
