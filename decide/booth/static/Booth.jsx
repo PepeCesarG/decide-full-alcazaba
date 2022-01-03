@@ -154,41 +154,37 @@ class Booth extends React.Component {
 
   Navbar(props) {
     return (
-      
-      <div className="navbar" class="navbar-div">
-        <h1 class="decide-h1">Decide</h1>
+      <div className="navbar">
+        <h1>Decide</h1>
         {!this.state.signup && (
-          <a href="#" onClick={this.decideLogout} class="logout">
+          <a href="#" onClick={this.decideLogout}>
             logout
           </a>
         )}
       </div>
-      
     );
   }
 
   LoginForm(props) {
     return (
-      <div id="loginForm" class="login-div">
+      <div id="loginForm">
         <form onSubmit={this.onSubmitLogin}>
-          <label htmlFor="username" class="username-label">Username</label>
+          <label htmlFor="username">Username</label>
           <input
             id="username"
             type="text"
             required
             autoComplete="username"
             onChange={this.onUsernameChange}
-            class ="username-input"
           />
-          <label htmlFor="password" class="password-label">Password</label>
+          <label htmlFor="password">Password</label>
           <input
             id="password"
             type="password"
             required
             onChange={this.onPasswordChange}
-            class="password-input"
           />
-          <button type="submit" class="button-submit">Login</button>
+          <button type="submit">Login</button>
         </form>
       </div>
     );
@@ -196,12 +192,12 @@ class Booth extends React.Component {
 
   VotingForm(props) {
     return (
-      <div id="votingForm" class="votingform-div">
-        <h2 class="pregunta-h2">{this.state.voting.question.desc}</h2>
+      <div id="votingForm">
+        <h2>{this.state.voting.question.desc}</h2>
         <form>
           {this.state.voting.question.options.map((opt) => (
-            <div className="radio" key={opt.number} class ="radio-div">
-              <label class="opt-label" class="opt-label">
+            <div className="radio" key={opt.number}>
+              <label>
                 <input
                   type="radio"
                   id={"q" + opt.number}
@@ -214,7 +210,7 @@ class Booth extends React.Component {
             </div>
           ))}
         </form>
-        <button type="button" onClick={this.decideSend} class="button-submit">
+        <button type="button" onClick={this.decideSend}>
           Vote
         </button>
       </div>
@@ -225,14 +221,14 @@ class Booth extends React.Component {
     return (
       <>
         {this.Navbar()}
-        <div id="voting" class="voting-div">
-          <h1 class="titulo-h1">
+        <div id="voting">
+          <h1>
             {this.state.voting.id} - {this.state.voting.name}
           </h1>
 
           {this.state.alertShow && (
-            <div className={"alert " + this.state.alertLvl} class="alert-div">
-              <button type="button" onClick={this.onClickAlert} class="button-alert">
+            <div className={"alert " + this.state.alertLvl}>
+              <button type="button" onClick={this.onClickAlert}>
                 x
               </button>
               {this.state.alertMsg}
