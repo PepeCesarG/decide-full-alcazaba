@@ -11,3 +11,4 @@ jsonnet==0.12.1
 django-heroku
 gunicorn
 psycopg2==2.8.4
+xhtml2pdf

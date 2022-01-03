@@ -1,12 +1,15 @@
 import json
 from django.http import JsonResponse
+from django.http.response import HttpResponse
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.http import Http404
+from xhtml2pdf import context
 
 from base import mods
 
 from django.shortcuts import get_object_or_404
+from visualizer.utils import generate_pdf
 from voting.models import *
 import random
 
@@ -109,3 +112,22 @@ class VisualizerView2(TemplateView):
             raise Http404
 
         return context
+
+class VisualizerView3(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vid = kwargs.get('voting_id', 0)
+
+        try:
+            r = mods.get('voting', params={'id': vid})
+            voting = r[0]
+            context = {
+                'voting':voting
+            }
+        except:
+            raise Http404
+        
+        pdf = generate_pdf('visualizer/pdf.html', context)
+        return HttpResponse(pdf, content_type = 'application/pdf')
+    
