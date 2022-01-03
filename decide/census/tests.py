@@ -83,7 +83,7 @@ class CensusTestCase(BaseTestCase):
         username.send_keys(usuarioconpermisos)
         password.send_keys(contraseñaconpermisos)
         driver.find_element_by_id("login-form").submit()
-        #driver.get('http://127.0.0.1:8081/admin/auth/user/')
+        #driver.get('http://>>>>>>> develop127.0.0.1:8081/admin/auth/user/')
         driver.get("http://127.0.0.1:8081/admin/auth/user/add/")
         createuser = driver.find_element_by_name('username')
         createpassword = driver.find_element_by_name('password1')

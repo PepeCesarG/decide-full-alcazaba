@@ -12,3 +12,5 @@ jsonnet==0.12.1
 django-heroku
 gunicorn
 selenium
+xhtml2pdf
+
