@@ -113,3 +113,94 @@ div.radio-div{
     line-height : 40px;
     margin: 10px;  
 }
+
+label.opt-label{
+    display: inline-block;
+    background: linear-gradient(to right, #325894,#8c98aa);
+    border-radius:20px;
+    color:rgb(255, 255, 255);
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+    line-height : 40px;
+    padding: 15px;
+    transition-duration: 0.4s;
+}
+
+label.opt-label:hover{
+    background: linear-gradient(to right, #325894ab,#8c98aaab);
+    color: #243f69;
+}
+button.button-submit{
+    background: #243f69;
+    font-family: Verdana, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    color: #ffffff;
+    position: relative;
+    left: 20px;
+    transition-duration: 0.4s;
+}
+button.button-submit:hover{
+    background: #ffffff;
+    color: #243f69;
+}
+
+button.button-alert{
+    background: #243f69;
+    font-family: Verdana, sans-serif;
+    color: #ffffff;
+    transition-duration: 0.3s;
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+button.button-alert:hover{
+    background: #ffffff;
+    color: #243f69;
+}
+
+div.alert-div{
+    border-style: solid;
+    border-color: #243f69;
+    font-family: Verdana, sans-serif;
+    color:#243f69;
+    display: inline-block;
+    font-size: 20px;
+    padding-right: 10px;
+}
+
+label.username-label{
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    color:#243f69;
+    margin-left: 25px;
+}
+
+input.username-input{
+    display:block;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    color:#ffffff;
+    background: #243e6991;
+    margin-left: 25px;
+}
+
+
+label.password-label{
+    display:block;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    color:#243f69;
+    margin-left: 25px;
+}
+
+input.password-input{
+    display:block;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    color:#ffffff;
+    background: #243e6991;
+    margin-left: 25px;
+    margin-bottom: 25px;
+}
