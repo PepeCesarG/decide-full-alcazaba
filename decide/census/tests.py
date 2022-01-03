@@ -61,7 +61,7 @@ class CensusTestCase(BaseTestCase):
         user.id = pk
         user.save()
         return user
-        
+        '''
     #TEST QUE COMPRUEBA LA FEATURE #34 PARA EL CENSO: Automatizar el proceso de creacion de votos
     #de tal manera que si se crea un votante con una localidad, edad y genero se creen los censos 
     #respectivos, para hacer este test es necesario que se introduzca un usuario con permisos y tener 
@@ -109,7 +109,7 @@ class CensusTestCase(BaseTestCase):
         logging.debug('Censo por locacion:' + str(censocreadoporlocation))
         logging.debug('Censo por genero:' + str(censocreadoporgenero))
         logging.debug('Censo por edad:' + str(censocreadoporedad))
-        
+        '''
     def create_voter(self):
         Voter.objects.all().delete()
         self.user, _ = User.objects.get_or_create(username='testvoter{}'.format(1))
