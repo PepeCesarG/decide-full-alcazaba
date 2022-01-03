@@ -35,9 +35,10 @@ class VisualizerGetAll(TemplateView):
         'name': 'Test Response',
         'roles' : ['Admin','User']
     }
-    voting = get_object_or_404(Voting)
+    data  = list(Voting.objects.all())
 
-    return JsonResponse(responseData)
+    return JsonResponse(json.dumps(data, default=lambda o: o.__dict__, 
+            sort_keys=True, indent=4), safe=False)
 
 class VisualizerView2(TemplateView):
     template_name = 'visualizer/graficos.html'
