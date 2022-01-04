@@ -1,29 +1,31 @@
+import logging
+import os
 import random
-from django.contrib.auth.models import User
-from django.conf import settings
-from django.test import TestCase
-from rest_framework.test import APIClient
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from .models import Census
-from voting.models import Voting, Question, QuestionOption
-from mixnet.models import Auth
-from django.contrib.auth.models import User
+
 from base import mods
 from base.tests import BaseTestCase
-from .models import Voter,Census
-from .admin import CensusAdmin, VoterAdmin
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-import os
-import logging
-from selenium.webdriver.support.ui import Select
-import random
+from django.db import transaction
+from django.test import TestCase
+from mixnet.models import Auth
+from rest_framework.test import APIClient
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from voting.models import Question, QuestionOption, Voting
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from .admin import CensusAdmin, VoterAdmin
+from .models import Census, Voter
+
+
 class CensusTestCase(BaseTestCase):
     
     voter = None
-    voting =None
+    voting = None
     census = None
     
     def setUp(self):
@@ -209,10 +211,31 @@ class CensusTestCase(BaseTestCase):
         for c in Census.objects.all():
             response = self.client.delete('/census/{}/'.format(c.id), data, format='json')
             self.assertEqual(response.status_code, 204)
-            
+
+    def test_csv_import_success(self):
+        self.login()
+        self.create_census()
+        data = open('./census/test_csv/positive.csv', 'rb')
+        data = SimpleUploadedFile(content = data.read(), name = data.name, content_type='multipart/form-data')
         
-    
-    '''
+        response = self.client.post('/census/import-csv/', {"csv_file": data}, format="multipart")
+        data.close()
+        logging.debug("Test CSV exit code: {}".format(response.status_code))
+        logging.debug(response.json())
+            
+    ''' 
+    def test_csv_import_success(self):
+        self.login()
+        self.create_census()
+        with open('./census/test_csv/positive.csv') as f:  
+            data = {
+                "name" : "csv_test",
+                "csv_file" : f
+            }
+            response = self.client.post('/census/import-csv/', data, content_type='application/json')
+        logging.debug("Test CSV exit code: {}".format(response.status_code))
+        logging.debug(response.json())
+
     
     def test_csv_import_success(self):
         self.login()

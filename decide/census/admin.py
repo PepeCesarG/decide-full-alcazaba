@@ -177,7 +177,7 @@ class CensusAdmin(admin.ModelAdmin, ExportCsv):
                 self.message_user(request, "Your csv file has been imported successfully")
                 return redirect("..")
             except Exception as e:
-                print(e)
+                logging.warning(e)
                 self.message_user(request, "Your csv file could not be imported", level = messages.ERROR)
                 return redirect(".")
         
