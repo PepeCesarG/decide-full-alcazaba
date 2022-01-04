@@ -14,16 +14,17 @@ from django.contrib.auth.models import User
 from base import mods
 from base.tests import BaseTestCase
 from .models import Voter,Census
-from .admin import CensusAdmin, VoterAdmin
+from .admin import CensusAdmin, ExportCsv, VoterAdmin
 from django.core.exceptions import ObjectDoesNotExist
 import os
 import logging
 from selenium.webdriver.support.ui import Select
 import random
+
 class CensusTestCase(BaseTestCase):
     
     voter = None
-    voting =None
+    voting = None
     census = None
     
     def setUp(self):
@@ -117,6 +118,7 @@ class CensusTestCase(BaseTestCase):
         self.user.save()
         self.voter, _ = Voter.objects.get_or_create(user=self.user, location='Avila', edad='50',genero='Mujer')
         self.voter.save()
+
     def create_census(self):
         Census.objects.all().delete()
         Voting.objects.all().delete()
@@ -228,3 +230,74 @@ class CensusTestCase(BaseTestCase):
             print(response.status_code)
             self.assertEqual(3, Census.objects.count())
     '''
+
+    def test_export_census_ok(self):
+
+        self.login()
+
+        Census.objects.all().delete()
+        Voting.objects.all().delete()
+        self.voting = self.create_voting_by_id(1)
+        self.voting.save()
+        self.voting = self.create_voting_by_id(2)
+        self.voting.save()
+
+        self.user, _ = User.objects.get_or_create(username='testvoter{}'.format(1))
+        self.user.is_active = True
+        self.user.save()
+        self.voter, _ = Voter.objects.get_or_create(user=self.user, location='Sevilla', edad='24',genero='Mujer')
+        self.voter.save()
+
+        self.user, _ = User.objects.get_or_create(username='testvoter{}'.format(1))
+        self.user.is_active = True
+        self.user.save()
+        self.voter, _ = Voter.objects.get_or_create(user=self.user, location='Madrid', edad='27',genero='Hombre')
+        self.voter.save()
+
+        self.census = Census(name="prueba1")
+        self.census.id = 1
+        self.census.save()
+        self.census.voting_ids.add(self.voting)
+        self.census.save()
+        self.census.voter_ids.add(self.voter)
+        self.census.save()
+
+
+        data = {
+        'action': 'export_csv_call',
+        '_selected_action': '1'
+        }
+
+        response = self.client.post('/census', data, follow=True)
+        
+        self.assertEqual(response.status_code, 200)
+    
+    def test_export_census_nocensus(self):
+
+        self.login()
+
+        Census.objects.all().delete()
+        Voting.objects.all().delete()
+        self.voting = self.create_voting_by_id(1)
+        self.voting.save()
+        self.voting = self.create_voting_by_id(2)
+        self.voting.save()
+
+        self.user, _ = User.objects.get_or_create(username='testvoter{}'.format(1))
+        self.user.is_active = True
+        self.user.save()
+        self.voter, _ = Voter.objects.get_or_create(user=self.user, location='Sevilla', edad='24',genero='Mujer')
+        self.voter.save()
+
+        self.user, _ = User.objects.get_or_create(username='testvoter{}'.format(1))
+        self.user.is_active = True
+        self.user.save()
+        self.voter, _ = Voter.objects.get_or_create(user=self.user, location='Madrid', edad='27',genero='Hombre')
+        self.voter.save()
+
+        data = {'action': 'export_csv_call'}
+
+        response = self.client.post('/census/', data, follow=True)
+        
+        self.assertEqual(response.status_code, 409)
+        
