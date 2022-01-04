@@ -2,3 +2,37 @@
     margin-top: 20px;
     margin-left: 40px;
 }
+
+footer{
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #111;
+    height: auto;
+    width: 100vw;
+    padding: 40px;
+    color: #fff;
+    margin-top: 40px;
+}
+
+.footer-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.footer-content h3{
+    font-size: 1.8rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    line-height: 3rem;
+}
+
+.footer-content p{
+    max-width: 500px; 
+    margin: 10px auto;
+    line-height: 28px;
+    font-size: 14px;
+}
