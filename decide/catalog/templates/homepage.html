@@ -1,19 +1,9 @@
+{% extends "base.html" %}
 {% load static %}
 {% load admin_urls %}
 {% load i18n %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie-edge">
-    <title>Decide</title>
-    <link rel="shortcut icon" href="decidelogo" type="image/x-icon">
-    <link rel="stylesheet" href="{% static '/estilo.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-</head>
-<body>
+{% block content %}
     <header>
         <nav>
             <a href='/'>{% trans 'Home' %}</a>
@@ -30,7 +20,7 @@
     <main>
         <section class="portafolio">
             <div class="contenedor">
-                <h2 class="titulo">{% trans "Redirection to modules" %}</h2>
+                <h2 class="titulo">{% trans 'Redirect to modules' %}</h2>
                 <div class="galeria-port">
                     <div class="imagen-port">
                         <img src="{% static '/img/admin.png' %}" alt="">
@@ -119,6 +109,21 @@
                 </div>
             </div>
         </section>
+        <section>
+            <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                <input name="next" type="hidden" value="{{ redirect_to }}" />
+                <select name="language">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                            {{ language.name_local }} ({{ language.code }})
+                        </option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Go" />
+            </form>
+        </section>
     </main>
-</body>
-</html>
+    {% endblock %}
