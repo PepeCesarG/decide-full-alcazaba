@@ -1,19 +1,9 @@
+{% extends "base.html" %}
 {% load static %}
 {% load admin_urls %}
 {% load i18n %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie-edge">
-    <title>Decide</title>
-    <link rel="shortcut icon" href="decidelogo" type="image/x-icon">
-    <link rel="stylesheet" href="{% static '/estilo.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-</head>
-<body>
+{% block content %}
     <header>
         <nav>
             <a href='/'>{% trans 'Home' %}</a>
@@ -136,5 +126,4 @@
             </form>
         </section>
     </main>
-</body>
-</html>
+    {% endblock %}
