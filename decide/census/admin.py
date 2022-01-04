@@ -116,10 +116,12 @@ class ExportCsv:
             fila = writer.writerow([linea])
 
         '''
-        data=''
-        with open(respuesta, 'w') as file:
-            data = file.read().replace("@", "")
-            file.write(data)
+        Se implementan para concenso con la importacion de censo que
+        se anyadan en una lista separadas por ":" las distintas 
+        votaciones y los distintos votantes en el caso de haber varios
+        
+        Se van a representar mensajes de error o confirmacion en funcion
+        de importacion correcta o no.
         '''
 
         try:
@@ -202,6 +204,7 @@ def tally(ModelAdmin, request, queryset):
     for v in queryset.filter(end_date__lt=timezone.now()):
         token = request.session.get('auth-token', '')
         v.tally_votes(token)
+
 class VoterAdminForm(forms.ModelForm):
     class Meta:
         model = Voter
@@ -209,6 +212,7 @@ class VoterAdminForm(forms.ModelForm):
     edad = forms.IntegerField(required = True)    
     location = forms.ChoiceField(widget=forms.Select, choices=PROVINCIAS, required=False)
     genero = forms.ChoiceField(widget=forms.Select, choices=GENERO, required=False)
+
 class VoterAdmin(admin.ModelAdmin):
     list_display = ('user','location','edad','genero')
     actions = [ start, stop, tally ]
