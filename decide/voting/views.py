@@ -14,10 +14,37 @@ from .serializers import SimpleVotingSerializer, VotingSerializer
 from base.perms import UserIsStaff
 from base.models import Auth
 from census.models import Census
-
+from django.forms.models import inlineformset_factory
 
 class SuccessView(TemplateView):
     template_name = 'voting/success.html'
+
+QuestionOptionSet = inlineformset_factory(Question, QuestionOption, fields=('number','option',),can_delete=False, extra=6)
+
+class QuestionFormView(CreateView):
+    model = Question
+    fields = "__all__"
+
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data["questionOption"] = QuestionOptionSet(self.request.POST)
+        else:
+            data["questionOption"] = QuestionOptionSet()
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        questionOption = context["questionOption"]
+        self.object = form.save()
+        if questionOption.is_valid():
+            questionOption.instance = self.object
+            questionOption.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return "../success"
 
 
 class VotingFormView(CreateView):
