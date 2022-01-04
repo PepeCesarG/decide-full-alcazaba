@@ -1,0 +1,146 @@
+{% load static %}
+{% load admin_urls %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <title>Decide</title>
+    <link rel="shortcut icon" href="decidelogo" type="image/x-icon">
+    <link rel="stylesheet" href="{% static '/estilo.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href='/'>{% trans 'Inicio' %}</a>
+            <a href='#'>{% trans 'Login' %}</a>
+        </nav>
+        <section class="textos-header">
+            <h1>{% trans "Manual de uso de nuevas funcionalidades." %}</h1>
+
+            <div class="wave" style="height: 150px;overflow:hidden"><svg viewBox="0 0 500 150" preserveAspectRatio="none" 
+                style="height:100%;width: 100%;"><path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00, 49.98 
+                L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill:#fff;"></path></svg></div>
+        </section>
+    </header>
+    <main>
+        <section class="portafolio">
+            <div class="contenedor">
+                <h2 class="titulo">{% trans "Cómo hacer una votación en Decide" %}</h2>
+                <div class="explicacion">
+                    <h4>Homepage</h4>
+                    <p>La página de inicio, una de las nuevas implementaciones, es la página principal del sistema. Desde aquí se puede acceder a los distintos módulos del sistema.</p> 
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/homepage.png' %}" alt="">
+                    </div>
+                    <h4>Inicio de sesión</h4>
+                    <p>Desde aquí podremos iniciar sesión, ya sea cómo usuario o cómo administrador. Será necesario iniciar sesión para realizar cualquier acción sobre una votación.</p>
+                    <div class="imagen-guia-small">
+                        <img src="{% static '/img/iniciosesion.png' %}" alt="">
+                    </div>
+                    <h4>Administrador</h4>
+                    <p>Este es el módulo de administrador, desde aquí se pueden acceder a las distintas funcionalidades que presenta el sistema. De cara a crear una votación debemos seleccionar la opción "Añadir" correspondiente a la sección "Votings" dentro del módulo "Voting".</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/interfazAdmin.png' %}" alt="">
+                    </div>
+                    <h4>Voting</h4>
+                    <p>Una vez en la sección "Añadir voting" debemos rellenar los campos que aparecen: Nombre, Descipción,Pregunta, etc.</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/newVotingDone.png' %}" alt="">
+                    </div>
+                    <p>Podemos crear una pregunta, para posteriormente añadirla, para ello se nos abrirá un formulario en otra ventana, para ello deberemos hacer click en el símbolo "+" del apartado preguntas.</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/preguntas.png' %}" alt="">
+                    </div>
+                    <p>Con respecto del sistema base, se ha añadido la posibilidad de seleccionar una provincia cómo censo de la votación, permitiendo asociar el censo desde este mismo menú. Los censos de las provincias aparecerán en el apartado de censos, el cuál veremos posteriormente.</p>
+                    <p>A continuación, debemos abrir la votación, para ello la seleccionamos de entre todas las votaciones y creadas y marcamos la opción "Start".</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/startVoting.png' %}" alt="">
+                    </div>
+                    <h4>Autenticación</h4>
+                    <p>Podemos crear usuarios para poblar el censo asociado con la votación, primero vamos a crear un usuario para posteriormente añadirlo a un censo que también crearemos.</p>
+                    <p>Para ello volvemos al panel del administrador pero ahora seleccionaremos la opción "Añadir" correspondiente a la sección "Usuarios", dentro del módulo de "Autenticación y Autorización".</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/newUsuario.png' %}" alt="">
+                    </div>
+                    <p>Debemos rellenar el formulario que se nos muestra a continuación, de cara a añadir a un nuevo usuario. Una vez relleno y validado deberemos pulsar la opción "Grabar".</p>
+                    <p>Esto nos redirigirá directamente a la vista de modificación de datos de usuario, desde la cuál podremos añadir o modificar información del usuario, además de darle ciertos permisos. Para llevar a cabo la votación no es necesario modificar nada así que volvemos al panel del administrador.</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/historicoUsuario.png' %}" alt="">
+                    </div>
+                    <h4>Censo</h4>
+                    <p>Una vez creado el usuario deberemos asociarlo a la clase voter, para ello deberemos seleccionar la opción "Añadir" dentro de la sección "Voters", en el módulo "Census".</p>
+                    <p>Esto nos redigirá a un formulario dónde asociaremos al usuario en cuestión con la clase voter. Además de seleccionar al usuario se tendrán que rellenar los otros campos del formulario con la información pertinente.</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/newVoter.png' %}" alt="">
+                    </div>
+                    <p>Una vez debidamente cumplimentado y guardado el formulario, el sistema nos devolverá al módulo de administrador dónde ahora deberemos seleccionar la opción de "Añadir", esta vez en la sección "Censuss".</p>
+                    <p>Ante nosotros tendremos el formulario correspondiente a añadir un censo, en él deberemos asociar tanto la votación correspondiente cómo los votantes pertenecientes al censo que estamos creando. Cabe destacar que un censo se puede asociar a varias votaciones.</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/newCenso.png' %}" alt="">
+                    </div>
+                    <p>Ahora nos aparecen todos los censos, incluyendo los de las provincias cómo se mencionó con anterioridad</p>
+                    <h4>Booth</h4>
+                    <p>Ya sería posible acceder a la votación en cuestión y, accediendo cómo cualquiera de los votantes del censo, efectuar nuestro voto. Para ello, deberemos introducir añadir a la URL /booth/{id_del_voting}. Si no recordamos el id de la votación siempre lo podemos consultar en el apartado de voting.</p>
+                    <div class="imagen-guia-small">
+                        <img src="{% static '/img/loginBooth.png' %}" alt="">
+                    </div>
+                    <p>Cómo acabo de mencionar, lo primero será identificarnos cómo un votante perteneciente al censo asociado a la votación en cuestión. Una vez hecho esto ya será posible efectuar nuestro voto. El sistema nos notificará en el momento en que el voto haya sido enviado correctamente o en caso contrario.</p>
+                    <div class="imagen-guia-small">
+                        <img src="{% static '/img/votarbooth.png' %}" alt="">
+                    </div>
+                    <br>
+                    <div class="imagen-guia-small">
+                        <img src="{% static '/img/votoenviado.png' %}" alt="">
+                    </div>
+                    <h4>Visualizer</h4>
+                    <p>Para ver los resultados de nuestra votación, primero debemos volver a "Voting", al mismo apartado dónde abrimos la votación.</p>
+                    <p>En este caso, seleccionaremos la opción "Stop" y, a continuación, "Tally". Con esto último, realizaremos el recuento de votos, al realizar el recuento, también se realiza un postprocesado de votos para aplicar identidad, cremallera, paridad, etc</p>
+                    <p>Una vez cerrada la votación y efectuado el recuento podemos visualizar los resultados, esto lo haremos accediendo a la URL /visualizer/{id_del_voting}</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/visualizerPrueba.png' %}" alt="">
+                    </div>
+                    <p>En esta vista se muestran los resultados de la votación, mostrados en un formato de tabla. Además, mediante el botón de arriba a la derecha se permite alternar entre un modo de visionado claro u oscuro.</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/visualizerBlack.png' %}" alt="">
+                    </div> 
+                    <p>De forma adicional, se ha implementado la opción de visualizar los resultado mediante el uso de varias gráficas, para ello deberemos añadir a la URL /graficos</p>
+                    <p>Aquí se muestran varias gráficas asociadas a la votación, mostrando tanto gráficos de barras cómo de sectores. Con el botón que se encuentra arriba a la derecha de los gráficos se da la posibilidad de verlo en pantalla completa o descargarlo en un amplio abanico de formatos.</p>
+                    <div class="imagen-guia">
+                        <img src="{% static '/img/graficosBarras.png' %}" alt="">
+                        <img src="{% static '/img/graficosSectores.png' %}" alt="">
+                    </div>
+                    <br><br>
+                </div>
+                <div class="funcionalidades">
+                    <h2 class="titulo">{% trans "Funcionalidades añadidas" %}</h2>
+                    <p>Además de todas las nuevas implementaciones que hemos encontrado en el proceso de realizar y visualizar un votación, se han implementado otras muchas funcionalidades al sistema base de Decide.</p>
+                    <h4>Autenticación</h4>
+                    <p><strong>Autenticación con Google: </strong>posibilidad de autenticarse mediante la cuenta de Google asociada.</p>
+                    <h4>Cabina y votaciones</h4>
+                    <p><strong>Modo claro-oscuro con React: botón que permite cambiar entre modo claro y oscuro utilizando React.</strong></p>
+                    <p><strong>Preguntas de respuesta binaria: </strong>añadir preguntas de respuesta binaria (si/no), además de añadir un selector para elegir entre este formato y preguntas con más de dos opciones de respuesta.</p>
+                    <p><strong>Añadir estilos al módulo booth: </strong>diseñar e implementar un estilo para el módulo de booth.</p>
+                    <p><strong>Votar a través de un bot de Telegram: </strong>permitir el voto a través de un bot de Telegram, el cuál requiere iniciar sesión y aportar el id de la votación en cuestión.</p>
+                    <h4>Censo</h4>
+                    <p><strong>Creación de censos a partir de edad, género o ubicación: </strong>permite la inclusión automática de los usuarios a estos censos en base en base a los datos introducidos durante el registro. El censo en cuestiónse genera automáticamente en caso de ser el primer usuario en pertenecer a él.</p>
+                    <p><strong>Importación y exportación del censo: </strong>posibilita importar y exportar los censos en distintos formatos.</p>
+                    <p><strong>Limitación en el censo: </strong>permitir elegir el censo de una votación cómo una combinación, de inclusión o exclusión, entre dos censos.</p>
+                    <p><strong>Reutilización y filtrado de censos: </strong>habilita la posibilidad de reutilizar un censo ya existente al crear nuevas votaciones.</p>
+                    <h4>Visualización</h4>
+                    <p><strong>Homepage: </strong>implementación de una página de inicio del sistema, desde la cuál acceder a los distintos módulos y funcionalidades.</p>
+                    <p><strong>Internalización: </strong>sistema de internalizacción del sitio web, permitiendo cambiar entre inglés y castellano.</p>
+                    <p><strong>Modo claro-oscuro: </strong>botón que permite cambiar entre modo claro y oscuro, mejorando la visualización del sitio.</p>
+                    <p><strong>Pintado de gráficas: </strong>mostrar los resultados de unq votación en diferentes gráficas, pudiendo ser descargadas en varios formatos.</p>
+                    <p><strong>Bot de Telegram: </strong>creación de un bot de Telegram que permita ver los resultados y las estadísticas asociadas de una votación.</p>
+                    <p><strong>Tipos de votaciones: </strong>permitir exportar los resultados de las votaciones en formato PDF.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
