@@ -1,25 +1,13 @@
+{% extends "base.html" %}
 {% load static %}
 {% load admin_urls %}
 {% load i18n %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie-edge">
-    <title>Decide</title>
-    <link rel="shortcut icon" href="decidelogo" type="image/x-icon">
-    <link rel="stylesheet" href="{% static '/estilo.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-</head>
-<body>
+{% block content %}
     <header>
         <nav>
-            <a href='#'>{% trans 'Home' %}</a>
-            <a href='#'>{% trans 'Portfolio' %}</a>
-            <a href='#'>{% trans "Services" %}</a>
-            <a href='#'>{% trans "Contact" %}</a>
+            <a href='/'>{% trans 'Home' %}</a>
+            <a href='/guia'>{% trans "User guide" %}</a>
         </nav>
         <section class="textos-header">
             <h1>{% trans "Voting in Decide" %}</h1>
@@ -32,7 +20,7 @@
     <main>
         <section class="portafolio">
             <div class="contenedor">
-                <h2 class="titulo">{% trans "Redirection to modules" %}</h2>
+                <h2 class="titulo">{% trans 'Redirect to modules' %}</h2>
                 <div class="galeria-port">
                     <div class="imagen-port">
                         <img src="{% static '/img/admin.png' %}" alt="">
@@ -59,35 +47,35 @@
                         <img src="{% static '/img/auth.jpg' %}" alt="">
                         <div class="hover-galeria">
                             <img src="{% static '/img/icono1.png' %}" alt="">
-                            <a href="/authentication" style="color:#fff;">authentication/</a>
+                            <a href="admin/auth" style="color:#fff;">authentication/</a>
                         </div>
                     </div>
                     <div class="imagen-port">
                         <img src="{% static '/img/base.webp' %}" alt="">
                         <div class="hover-galeria">
                             <img src="{% static '/img/icono1.png' %}" alt="">
-                            <a href="/base" style="color:#fff;">base/</a>
+                            <a href="admin/base" style="color:#fff;">base/</a>
                         </div>
                     </div>
                     <div class="imagen-port">
                         <img src="{% static '/img/booth.jpg' %}" alt="">
                         <div class="hover-galeria">
                             <img src="{% static '/img/icono1.png' %}" alt="">
-                            <a href="/booth" style="color:#fff;">booth/</a>
+                            <a href="/booth/{voting_id}" style="color:#fff;">booth/</a>
                         </div>
                     </div>
                     <div class="imagen-port">
                         <img src="{% static '/img/imgcenso.webp' %}" alt="">
                         <div class="hover-galeria">
                             <img src="{% static '/img/icono1.png' %}" alt="">
-                            <a href="/census" style="color:#fff;">census/</a>
+                            <a href="admin/census" style="color:#fff;">census/</a>
                         </div>
                     </div>
                     <div class="imagen-port">
                         <img src="{% static '/img/mixnet.png' %}" alt="">
                         <div class="hover-galeria">
                             <img src="{% static '/img/icono1.png' %}" alt="">
-                            <a href="/mixnet" style="color:#fff;">mixnet/</a>
+                            <a href="admin/mixnet" style="color:#fff;">mixnet/</a>
                         </div>
                     </div>
                     <div class="imagen-port">
@@ -101,7 +89,7 @@
                         <img src="{% static '/img/store.png' %}" alt="">
                         <div class="hover-galeria">
                             <img src="{% static '/img/icono1.png' %}" alt="">
-                            <a href="/store" style="color:#fff;">store/</a>
+                            <a href="admin/store" style="color:#fff;">store/</a>
                         </div>
                     </div>
                     <div class="imagen-port">
@@ -115,12 +103,27 @@
                         <img src="{% static '/img/voting.jpg' %}" alt="">
                         <div class="hover-galeria">
                             <img src="{% static '/img/icono1.png' %}" alt="">
-                            <a href="/voting" style="color:#fff;">voting/</a>
+                            <a href="admin/voting" style="color:#fff;">voting/</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <section>
+            <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                <input name="next" type="hidden" value="{{ redirect_to }}" />
+                <select name="language">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                            {{ language.name_local }} ({{ language.code }})
+                        </option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Go" />
+            </form>
+        </section>
     </main>
-</body>
-</html>
+    {% endblock %}

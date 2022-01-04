@@ -16,7 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: authentication/templates/logout.html:5
 msgid "Logout"
@@ -28,50 +27,44 @@ msgstr ""
 
 #: catalog/templates/homepage.html:19
 msgid "Home"
-msgstr "Inicio"
+msgstr ""
 
 #: catalog/templates/homepage.html:20
 msgid "Portfolio"
-msgstr "Portafolio"
+msgstr ""
 
 #: catalog/templates/homepage.html:21
 msgid "Services"
-msgstr "Servicios"
+msgstr ""
 
 #: catalog/templates/homepage.html:22
 msgid "Contact"
-msgstr "Contacto"
+msgstr ""
 
 #: catalog/templates/homepage.html:25
 msgid "Voting in Decide"
-msgstr "Vota en Decide"
+msgstr ""
 
 #: catalog/templates/homepage.html:35
-#, fuzzy
-#| msgid "Redirección a los módulos"
 msgid "Redirect to modules"
-msgstr "Redirección a los módulos"
+msgstr "Redirection to modules"
 
 #: decide/settings.py:167
 msgid "Spanish"
-msgstr "Español"
+msgstr ""
 
 #: decide/settings.py:168
 msgid "English"
-msgstr "Ingles"
+msgstr ""
 
 #: visualizer/templates/visualizer/pdf.html:8
-#, fuzzy
-#| msgid "Voting in Decide"
 msgid "Voting not started"
-msgstr "Vota en Decide"
+msgstr ""
 
 #: visualizer/templates/visualizer/pdf.html:10
-#, fuzzy
-#| msgid "Voting in Decide"
 msgid "Voting is opened"
-msgstr "Vota en Decide"
+msgstr ""
 
 #: visualizer/templates/visualizer/pdf.html:12
 msgid "Results: "
-msgstr "Resultados: "
+msgstr ""
