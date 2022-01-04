@@ -64,13 +64,15 @@
                         </tr>
                     </tbody>
                 </table>
+                <br>
+                <br>
+                <div id="graphics-button">
+                    <button style="background-color: #3b83bd;"><a href="{% url 'graficos' voting_id %}" style="color:#fff;" class="btn btn-link">Ver Gráficas</a></button>
+                </div>
 
         </div>
     </div>
 
-    <div id="graphics-button">
-        <span><a href="{% url 'graficos' voting_id %}" class="btn btn-link">Ver Gráficas</a></span>
-    </div>
 {% endblock %}
 
 {% block extrabody %}
