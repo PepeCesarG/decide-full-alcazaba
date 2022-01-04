@@ -100,3 +100,6 @@ ENV/
 .mypy_cache/
 
 .vagrant
+
+#Telegram bot repository
+telegram_bot
