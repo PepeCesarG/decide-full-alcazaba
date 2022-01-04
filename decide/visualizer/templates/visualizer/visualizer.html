@@ -6,7 +6,7 @@
          href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet"
          href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
-    <link type="text/css" rel="stylesheet" href="{% static "booth/style.css" %}" />
+    <link type="text/css" rel="stylesheet" href="{% static "styleVisualizer.css" %}" />
 
 {% endblock %}
 
@@ -64,9 +64,15 @@
                         </tr>
                     </tbody>
                 </table>
+                <br>
+                <br>
+                <div id="graphics-button">
+                    <button style="background-color: #3b83bd;"><a href="{% url 'graficos' voting_id %}" style="color:#fff;" class="btn btn-link">Ver Gráficas</a></button>
+                </div>
 
         </div>
     </div>
+
 {% endblock %}
 
 {% block extrabody %}
