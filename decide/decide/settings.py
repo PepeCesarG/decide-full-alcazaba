@@ -73,7 +73,7 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-full-alcazaba-main.herokuapp.com'
+BASEURL = 'https://decide-full-alcazaba-visualize.herokuapp.com'
 
 APIS = {
     'authentication': BASEURL,
