@@ -13,4 +13,4 @@ gunicorn
 psycopg2==2.8.4
 selenium
 xhtml2pdf
-
+django-allauth==0.38.0

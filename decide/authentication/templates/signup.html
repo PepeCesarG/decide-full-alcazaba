@@ -1,0 +1,129 @@
+<!DOCTYPE html><!-- HTML 5 -->
+
+    <div class="text-center">
+        <h1>Sign up</h1>
+        <h2>Please enter your username and your password</h2>
+    </div>
+
+    <div id="signup" class="text-center">
+        <p>
+            Already have an account?
+            <button class="btn btn-outline-primary btn-sm" onClick="window.location.href='../sign-in'">Sign in</button>
+        </p>
+
+        <div style="width:800px; margin:0 auto;" class="form-group-lg align-items-center form-group col-lg-3">
+            <label for="username">Username</label><br>
+            <input type="text" id="username_signup" class="form-control" name="username" value="" placeholder=""/>
+            <br />
+
+            <label for="password1">Password</label><br>
+            <input type="password" id="password1" class="form-control" name="password1" value="" placeholder=""/>
+            <br />
+
+            <label for="password2">Repeat password</label><br>
+            <input type="password" id="password2" class="form-control" name="password2" value="" placeholder=""/>
+            <br />
+
+            <label for="birthDate">Birth</label><br>
+            <input type="date" id="birthDate" name="birthDate" class="form-control" value="" placeholder=""/>
+            <br />
+
+            <label for="gender">Gender</label>
+            <br />
+            <input type="radio" id ="gender_male" name="gender" value="Male"> Male<br>
+            <input type="radio" id ="gender_female" name="gender" value="Female"> Female<br>
+            <input type="radio" id ="gender_other" name="gender" value="Other"> Other<br>
+            <br />
+
+                    
+            <input type="submit" class="form-control btn btn-success"  onClick="signUp()" />
+            
+        </div>
+
+    </div>
+
+
+
+     <script>
+
+
+        var token = null;
+        var user = null;
+
+        function postData(url, data) {
+          // Default options are marked with *
+          var fdata = {
+            body: JSON.stringify(data),
+            headers: {
+              'content-type': 'application/json',
+            },
+            method: 'POST',
+          };
+
+          if (token) {
+              fdata.headers['Authorization'] = 'Token ' + token;
+          }
+
+          return fetch(url, fdata)
+          .then(response => {
+            if (response.status === 200 || response.status === 201) {
+                return response.json();
+            } else {
+                return Promise.reject(response.statusText);
+            }
+          });
+        }
+
+
+
+        function decideUser() {
+            var data = { token: token };
+            postData("{{auth_url}}" + "/authentication/getuser/", data)
+              .then(data => {
+                user = data;
+              }).catch(error => {
+                alert("Error:" + error);
+              });
+        }
+
+
+
+        function signUp() {
+            var data = {
+                username: document.querySelector("#username_signup").value,
+                password1: document.querySelector("#password1").value,
+                password2: document.querySelector("#password2").value,
+                birthdate: document.querySelector("#birthDate").value + 'T00:00',
+                gender: document.querySelector('input[name="gender"]:checked').value
+            };
+            postData("{{auth_url}}" + "/authentication/signup/", data)
+              .then(data => {
+                document.cookie = 'decide='+data.key+'; path=/';
+                token = data.key;
+                decideUser();
+                window.location.replace("/");
+              })
+              .catch(error => {
+                alert("Error:" + error);
+                console.error(error);
+              });
+        }
+
+
+
+        function init() {
+
+            var cookies = document.cookie.split("; ");
+            cookies.forEach((c) => {
+                var cs = c.split("=");
+                if (cs[0] == 'decide' && cs[1]) {
+                    token = cs[1];
+                    decideUser();
+                }
+            });
+        }
+
+        init();
+    </script>
+
+</body>

@@ -11,6 +11,7 @@ from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
+from django.views.generic import View
 
 from .serializers import UserSerializer
 
@@ -73,3 +74,10 @@ class SigninView(TemplateView):
     def get_context_data(self):
         context=super().get_context_data()
         return 
+
+class SignupView(TemplateView):
+    template_name="signup.html"
+    def get_context_data(self):
+        context=super().get_context_data()
+        return context
+
