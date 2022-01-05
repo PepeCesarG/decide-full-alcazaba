@@ -111,9 +111,11 @@
         </section>
         <section>
             <h2 class="titulo">{% trans 'Votings' %}</h2>
-            {%for voting in votings%}
-            <li><a href="/visualizer/{{voting.id}}">{{voting.name}}</a></li>
-            {% endfor %}
+            <div class="listavotings">
+                {%for voting in votings%}
+                <li><a href="/visualizer/{{voting.id}}">{{voting.name}}</a></li>
+                {% endfor %}
+            </div>
         </section>
         <section>
             <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
