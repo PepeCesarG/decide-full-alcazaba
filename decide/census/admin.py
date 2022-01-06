@@ -187,24 +187,6 @@ class CensusAdmin(admin.ModelAdmin, ExportCsv):
         payload = {"form": form}
         return render(request, "csv_form.html", payload)
 
-def start(modeladmin, request, queryset):
-    for v in queryset.all():
-        v.create_pubkey()
-        v.start_date = timezone.now()
-        v.save()
-
-
-def stop(ModelAdmin, request, queryset):
-    for v in queryset.all():
-        v.end_date = timezone.now()
-        v.save()
-
-
-def tally(ModelAdmin, request, queryset):
-    for v in queryset.filter(end_date__lt=timezone.now()):
-        token = request.session.get('auth-token', '')
-        v.tally_votes(token)
-
 class VoterAdminForm(forms.ModelForm):
     class Meta:
         model = Voter
@@ -215,7 +197,6 @@ class VoterAdminForm(forms.ModelForm):
 
 class VoterAdmin(admin.ModelAdmin):
     list_display = ('user','location','edad','genero')
-    actions = [ start, stop, tally ]
     search_fields = ('user', )
     form = VoterAdminForm
     def save_related(self, request, form, formsets, change):
