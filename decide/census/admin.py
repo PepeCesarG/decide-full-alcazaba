@@ -6,7 +6,6 @@ from django.contrib import admin, messages
 from django.db import transaction
 from django.shortcuts import redirect, render
 from django.urls import path
-
 from .filters import StartedFilter
 
 from django.http import HttpResponse
@@ -150,7 +149,8 @@ class CensusAdmin(admin.ModelAdmin, ExportCsv):
     def import_csv(self, request):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
-            csvf = StringIO(csv_file.read().decode())
+            aux = csv_file.read()
+            csvf = StringIO(aux.decode()) if (type(aux) != type('str')) else StringIO(aux)
             reader = csv.reader(csvf, delimiter=',')
             try:
                 with transaction.atomic():
