@@ -132,6 +132,7 @@ class VisualizerGetAll(TemplateView):
                 'description': voting.desc,
                 'fecha_inicio': voting.start_date,
                 'fecha_fin': voting.end_date,
+                'question_desc': voting.question.desc,
                 'postproc': voting.postproc,
             }
 
