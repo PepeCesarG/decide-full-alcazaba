@@ -27,7 +27,6 @@ from voting.models import Question, QuestionOption, Voting
 from .admin import CensusAdmin, VoterAdmin
 from .models import Census, Voter
 
-
 class CensusTestCase(BaseTestCase):
     
     voter = None
@@ -219,9 +218,11 @@ class CensusTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 204)
 
     def test_csv_import_success(self):
-        self.login()
-        self.create_census
         rf = RequestFactory()
+        req = rf.post('/census/import-csv/')
+        setattr(req, 'session', 'session')
+        messages = FallbackStorage(req)
+        setattr(req, '_messages', messages)
         admin = CensusAdmin(Census, None)
 
         with open('./census/test_csv/positive.csv') as fp:
@@ -231,11 +232,43 @@ class CensusTestCase(BaseTestCase):
                 'CSV',
                 sys.getsizeof(fp), None)
 
-            req = rf.post('/census/import-csv/')
-            setattr(req, 'session', 'session')
-            messages = FallbackStorage(req)
-            setattr(req, '_messages', messages)
+            req.FILES['csv_file'] = csv
+            response = admin.import_csv(req)
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.url, '..') #redirect: /census
+    
+    def test_csv_import_failure(self):
+        rf = RequestFactory()
+        req = rf.post('/census/import-csv/')
+        setattr(req, 'session', 'session')
+        messages = FallbackStorage(req)
+        setattr(req, '_messages', messages)
+        admin = CensusAdmin(Census, None)
+
+        with open('./census/test_csv/negative.csv') as neg:
+            #Bad census csv
+            csv = InMemoryUploadedFile(neg, 
+                'TextField',
+                'negative.csv',
+                'CSV',
+                sys.getsizeof(neg), None)
 
             req.FILES['csv_file'] = csv
             response = admin.import_csv(req)
             self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.url, '.') #redirect: /census/import-csv
+
+        with open('./census/test_csv/positive.csv') as pos:
+            #Repeated census id
+            self.create_census()
+            csv = InMemoryUploadedFile(pos, 
+                'TextField',
+                'positive.csv',
+                'CSV',
+                sys.getsizeof(pos), None)
+
+            req.FILES['csv_file'] = csv
+            response = admin.import_csv(req)
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.url, '.') #redirect: /census/import-csv
+            

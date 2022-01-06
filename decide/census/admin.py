@@ -13,7 +13,9 @@ from django.contrib.auth.models import User
 from voting.models import Voting
 from .models import Census,Voter
 import logging, sys
+
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
 PROVINCIAS = [
     ('', 'Seleccionar provincia...'),
     ('Alava', 'Álava'),
@@ -67,11 +69,13 @@ PROVINCIAS = [
     ('Zamora', 'Zamora'),
     ('Zaragoza', 'Zaragoza'),
 ]
+
 GENERO = [
     ('Hombre', 'Hombre'),
     ('Mujer', 'Mujer'),
     ('Otro','Otro')
 ]
+
 class CsvImportForm(forms.Form):
     csv_file = forms.FileField()
 
@@ -150,9 +154,11 @@ class CensusAdmin(admin.ModelAdmin, ExportCsv):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
             aux = csv_file.read()
+            #Decodes file if encoded (normal use), not if not encoded (test use)
             csvf = StringIO(aux.decode()) if (type(aux) != type('str')) else StringIO(aux)
             reader = csv.reader(csvf, delimiter=',')
             try:
+                #Allows rollback in case of exception while parsing CSVs
                 with transaction.atomic():
                     next(reader)
                     for row in reader:
@@ -175,12 +181,15 @@ class CensusAdmin(admin.ModelAdmin, ExportCsv):
                                 census.voter_ids.add(voter)
                     
                 self.message_user(request, "Your csv file has been imported successfully")
+                #Redirects to census/census (list view)
                 return redirect("..")
             except Exception as e:
                 logging.warning(e)
                 self.message_user(request, "Your csv file could not be imported", level = messages.ERROR)
+                #Redirects to census/census/import-csv, which just reloads the same page
                 return redirect(".")
-        
+                
+        #If not accessed through a POST petition, load the CSV form view
         form = CsvImportForm()
         payload = {"form": form}
         return render(request, "csv_form.html", payload)
