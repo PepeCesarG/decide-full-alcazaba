@@ -43,3 +43,27 @@ class TestSeleniumVisualizer(BaseTestCase):
         self.driver.find_element(By.CSS_SELECTOR, ".submit-row > input").click()
         assert self.driver.find_element(By.LINK_TEXT, "Administración de Django").text == "Administración de Django"
         assert self.driver.find_element(By.CSS_SELECTOR, "strong").text == "ADMIN"
+    
+    def test_access_visualizer_200(self):
+        self.driver = webdriver.Chrome()
+        response = self.driver.get("https://decide-full-alcazaba-visualize.herokuapp.com/visualizer/5")
+        assert self.driver.find_element(By.CSS_SELECTOR, "h2").text == "Votación no comenzada"
+
+    def test_darkmode(self):
+        self.driver = webdriver.Chrome()
+        response = self.driver.get("https://decide-full-alcazaba-visualize.herokuapp.com/visualizer/5")
+        self.driver.find_element(By.CSS_SELECTOR, "span:nth-child(1)").click()
+        '''
+        assert self.driver.find_element(By.CSS_SELECTOR, ".text-muted > th:nth-child(1)").text == "Opción"
+        assert self.driver.find_element(By.CSS_SELECTOR, "th:nth-child(2)").text == "Puntuación"
+        assert self.driver.find_element(By.CSS_SELECTOR, "th:nth-child(3)").text == "Votos"
+        '''
+        assert self.driver.find_element(By.CSS_SELECTOR, "h2").text == "Votación no comenzada"
+    
+    def test_lightmode(self):
+        self.driver = webdriver.Chrome()
+        response = self.driver.get("https://decide-full-alcazaba-visualize.herokuapp.com/visualizer/5")
+        self.driver.find_element(By.CSS_SELECTOR, "span:nth-child(1)").click()
+        assert self.driver.find_element(By.CSS_SELECTOR, "h2").text == "Votación no comenzada"
+        self.driver.find_element(By.CSS_SELECTOR, "span:nth-child(2)").click()
+        assert self.driver.find_element(By.CSS_SELECTOR, "h2").text == "Votación no comenzada"
