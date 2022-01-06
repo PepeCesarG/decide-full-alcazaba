@@ -73,3 +73,11 @@ class SigninView(TemplateView):
     def get_context_data(self):
         context=super().get_context_data()
         return 
+        
+class LoginView(TemplateView):
+    template_name="login.html"
+    def get_context_data(self):
+        context=super().get_context_data()
+        return 
+    
+    

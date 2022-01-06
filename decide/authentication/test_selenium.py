@@ -1,45 +1,42 @@
 from django.test import TestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
+import pytest
+import time
+import json
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-from base.tests import BaseTestCase
-
-
-class AdminTestCase(StaticLiveServerTestCase):
+"""
+class AuthTestCase(StaticLiveServerTestCase):
 
    
     def setUp(self):
-        #Load base test functionality for decide
-        self.base = BaseTestCase()
-        self.base.setUp()
-
-        options = webdriver.ChromeOptions()
-        options.headless = True
-        self.driver = webdriver.Chrome(options=options)
-
-        super().setUp()            
-    
-    def tearDown(self):           
+        self.driver = webdriver.Chrome()
+        self.vars = {}
+  
+    def tearDown(self):
         super().tearDown()
         self.driver.quit()
 
-        self.base.tearDown()
         
 
-    """def test_simpleCorrectLogin(self):
+    def test_simpleCorrectLogin(self):
         print("PRIMER TEST DE SELENIUM")                    
         self.driver.get(f'{self.live_server_url}')
         self.driver.find_element_by_id('auth').click()
         
         print(self.driver.current_url)
-        self.driver.current_url.assertEqual(self.driver.get(f'{self.live_server_url}/authentication/'))"""
-
-    """def test_simpleWrongLogin(self):
+        self.driver.current_url.assertEqual(self.driver.get(f'{self.live_server_url}/authentication/'))
+        
+        
+        
+     def test_simpleWrongLogin(self):
 
         self.driver.get(f'{self.live_server_url}/authentication/sign-in//')
         self.driver.find_element_by_id('id_username').send_keys("WRONG")
