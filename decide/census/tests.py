@@ -1,10 +1,24 @@
+import logging
+import os
 import random
-from django.contrib.auth.models import User
+import sys
+from io import StringIO
+
+from base import mods
+from base.tests import BaseTestCase
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.messages.middleware import MessageMiddleware
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.uploadedfile import (InMemoryUploadedFile,
+                                            SimpleUploadedFile)
+from django.db import transaction
 from django.test import TestCase
+from django.test.client import RequestFactory
+from mixnet.models import Auth
 from rest_framework.test import APIClient
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from .models import Census
@@ -20,6 +34,11 @@ import os
 import logging
 from selenium.webdriver.support.ui import Select
 import random
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from voting.models import Question, QuestionOption, Voting
+
+from .admin import CensusAdmin, VoterAdmin
+from .models import Census, Voter
 
 class CensusTestCase(BaseTestCase):
     
@@ -211,25 +230,6 @@ class CensusTestCase(BaseTestCase):
         for c in Census.objects.all():
             response = self.client.delete('/census/{}/'.format(c.id), data, format='json')
             self.assertEqual(response.status_code, 204)
-            
-        
-    
-    '''
-    
-    def test_csv_import_success(self):
-        self.login()
-        for i in range(1,5):
-            self.create_voting_by_id(i)
-            self.get_or_create_user(i)
-        with open('./census/test_csv/positive.csv') as f:  
-            data = {
-                "nametest" : "csv_file",
-                "file_data" : f
-            }
-            response = self.client.post('/census/import-csv/', data, format = 'json')
-            print(response.status_code)
-            self.assertEqual(3, Census.objects.count())
-    '''
 
     def test_export_census_ok(self):
 
@@ -300,4 +300,59 @@ class CensusTestCase(BaseTestCase):
         response = self.client.post('/census/', data, follow=True)
         
         self.assertEqual(response.status_code, 409)
-        
+
+    def test_csv_import_success(self):
+        rf = RequestFactory()
+        req = rf.post('/census/import-csv/')
+        setattr(req, 'session', 'session')
+        messages = FallbackStorage(req)
+        setattr(req, '_messages', messages)
+        admin = CensusAdmin(Census, None)
+
+        with open('./census/test_csv/positive.csv') as fp:
+            csv = InMemoryUploadedFile(fp, 
+                'TextField',
+                'positive.csv',
+                'CSV',
+                sys.getsizeof(fp), None)
+
+            req.FILES['csv_file'] = csv
+            response = admin.import_csv(req)
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.url, '..') #redirect: /census
+    
+    def test_csv_import_failure(self):
+        rf = RequestFactory()
+        req = rf.post('/census/import-csv/')
+        setattr(req, 'session', 'session')
+        messages = FallbackStorage(req)
+        setattr(req, '_messages', messages)
+        admin = CensusAdmin(Census, None)
+
+        with open('./census/test_csv/negative.csv') as neg:
+            #Bad census csv
+            csv = InMemoryUploadedFile(neg, 
+                'TextField',
+                'negative.csv',
+                'CSV',
+                sys.getsizeof(neg), None)
+
+            req.FILES['csv_file'] = csv
+            response = admin.import_csv(req)
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.url, '.') #redirect: /census/import-csv
+
+        with open('./census/test_csv/positive.csv') as pos:
+            #Repeated census id
+            self.create_census()
+            csv = InMemoryUploadedFile(pos, 
+                'TextField',
+                'positive.csv',
+                'CSV',
+                sys.getsizeof(pos), None)
+
+            req.FILES['csv_file'] = csv
+            response = admin.import_csv(req)
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.url, '.') #redirect: /census/import-csv
+            
