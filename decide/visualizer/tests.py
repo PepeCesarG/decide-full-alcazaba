@@ -1,5 +1,4 @@
 from base.tests import BaseTestCase
-import pytest
 import time
 import json
 from selenium import webdriver
@@ -11,12 +10,14 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class TestSeleniumVisualizer(BaseTestCase):
-    def setup_method(self, method):
+    def setup_method(self):
         self.driver = webdriver.Chrome()
         self.vars = {}
+        super().setup_method
   
-    def teardown_method(self, method):
+    def teardown_method(self):
         self.driver.quit()
+        super.teardown_method
     
     def test_view_url_guia_error(self):
         resp = self.client.get('/guiaUsuario')
