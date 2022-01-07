@@ -2,7 +2,9 @@ from django.urls import include, path
 from django.contrib.auth.views import logout
 from rest_framework.authtoken.views import obtain_auth_token
 
+
 from .views import *
+
 
 
 urlpatterns = [
@@ -19,4 +21,9 @@ urlpatterns = [
    
     path('user/<int:id>/', GetUserDetailsView.as_view()),
    
+
+    path('register/', RegisterView.as_view()),
+    path('sign-in/', SigninView.as_view()),
+    
+    path('form-login/', LoginView.as_view()),
 ]

@@ -22,6 +22,8 @@ from django.contrib import messages
 from .models import VotingUser
 from voting.models import Voting
 
+from django.views.generic import TemplateView
+
 class GetUserView(APIView):
     def post(self, request):
         key = request.data.get('token', '')
@@ -349,3 +351,18 @@ class GetGenresByIds(APIView):
             }
 
             return Response(context, HTTP_200_OK)
+        
+        
+class SigninView(TemplateView):
+    template_name="signin.html"
+    def get_context_data(self):
+        context=super().get_context_data()
+        return 
+        
+class LoginView(TemplateView):
+    template_name="login.html"
+    def get_context_data(self):
+        context=super().get_context_data()
+        return 
+    
+    

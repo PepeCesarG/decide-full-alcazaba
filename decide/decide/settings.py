@@ -110,6 +110,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR,'../catalog/templates'),
             os.path.join(BASE_DIR,'../voting/templates'),
+            os.path.join(BASE_DIR,'../authentication/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
