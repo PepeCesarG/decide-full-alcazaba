@@ -30,6 +30,42 @@ class TestContrasenyamal():
     time.sleep(1) #Debido que el test carga más rápido que la propia página debido al React.
     self.driver.find_element(By.CSS_SELECTOR, ".button-alert").click()
 
+class TestUsuarioMal():
+  def setUp(self):
+    self.driver = webdriver.Chrome()
+    self.vars = {}
+  
+  def tearDown(self):
+    self.driver.quit()
+  
+  def test_UsuarioMal(self):
+    self.driver.get("http://127.0.0.1:8081/booth/2/")
+    self.driver.set_window_size(1303, 1016)
+    self.driver.find_element(By.ID, "username").click()
+    self.driver.find_element(By.ID, "username").send_keys("alcazabe")
+    self.driver.find_element(By.ID, "password").click()
+    self.driver.find_element(By.ID, "password").send_keys("alcazaba")
+    self.driver.find_element(By.CSS_SELECTOR, ".button-submit").click()
+    time.sleep(1) #Debido que el test carga más rápido que la propia página debido al React.
+    self.driver.find_element(By.CSS_SELECTOR, ".button-alert").click()
+
+class TestTestLogeaBien():
+  def setUp(self):
+    self.driver = webdriver.Chrome()
+    self.vars = {}
+  
+  def tearDown(self):
+    self.driver.quit()
+  
+  def test_testLogeaBien(self):
+    self.driver.get("http://127.0.0.1:8081/booth/2/")
+    self.driver.set_window_size(1303, 1016)
+    self.driver.find_element(By.ID, "username").click()
+    self.driver.find_element(By.ID, "username").send_keys("alcazaba")
+    self.driver.find_element(By.ID, "password").click()
+    self.driver.find_element(By.ID, "password").send_keys("alcazaba")
+    self.driver.find_element(By.CSS_SELECTOR, ".button-submit").click()
+
 class Testprimeraopcion():
   def setUp(self):
     self.driver = webdriver.Chrome()
@@ -50,6 +86,28 @@ class Testprimeraopcion():
     self.driver.find_element(By.CSS_SELECTOR, ".radio-div:nth-child(1) > .opt-label").click()
     self.driver.find_element(By.CSS_SELECTOR, ".button-submit").click()
     time.sleep(1) #Debido que el test carga más rápido que la propia página debido al React.
+    self.driver.find_element(By.CSS_SELECTOR, ".button-alert").click()
+
+class TestSegundaOpcion():
+  def setUp(self):
+    self.driver = webdriver.Chrome()
+    self.vars = {}
+  
+  def tearDown(self):
+    self.driver.quit()
+  
+  def test_SegundaOpcion(self):
+    self.driver.get("http://127.0.0.1:8081/booth/2/")
+    self.driver.set_window_size(1303, 1016)
+    self.driver.find_element(By.ID, "username").click()
+    self.driver.find_element(By.ID, "username").send_keys("alcazaba")
+    self.driver.find_element(By.ID, "password").click()
+    self.driver.find_element(By.ID, "password").send_keys("alcazaba")
+    self.driver.find_element(By.CSS_SELECTOR, ".button-submit").click()
+    time.sleep(1)
+    self.driver.find_element(By.CSS_SELECTOR, ".radio-div:nth-child(2) > .opt-label").click()
+    self.driver.find_element(By.CSS_SELECTOR, ".button-submit").click()
+    time.sleep(1)
     self.driver.find_element(By.CSS_SELECTOR, ".button-alert").click()
 
 class TestNingunaOpcion():
