@@ -122,3 +122,11 @@ class TestShowgraphics(BaseTestCase):
         self.driver.find_element(By.LINK_TEXT, "Color de pelo").click()
         self.driver.find_element(By.LINK_TEXT, "Ver Gráficas").click()
         assert self.driver.find_element(By.CSS_SELECTOR, "h1").text == "GRÁFICOS DE LA VOTACIÓN"
+
+    def test_showgraphics_title_ok(self):
+        self.driver.get("http://localhost:8000/")
+        self.driver.set_window_size(1848, 1016)
+        self.driver.find_element(By.LINK_TEXT, "Color de pelo").click()
+        self.driver.find_element(By.LINK_TEXT, "Ver Gráficas").click()
+        elements = self.driver.find_elements(By.CSS_SELECTOR, ".col-lg-12")
+        assert len(elements) > 0
