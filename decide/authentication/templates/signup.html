@@ -96,7 +96,7 @@
                 birthdate: document.querySelector("#birthDate").value + 'T00:00',
                 gender: document.querySelector('input[name="gender"]:checked').value
             };
-            postData("{{auth_url}}" + "/authentication/signup/", data)
+            postData("{{auth_url}}" + "/authentication/sign-up/", data)
               .then(data => {
                 document.cookie = 'decide='+data.key+'; path=/';
                 token = data.key;

@@ -1,74 +1,16 @@
 <!DOCTYPE html>
-
-
-
 <html>
-
-    
-     <head>
-     
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <head>
         <meta charset="utf-8" />
-        <title>{% block title %}Decide Locaste!{% endblock %}</title>
-       
+        <title>Decide!</title>
+      
     </head>
     
     <body>
-        <header>
-        
-
-        <br>
-        <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-primary ">
-        <a class="navbar-brand" href="#">Decide-Locaste</a>
-        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button> -->
-        
-        <ul class="nav navbar-nav">
-            <li><a class="nav-item nav-link" href="{% url 'index' %}">Home</a></li>
-            {% if user.is_authenticated %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      
-                {{name}}
-                </a>
-                <div class="dropdown dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" onClick="window.location.href='authentication/profile'">Edit profile</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" onClick="decideLogout()">Log out</a>
-                </div>
-            </li>
-            {% else %}
-            <li>
-                <a class="nav-item nav-link" onClick="window.location.href='authentication/sign-in'">Sign in <span class="sr-only">(current)</span></a>
-            </li> 
-            {% endif %}
-        </ul>
-        </nav>
-        </header>
         {% block content %}
         {% endblock %}
 
         {% block extrabody %}{% endblock %}
-
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-        <script type="text/javascript">
-        function decideLogout() {
-
-          token = null;
-          user = null;
-          document.cookie = 'decide=; path=/';
-          window.location.href = "/accounts/logout/";
-        }
-        </script>
-        <footer>
-            <br><br>
-            <h5 class="blockquote text-left">Decide Locaste 2019 &copy; </h5>
-        </footer>
-    
     </body>
-  
 </html>
 
