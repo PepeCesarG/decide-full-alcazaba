@@ -90,7 +90,7 @@ class VisualizerTestCase(BaseTestCase):
         self.driver.find_element(By.LINK_TEXT, "Esta va").click()
         url = self.driver.current_url
         assert url == "https://decide-full-alcazaba-visualize.herokuapp.com/visualizer/5/"
-
+    
     def test_redirectAdmin(self):
         self.driver = webdriver.Chrome()
         self.driver.get("https://decide-full-alcazaba-visualize.herokuapp.com/")
@@ -143,3 +143,27 @@ class VisualizerTestCase(BaseTestCase):
         actions.move_to_element(element).perform()
         self.driver.find_element(By.LINK_TEXT, "postproc/").click()
         assert self.driver.find_element(By.CSS_SELECTOR, "h1").text == "Post Proc"
+    
+    def test_redirectBase(self):
+        self.driver = webdriver.Chrome()
+        self.driver.get("https://decide-full-alcazaba-visualize.herokuapp.com/")
+        element = self.driver.find_element(By.CSS_SELECTOR, ".imagen-port:nth-child(5) > .hover-galeria")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        element = self.driver.find_element(By.LINK_TEXT, "base/")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        self.driver.find_element(By.LINK_TEXT, "base/").click()
+        self.driver.find_element(By.ID, "content").click()
+        self.driver.find_element(By.ID, "id_username").click()
+        self.driver.find_element(By.ID, "id_username").send_keys("admin")
+        self.driver.find_element(By.ID, "id_password").click()
+        self.driver.find_element(By.ID, "id_password").send_keys("buenas1234")
+        self.driver.find_element(By.CSS_SELECTOR, ".submit-row > input").click()
+        assert self.driver.find_element(By.CSS_SELECTOR, ".section").text == "BASE"
+    
+    def test_okFooter(self):
+        self.driver = webdriver.Chrome()
+        self.driver.get("https://decide-full-alcazaba-visualize.herokuapp.com/")
+        elements = self.driver.find_elements(By.CSS_SELECTOR, "footer")
+        assert len(elements) > 0
