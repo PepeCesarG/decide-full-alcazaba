@@ -1,6 +1,15 @@
+import random
+from django.contrib.auth.models import User
+from django.conf import settings
+from django.test import TestCase
+from rest_framework.test import APIClient
+from django.db import transaction
+
+from voting.models import Voting, Question, QuestionOption
+from mixnet.models import Auth
+from django.contrib.auth.models import User
+from base import mods
 from base.tests import BaseTestCase
-import time
-import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
@@ -9,15 +18,20 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+
+import os
+import time
+import json
+
 class TestSeleniumVisualizer(BaseTestCase):
-    def setup_method(self):
+    def setup(self):
         self.driver = webdriver.Chrome()
         self.vars = {}
-        super().setup_method
+        super().setup
   
-    def teardown_method(self):
+    def teardown(self):
         self.driver.quit()
-        super.teardown_method
+        super.teardown
     
     def test_view_url_guia_error(self):
         resp = self.client.get('/guiaUsuario')
