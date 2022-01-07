@@ -1,4 +1,5 @@
 import json
+from django.http import JsonResponse
 from django.http.response import HttpResponse
 from django.views.generic import TemplateView
 from django.conf import settings
@@ -117,4 +118,23 @@ class VisualizerView3(TemplateView):
         
         pdf = generate_pdf('visualizer/pdf.html', context)
         return HttpResponse(pdf, content_type = 'application/pdf')
+
+class VisualizerGetAll(TemplateView):
+
+    def get(self, request):
+
+        data  = list(Voting.objects.all())
+        responseData = {}
+        for voting in data:
+
+            responseData[voting.id] = {
+                'name': voting.name,
+                'description': voting.desc,
+                'fecha_inicio': voting.start_date,
+                'fecha_fin': voting.end_date,
+                'question_desc': voting.question.desc,
+                'postproc': voting.postproc,
+            }
+
+        return JsonResponse(responseData)
     
