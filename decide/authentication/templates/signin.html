@@ -5,13 +5,11 @@
     <script>
   var googleUser = {};
   var startApp = function() {
+  
     gapi.load('auth2', function(){
-      // Retrieve the singleton for the GoogleAuth library and set up the client.
       auth2 = gapi.auth2.init({
         client_id: '150285852294-dth6aoumllndds0h9fdfjt8dd5rcieeu.apps.googleusercontent.com',
         cookiepolicy: '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',
-        // Request scopes in addition to 'profile' and 'email'
-        //scope: 'additional_scope'
       });
       attachSignin(document.getElementById('customBtn'));
     });
@@ -23,9 +21,11 @@
         function(googleUser) {
           document.getElementById('name').innerText = "Signed in: " +
               googleUser.getBasicProfile().getName();
+          onSingIn(googleUser);
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
         });
+ 
   }
   </script>
 
@@ -75,19 +75,27 @@
 <body>
 <div id="gSignInWrapper">
     <span class="label">Sign in with:</span>
-    <div id="customBtn" class="customGPlusSignIn">
+    <div id="customBtn"  class="customGPlusSignIn">
       <span class="icon"></span>
       <span class="buttonText">Google</span>
     </div>
   </div>
 <div id="name"></div>
-  <script>startApp();</script>
 
+  <script>
+  	
+        startApp();
 
-
-    <script>
+        
         var token = null;
         var user = null;
+
+        function onSingIn(googleUser){
+          var profile =googleUser.getBasicProfile();
+          var id_token =googleUser.getAuthResponse().id_token;
+          console.log("ID Token: "+profile.getId());
+          
+        }
 
         function postData(url, data) {
           // Default options are marked with *
@@ -156,4 +164,6 @@
 
         init();
 </script>
+
+
 </body>

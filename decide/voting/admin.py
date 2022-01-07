@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.utils import timezone
 from django import forms
 from census.models import Census
-from django.contrib.auth.models import User
 
  
 import logging, sys
@@ -106,8 +105,8 @@ class VotingAdminForm(forms.ModelForm):
         model = Voting
         fields = "__all__"
         
-    incl_census = forms.ModelMultipleChoiceField(queryset=Census.objects.all(), label="Inclusive Census", to_field_name="name", required=False)
-    excl_census = forms.ModelMultipleChoiceField(queryset=Census.objects.all(), label="Exclusive Census", to_field_name="name", required=False)
+    incl_census = forms.ModelMultipleChoiceField(queryset=Census.objects.exclude(name__in=[provincia[0] for provincia in PROVINCIAS]), label="Inclusive Census", to_field_name="name", required=False)
+    excl_census = forms.ModelMultipleChoiceField(queryset=Census.objects.exclude(name__in=[provincia[0] for provincia in PROVINCIAS]), label="Exclusive Census", to_field_name="name", required=False)
         
     location = forms.ChoiceField(widget=forms.Select, choices=PROVINCIAS, required=False)
     
@@ -132,6 +131,8 @@ class VotingAdmin(admin.ModelAdmin):
         location = request.POST.get("location")
         name = request.POST.get("name")
         
+        voting = Voting.objects.get(name=name)
+        
         excl_censuses = request.POST.getlist("excl_census")
         excl_voters = []
         incl_censuses = request.POST.getlist("incl_census")
@@ -144,15 +145,11 @@ class VotingAdmin(admin.ModelAdmin):
             logging.debug("No se ha seleccionado provincia")
         else:
             logging.debug("Se ha seleccionado la provincia de " + location)
-            voting = Voting.objects.get(name=name)
             try:
                 censo = Census.objects.get(name=location)
-                censo.voting_ids.add(voting)
                 censo.save()
             except:
                 censo = Census(name = location)
-                censo.save()
-                censo.voting_ids.add(voting)
                 censo.save()
 #           añadir el censo de localidad a la lista de votantes de censos inclusivos
             incl_voters += censo.voter_ids.all()
@@ -175,10 +172,16 @@ class VotingAdmin(admin.ModelAdmin):
         for voter in excl_voters:
             if voter in voters:
                 voters.remove(voter)
+                
+#        borramos el censo anterior para que no se acumulen
+        try:
+            old_census = Census.objects.filter(voting_ids=voting).first()
+            old_census.delete()
+        except:
+            pass
         
 #        añadimos las relaciones con voting y voters al censo final
         for voter in voters:
-            voter = User.objects.get(username=voter)
             final_census.voter_ids.add(voter)
         final_census.voting_ids.add(Voting.objects.get(id=voting_id))
         final_census.save()
