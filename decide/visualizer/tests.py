@@ -123,6 +123,13 @@ class TestShowgraphics(BaseTestCase):
         self.driver.find_element(By.LINK_TEXT, "Ver Gráficas").click()
         assert self.driver.find_element(By.CSS_SELECTOR, "h1").text == "GRÁFICOS DE LA VOTACIÓN"
 
+    def test_showgraphics_button_ok(self):
+        self.driver.get("http://localhost:8000/")
+        self.driver.set_window_size(1848, 1016)
+        self.driver.find_element(By.LINK_TEXT, "Color de pelo").click()
+        elements = self.driver.find_elements(By.LINK_TEXT, "Ver Gráficas")
+        assert len(elements) > 0
+    
     def test_showgraphics_allgraphics_ok(self):
         self.driver.get("http://localhost:8000/")
         self.driver.set_window_size(1848, 1016)
@@ -138,4 +145,4 @@ class TestShowgraphics(BaseTestCase):
         self.driver.find_element(By.LINK_TEXT, "Ver Gráficas").click()
         element = self.driver.find_elements(By.CSS_SELECTOR, ".footer-content")
         assert len(element) > 0
-        assert self.driver.find_element(By.CSS_SELECTOR, "h3").text == "Decide"
+        assert self.driver.find_element(By.CSS_SELECTOR, "h3").text == "Decide"'''
