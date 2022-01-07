@@ -1,23 +1,73 @@
-{% extends "base.html" %}
-{% load i18n static %}
+{% load i18n static admin_urls %}
 
-{% block content %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie-edge">
+        <link rel="shortcut icon" href="decidelogo" type="image/x-icon">
+        <title>{% block title %}Decide!{% endblock %}</title>
+        {% block extrahead %}{% endblock %}
+        <style type='text/css'>
+            
+            .decide{
+                padding-top: 20px;
+                font-size: 36px;
+                text-align: center;
+            }
 
-    <h1>Decide</h1>
+            .votacion {
+                font-size: xx-large;
+            }
 
-    <h2>{{ voting.id }} - {{ voting.name }}</h2>
+            .opciones {
+                font-size: large;
+            }
 
-    {% if not voting.start_date %}
-        <h3>{% trans 'Votación no comenzada' %}</h3>
-    {% elif not voting.end_date %}
-        <h3>{% trans 'Votación abierta' %}</h3>
-    {% else %}
-        <h3>{% trans 'Resultados: ' %}</h3>
-        <ul>
-            {% for option in voting.postproc %}
-                <li>{{option.option}}: {{option.postproc}} <span>({{option.votes}})</span></li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+            .footer-content h3{
+                margin-top: 50px;
+                text-align: center;
+            }
 
-{% endblock %}
+            .footer-content p{
+                text-align: center;
+                font-size: medium;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        {% block content %}
+        <div>
+            <h1 class="decide">Decide</h1>
+            <h2 class="votacion">{{ voting.id }} - {{ voting.name }}</h2>
+            <p>{{ voting.desc }}</p>
+            <div class="opciones">
+                {% if not voting.start_date %}
+                    <h3>{% trans 'Votación no comenzada' %}</h3>
+                {% elif not voting.end_date %}
+                    <h3>{% trans 'Votación abierta' %}</h3>
+                {% else %}
+                    <h3>{% trans 'Resultados: ' %}</h3>
+                    <ul>
+                        {% for option in voting.postproc %}
+                            <li>{{option.option}}: {{option.postproc}} <span>({{option.votes}})</span></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+        {% endblock %}
+
+        <footer>
+            <div class="footer-content">
+                <h3>Decide</h3>
+                <p>Plataforma de voto online</p>
+            </div>
+        </footer>
+
+        {% block extrabody %}{% endblock %}
+    </body>
+</html>   
