@@ -1,5 +1,5 @@
 from django.test import TestCase
-import pytest
+
 import time
 import json
 from selenium import webdriver
@@ -34,3 +34,16 @@ class TestRedirectAPI():
         self.driver.find_element(By.CSS_SELECTOR, ".submit-row > input").click()
         assert self.driver.find_element(By.LINK_TEXT, "Administración de Django").text == "Administración de Django"
         assert self.driver.find_element(By.CSS_SELECTOR, "strong").text == "FRAVILTOR"
+    
+    def test_incorrectAdmin(self):
+        self.driver = webdriver.Chrome()
+        self.driver.get("https://decide-full-alcazaba-visualize.herokuapp.com/admin/login/?next=/admin/")
+        self.driver.set_window_size(909, 1016)
+        self.driver.find_element(By.ID, "id_username").click()
+        self.driver.find_element(By.ID, "id_username").send_keys("admin")
+        self.driver.find_element(By.ID, "id_password").click()
+        self.driver.find_element(By.ID, "id_password").send_keys("incorrecto")
+        self.driver.find_element(By.CSS_SELECTOR, ".submit-row > input").click()
+        elements = self.driver.find_elements(By.CSS_SELECTOR, ".errornote")
+        assert len(elements) > 0
+    
