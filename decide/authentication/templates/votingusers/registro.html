@@ -1,0 +1,52 @@
+<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'index/menu.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'votingusers/registro.css' %}">
+    <title>DECIDE FULL GUADALFEO</title>
+</head>
+<body>
+{% include "index/menu.html" %}
+
+<div class="container">
+
+        <h1>REGISTER</h1>
+
+        {% if not user.is_authenticated %}
+
+        <div>
+            <form id="registerForm" method="post" action="">
+                {% csrf_token %}
+                <h3>User</h3>
+                {{user_form.as_p}}
+
+                <h3>Voting User</h3>
+                {{votinguser_form.as_p}}
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+
+        {% else %}
+
+            {% if not voting_user %}
+
+                <form id="registerForm" method="post" action="">
+                    {% csrf_token %}
+
+                    <h3>Voting User</h3>
+                    {{votinguser_form.as_p}}
+                    <input type="submit" value="Submit">
+                </form>
+
+            {% else %}
+
+            <ul>
+                <li>You are already registered.</li>
+            </ul>
+
+            {% endif %}
+        {% endif %}
+    </div>
+
+  </body>
+</html>

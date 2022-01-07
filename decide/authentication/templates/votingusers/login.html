@@ -1,0 +1,57 @@
+<html>
+<head>
+    {% load static %}
+    {% load socialaccount %}
+    <link rel="stylesheet" type="text/css" href="{% static 'votingusers/login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index/menu.css' %}">
+    <title>DECIDE FULL GUADALFEO</title>
+</head>
+<body>
+    {% include "index/menu.html" %}
+
+  <div class="container">
+
+        <h1>LOGIN</h1>
+
+        {% for message in messages %}
+            <p id="error">{{ message }}</p>
+        {% endfor %}
+
+
+        {% if not user.is_authenticated %}
+
+        <div>
+            {% if not user.is_authenticated %}
+
+              <p>You can also try with your email instead of username</p>
+              <form id="loginForm" method="post" action="">
+                  {% csrf_token %}
+                  {{login_form.as_p}}
+                  <input type="submit" value="Login">
+              </form>
+
+              <a href="{% provider_login_url 'google' %}">Login with Google</a>
+              <a href="{% url 'social:begin' 'github'%}">Login with Github</a>
+              <a href="{% url 'social:begin' 'linkedin-oauth2'%}">Login with Linkedin</a>
+
+              <a href="{% url 'auth_register' %}">Need an account? Register here!</a>
+
+            {% else %}
+
+                <p>Already logged in! Return to <a href="{% url 'decide_main' %}">Main Page</a></p>
+
+            {% endif %}
+
+        </div>
+
+        {% else %}
+
+            <ul>
+                <li>You are already logged in.</li>
+            </ul>
+
+        {% endif %}
+    </div>
+
+  </body>
+</html>

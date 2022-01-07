@@ -1,0 +1,24 @@
+<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'index/menu.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'votingusers/profile.css' %}">
+    <title>DECIDE FULL GUADALFEO</title>
+</head>
+<body>
+    {% include "index/menu.html" %}
+    <div class="container">
+        <h2>Profile Information:</h2>
+        <form id="profileForm" method="post" action="">
+            {% csrf_token %}
+            <h3>User</h3>
+            {{user_form.as_p}}
+
+            <h3>Voting User</h3>
+            {{voting_user_form.as_p}}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+</body>
+</html>
