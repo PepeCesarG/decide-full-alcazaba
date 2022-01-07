@@ -119,3 +119,27 @@ class VisualizerTestCase(BaseTestCase):
         self.driver.find_element(By.CSS_SELECTOR, ".submit-row > input").click()
         elements = self.driver.find_elements(By.CSS_SELECTOR, ".errornote")
         assert len(elements) > 0
+    
+    def test_redirectAPI(self):
+        self.driver = webdriver.Chrome()
+        self.driver.get("https://decide-full-alcazaba-visualize.herokuapp.com/")
+        element = self.driver.find_element(By.CSS_SELECTOR, ".imagen-port:nth-child(2) > .hover-galeria")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        element = self.driver.find_element(By.LINK_TEXT, "doc/")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        self.driver.find_element(By.LINK_TEXT, "doc/").click()
+        assert self.driver.find_element(By.CSS_SELECTOR, ".title").text == "Decide API"
+
+    def test_redirectPostproc(self):
+        self.driver = webdriver.Chrome()
+        self.driver.get("https://decide-full-alcazaba-visualize.herokuapp.com/")
+        element = self.driver.find_element(By.CSS_SELECTOR, ".imagen-port:nth-child(9) > .hover-galeria")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        element = self.driver.find_element(By.LINK_TEXT, "postproc/")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        self.driver.find_element(By.LINK_TEXT, "postproc/").click()
+        assert self.driver.find_element(By.CSS_SELECTOR, "h1").text == "Post Proc"
