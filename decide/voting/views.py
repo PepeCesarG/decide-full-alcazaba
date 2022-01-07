@@ -1,14 +1,81 @@
+import logging
 import django_filters.rest_framework
 from django.conf import settings
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.http import HttpResponseRedirect
+from django.views.generic import TemplateView
 
 from .models import Question, QuestionOption, Voting
 from .serializers import SimpleVotingSerializer, VotingSerializer
 from base.perms import UserIsStaff
 from base.models import Auth
+from census.models import Census
+from django.forms.models import inlineformset_factory
+
+class SuccessView(TemplateView):
+    template_name = 'voting/success.html'
+
+QuestionOptionSet = inlineformset_factory(Question, QuestionOption, fields=('number','option',),can_delete=False, extra=6)
+
+class QuestionFormView(CreateView):
+    model = Question
+    fields = "__all__"
+
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data["questionOption"] = QuestionOptionSet(self.request.POST)
+        else:
+            data["questionOption"] = QuestionOptionSet()
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        questionOption = context["questionOption"]
+        self.object = form.save()
+        if questionOption.is_valid():
+            questionOption.instance = self.object
+            questionOption.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return "../success"
+
+
+class VotingFormView(CreateView):
+    model = Voting
+    fields = "__all__"
+
+    def create_census(self, form):
+        location = form.cleaned_data['location']
+        if location == '':
+            logging.debug("No se ha seleccionado provincia")
+        else:
+            logging.debug("Se ha seleccionado la provincia de " + location)
+            name = form.cleaned_data['name']
+            voting = Voting.objects.get(name=name)
+            try:
+                censo = Census.objects.get(name=location)
+                censo.voting_ids.add(voting)
+                censo.save()
+            except:
+                censo = Census(name = location)
+                censo.save()
+                censo.voting_ids.add(voting)
+                censo.save()
+
+    def get_success_url(self):
+        return "../success"
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.create_census(form)
+        return HttpResponseRedirect(self.get_success_url())   
 
 
 class VotingView(generics.ListCreateAPIView):
@@ -32,8 +99,7 @@ class VotingView(generics.ListCreateAPIView):
         for data in ['name', 'desc', 'tipo','question', 'question_opt']:
             if not data in request.data:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
-        question = Question(desc=request.data.get('question'))
-        question = Question(tipo=request.data.get('tipo'))
+        question = Question(desc=request.data.get('question'), tipo=request.data.get('tipo'))
         question.save()
 
         for idx, q_opt in enumerate(request.data.get('question_opt')):

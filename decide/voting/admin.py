@@ -97,13 +97,7 @@ def censusName():
 class QuestionOptionInline(admin.TabularInline):
     model = QuestionOption
 
-
-# class QuestionBinaryInLine(admin.TabularInline):
-    # model = QuestionBinary
-
-
 class QuestionAdmin(admin.ModelAdmin):
-    # TODO: Crear javascript que cambie el valor del InLine
     inlines = [QuestionOptionInline]
 
 class VotingAdminForm(forms.ModelForm):
