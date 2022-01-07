@@ -14,6 +14,17 @@ from base.tests import BaseTestCase
 
 import os
 
+import pytest
+import time
+import json
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
 
 class VisualizerTestCase(BaseTestCase):
     
@@ -57,7 +68,6 @@ class VisualizerTestCase(BaseTestCase):
         user.save()
         return user
     
-
     def test_enpoint_is_avaliable(self):
         self.create_voting()
         response = self.client.get('/visualizer/all', format='json')
@@ -84,3 +94,25 @@ class VisualizerTestCase(BaseTestCase):
         question_desc = str(voting.question).split(':')[0]
         question_desc_response = response.json()['2']['question_desc']
         self.assertEqual(question_desc, question_desc_response)
+
+
+
+class TestShowgraphics(BaseTestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome()
+        self.vars = {}
+        super().setUp()
+        
+    def tearDown(self):
+        self.driver.quit()
+        super().tearDown()
+    
+    def test_showgraphics(self):
+        self.driver.get("http://localhost:8000/")
+        self.driver.set_window_size(1848, 1016)
+        self.driver.find_element(By.LINK_TEXT, "Color de pelo").click()
+        self.driver.find_element(By.LINK_TEXT, "Ver Gráficas").click()
+        url = self.driver.current_url
+        assert url == "http://localhost:8000/visualizer/3/graficos"
+    
