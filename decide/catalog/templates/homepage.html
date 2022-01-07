@@ -109,6 +109,8 @@
                 </div>
             </div>
         </section>
+        {% if votings|length > 0 %}
+        
         <section>
             <h2 class="titulo">{% trans 'Votings' %}</h2>
             <div class="listavotings">
@@ -117,6 +119,7 @@
                 {% endfor %}
             </div>
         </section>
+        {% endif %}
         <section>
             <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
                 <input name="next" type="hidden" value="{{ redirect_to }}" />
