@@ -10,7 +10,6 @@ def homepage(request):
                 'id': voting.id,
                 'name': voting.name,
             }
-    print(votings.values())
     return render(request, 'homepage.html', {"votings":votings.values()})
 
 def guia(request):
