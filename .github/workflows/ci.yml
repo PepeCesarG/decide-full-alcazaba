@@ -33,10 +33,9 @@ jobs:
         pip install codacy-coverage
     - name: Run migrations
       run: cd decide;python manage.py makemigrations;python manage.py migrate
-    - name: Run test census     
+    - name: Run tests     
       run: cd decide;coverage run --branch --source=. ./manage.py test census --keepdb; coverage xml;
-    - name: Run test authentication     
-      run: cd decide;coverage run --branch --source=. ./manage.py test census --keepdb; authentication xml;
+
     # - name: Codacy Coverage Reporter
     #   uses: codacy/codacy-coverage-reporter-action@v1.1.0
     #   with:
