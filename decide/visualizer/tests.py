@@ -20,7 +20,7 @@ class TestRedirectAPI():
     
     def test_redirectAdmin(self):
         self.driver = webdriver.Chrome()
-        self.driver.get("http://localhost:8081/")
+        self.driver.get("https://decide-full-alcazaba-visualize.herokuapp.com/")
         element = self.driver.find_element(By.CSS_SELECTOR, ".imagen-port:nth-child(1) > .hover-galeria")
         actions = ActionChains(self.driver)
         actions.move_to_element(element).perform()
@@ -29,11 +29,11 @@ class TestRedirectAPI():
         actions.move_to_element(element).perform()
         self.driver.find_element(By.LINK_TEXT, "admin/").click()
         self.driver.find_element(By.ID, "content").click()
-        self.driver.find_element(By.ID, "id_username").send_keys("fraviltor")
-        self.driver.find_element(By.ID, "id_password").send_keys("fraviltor")
+        self.driver.find_element(By.ID, "id_username").send_keys("admin")
+        self.driver.find_element(By.ID, "id_password").send_keys("buenas1234")
         self.driver.find_element(By.CSS_SELECTOR, ".submit-row > input").click()
         assert self.driver.find_element(By.LINK_TEXT, "Administración de Django").text == "Administración de Django"
-        assert self.driver.find_element(By.CSS_SELECTOR, "strong").text == "FRAVILTOR"
+        assert self.driver.find_element(By.CSS_SELECTOR, "strong").text == "ADMIN"
     
     def test_incorrectAdmin(self):
         self.driver = webdriver.Chrome()
@@ -46,4 +46,3 @@ class TestRedirectAPI():
         self.driver.find_element(By.CSS_SELECTOR, ".submit-row > input").click()
         elements = self.driver.find_elements(By.CSS_SELECTOR, ".errornote")
         assert len(elements) > 0
-    
