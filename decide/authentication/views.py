@@ -75,9 +75,43 @@ class SigninView(TemplateView):
         context=super().get_context_data()
         return 
 
-class SignupView(TemplateView):
+
+class SignupView1(TemplateView):
     template_name="signup.html"
     def get_context_data(self):
         context=super().get_context_data()
         return context
 
+class SignupView(TemplateView):
+    template_name="signup.html"
+    def post(self, request):
+        key = request.data.get('token', '')
+        tk = get_object_or_404(Token, key=key)
+        if not tk.user.is_superuser:
+            return Response({}, status=HTTP_401_UNAUTHORIZED)
+
+        username = request.data.get('username', '')
+        pwd = request.data.get('password', '')
+        if not username or not pwd:
+            return Response({}, status=HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User(username=username)
+            user.set_password(pwd)
+            user.save()
+            token, _ = Token.objects.get_or_create(user=user)
+        except IntegrityError:
+            return Response({}, status=HTTP_400_BAD_REQUEST)
+        return Response({'user_pk': user.pk, 'token': token.key}, HTTP_201_CREATED)
+    
+    
+class ListUsers(APIView):
+    def get(self, request):
+        users = User.objects.all().values_list('id', flat=True)
+        return Response({'users': users})
+        
+
+class GetUserDetails(APIView):
+    def get(self, request, user_id):
+        user = User.objects.get(id=user_id)
+        return Response(UserSerializer(user, many=False).data)
