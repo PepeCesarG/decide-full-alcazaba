@@ -141,6 +141,14 @@ class VotingAdmin(admin.ModelAdmin):
         
         voting = Voting.objects.get(name=name)
         
+        #Debemos quitar la votacion de todos los censos en los que estuviera previamente
+        all_census = Census.objects.all()
+        for c in all_census:
+            if voting in c.voting_ids.all():
+                voting_ids = c.voting_ids.exclude(name=name)
+                c.voting_ids.set(voting_ids)
+                c.save()
+        
         excl_censuses = request.POST.getlist("excl_census")
         excl_voters = []
         incl_censuses = request.POST.getlist("incl_census")
