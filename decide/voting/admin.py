@@ -93,11 +93,11 @@ def censusName(inclList, exclList):
     exclList.sort()
     name = 'Con: '
     for c in inclList:
-        name = name + c + ','
+        name = name + c + '|'
     name = name[:-1]
     name = name + ' Sin: '
     for c in exclList:
-        name = name + c + ','
+        name = name + c + '|'
     name = name[:-1]
     logging.debug("El censo a usar será: " + name)
     return name
