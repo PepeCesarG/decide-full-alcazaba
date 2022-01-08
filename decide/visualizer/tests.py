@@ -15,6 +15,17 @@ from base.tests import BaseTestCase
 import os
 
 
+import pytest
+import time
+import json
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
 class VisualizerTestCase(BaseTestCase):
     
     voter = None
@@ -84,3 +95,36 @@ class VisualizerTestCase(BaseTestCase):
         question_desc = str(voting.question).split(':')[0]
         question_desc_response = response.json()['2']['question_desc']
         self.assertEqual(question_desc, question_desc_response)
+
+
+
+class TestPdf(BaseTestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome()
+        self.vars = {}
+        super().setUp()
+    
+    def tearDown(self):
+        self.driver.quit()
+        super().tearDown()
+    
+    def test_pdf(self):
+        self.driver.get("http://localhost:8000/")
+        self.driver.set_window_size(909, 1016)
+        self.driver.find_element(By.LINK_TEXT, "Color de las mesas").click()
+        self.driver.find_element(By.LINK_TEXT, "Exportar en PDF").click()
+        url = self.driver.current_url
+        assert url == "http://localhost:8000/visualizer/1/pdf"
+
+    def test_pdf_title(self):
+        self.driver.get("http://localhost:8000/")
+        self.driver.set_window_size(909, 1016)
+        self.driver.find_element(By.LINK_TEXT, "Color de las mesas").click()
+        self.driver.find_element(By.LINK_TEXT, "Exportar en PDF").click()
+        title = self.driver.title
+        self.assertEqual("Color de las mesas", title)
+
+        
+
+  
