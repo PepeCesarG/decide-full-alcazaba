@@ -140,7 +140,6 @@ class ExportCsv:
 class CensusAdmin(admin.ModelAdmin, ExportCsv):
     list_display = ('name', 'votings', 'voters')
     list_filter = ('name', )
-    readonly_fields=('voting_ids',)
 
     search_fields = ('name', )
     change_list_template = "entities/census_changelist.html"
