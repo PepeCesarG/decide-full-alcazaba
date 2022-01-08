@@ -12,8 +12,22 @@ from rest_framework.status import (
 from voting.models import Voting
 from django.contrib.auth.models import User
 from base.perms import UserIsStaff
-from .models import Census
-
+from .models import Census, Voter
+import logging, sys
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+class VoterCreate(generics.ListCreateAPIView):
+    def create(self,request,*args,**kwargs):
+        userv = User.objects.get(username=str(request.data.get('user')))
+        locationv = request.data.get('location')
+        edadv = request.data.get('edad')
+        generov = request.data.get('genero')
+        try:
+            voter = Voter(user=userv, location=locationv, edad=edadv,genero=generov)
+            voter.save()
+        except IntegrityError:
+            return Response('Usuario:'+str(request.data), status=ST_401)
+                
+        return Response(voter.id, status =ST_201)
 
 class CensusCreate(generics.ListCreateAPIView):
     permission_classes = (UserIsStaff,)

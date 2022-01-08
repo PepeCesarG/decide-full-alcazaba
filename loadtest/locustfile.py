@@ -11,7 +11,7 @@ from locust import (
 )
 
 
-HOST = "http://localhost:8000"
+HOST = "http://localhost:8081"
 VOTING = 1
 
 
@@ -33,15 +33,15 @@ class DefVoters(SequentialTaskSet):
     def login(self):
         username, pwd = self.voter
         self.token = self.client.post("/authentication/login/", {
-            "username": username,
-            "password": pwd,
+            "username": 'davisito',
+            "password": 'diamante1',
         }).json()
 
     @task
     def getuser(self):
         self.usr= self.client.post("/authentication/getuser/", self.token).json()
         print( str(self.user))
-
+    '''
     @task
     def voting(self):
         headers = {
@@ -57,7 +57,7 @@ class DefVoters(SequentialTaskSet):
             "voter": self.usr.get('id'),
             "voting": VOTING
         }), headers=headers)
-
+    '''
 
     def on_quit(self):
         self.voter = None

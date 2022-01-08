@@ -2,9 +2,9 @@ import json
 import requests
 
 
-HOST = "http://localhost:8000"
-USER = "admin"
-PASS = "admin"
+HOST = "http://127.0.0.1:8081"
+USER = "davisito"
+PASS = "diamante1"
 VOTING = 1
 
 
@@ -25,13 +25,21 @@ def create_voters(filename):
     for username, pwd in voters.items():
         token.update({'username': username, 'password': pwd})
         response = requests.post(HOST + '/authentication/register/', data=token)
+        print('Se crea usuario:' + str(response))
+        print('Se crea usuario:' + username)
+        addvoter = {'user':username, 'location':'Sevilla','edad':'45','genero':'Hombre'}
+        response = requests.post(HOST+'/census/voters/',json =addvoter)
+
+        print('Se crea voter:' +str(response.text))
         if response.status_code == 201:
-            voters_pk.append(response.json().get('user_pk'))
+            
+            voters_pk.append(int(response.text))
         else:
             invalid_voters.append(username)
+        break
     return voters_pk, invalid_voters
 
-
+'''
 def add_census(voters_pk, voting_pk):
     """
     Add to census all voters_pk in the voting_pk.
@@ -46,6 +54,9 @@ def add_census(voters_pk, voting_pk):
 
 
 
-voters, invalids = create_voters('voters.json')
+
 add_census(voters, VOTING)
 print("Create voters with pk={0} \nInvalid usernames={1}".format(voters, invalids))
+    '''
+voters, invalids = create_voters('voters.json')
+print(voters,invalids)
