@@ -10,10 +10,21 @@
         <title>{% block title %}Decide!{% endblock %}</title>
         {% block extrahead %}{% endblock %}
         <style type='text/css'>
+
+            * {
+               font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+
+            .imagen-logo {
+                vertical-align: sub;
+                padding-left: 1cm;
+                height: 70px;
+                width: 70px;
+            }
             
             .decide{
-                padding-top: 20px;
-                font-size: 36px;
+                vertical-align: top;
+                font-size: 32px;
                 text-align: center;
             }
 
@@ -21,18 +32,31 @@
                 font-size: xx-large;
             }
 
+            .descripcion {
+                text-align: justify;
+                padding-top: 5px;
+            }
             .opciones {
+                margin-top: 10px;
                 font-size: large;
             }
 
-            .footer-content h3{
-                margin-top: 50px;
+            footer{
                 text-align: center;
             }
 
+            .footer-content h3{
+                padding-top: 10px;
+                border-top-style: solid;
+                border-top-color: black;
+                margin-top: 50px;
+            }
+
             .footer-content p{
-                text-align: center;
                 font-size: medium;
+                padding-bottom: 10px;
+                border-bottom-style: solid;
+                border-bottom-color: black;
             }
 
         </style>
@@ -41,9 +65,13 @@
     <body>
         {% block content %}
         <div>
+            <div class="imagen-logo">
+                <img src="https://i.imgur.com/I3RFIvv.png" alt="decidelogo">
+            </div>
+
             <h1 class="decide">Decide</h1>
             <h2 class="votacion">{{ voting.id }} - {{ voting.name }}</h2>
-            <p>{{ voting.desc }}</p>
+            <p class="descripcion">{{ voting.desc }}</p>
             <div class="opciones">
                 {% if not voting.start_date %}
                     <h3>{% trans 'Votación no comenzada' %}</h3>
