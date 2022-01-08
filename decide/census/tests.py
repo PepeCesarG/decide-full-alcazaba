@@ -81,55 +81,6 @@ class CensusTestCase(BaseTestCase):
         user.id = pk
         user.save()
         return user
-        '''
-    #TEST QUE COMPRUEBA LA FEATURE #34 PARA EL CENSO: Automatizar el proceso de creacion de votos
-    #de tal manera que si se crea un votante con una localidad, edad y genero se creen los censos 
-    #respectivos, para hacer este test es necesario que se introduzca un usuario con permisos y tener 
-    #la base de datos limpia
-    def test_create_check_censuss(self):
-        usuarioconpermisos = ''
-        contraseñaconpermisos = ''
-        if usuarioconpermisos=='' or contraseñaconpermisos=='':
-            logging.debug('NO SE HA INTRODUCIDO USUARIO O CONTRASEÑA EN EL TEST')
-        i = random.randint(0,100000)
-        logger = logging.getLogger('selenium.webdriver.remote.remote_connection') 
-        logger.setLevel(logging.WARNING)
-        options = webdriver.ChromeOptions()
-        options.headless = False
-        driver = webdriver.Chrome(options=options)
-        driver.get("http://127.0.0.1:8081/admin")
-        username = driver.find_element_by_name('username')
-        password = driver.find_element_by_name('password')
-        username.send_keys(usuarioconpermisos)
-        password.send_keys(contraseñaconpermisos)
-        driver.find_element_by_id("login-form").submit()
-        #driver.get('http://>>>>>>> develop127.0.0.1:8081/admin/auth/user/')
-        driver.get("http://127.0.0.1:8081/admin/auth/user/add/")
-        createuser = driver.find_element_by_name('username')
-        createpassword = driver.find_element_by_name('password1')
-        confirmpassword = driver.find_element_by_name('password2')
-        createuser.send_keys('usuarioprueba'+str(i))
-        createpassword.send_keys('contrasenaprueba1')
-        confirmpassword.send_keys('contrasenaprueba1')
-        driver.find_element_by_id('user_form').submit()
-        driver.get("http://127.0.0.1:8081/admin/census/voter/add")
-        selectuser = Select(driver.find_element_by_name('user'))
-        selectuser.select_by_visible_text('usuarioprueba'+str(i))
-        selectlocation = Select(driver.find_element_by_name('location'))
-        selectlocation.select_by_visible_text('Zaragoza')
-        insertedad = driver.find_element_by_name('edad')
-        insertedad.send_keys('45')
-        selectgenero = Select(driver.find_element_by_name('genero'))
-        selectgenero.select_by_visible_text('Hombre')
-        driver.find_element_by_id('voter_form').submit()
-        driver.get('http://127.0.0.1:8081/admin/census/census/')
-        censocreadoporgenero = driver.find_element_by_link_text('Hombre').text
-        censocreadoporlocation =driver.find_element_by_link_text('Sevilla').text
-        censocreadoporedad = driver.find_element_by_link_text('45').text
-        logging.debug('Censo por locacion:' + str(censocreadoporlocation))
-        logging.debug('Censo por genero:' + str(censocreadoporgenero))
-        logging.debug('Censo por edad:' + str(censocreadoporedad))
-        '''
     def create_voter(self):
         Voter.objects.all().delete()
         self.user, _ = User.objects.get_or_create(username='testvoter{}'.format(1))
@@ -356,3 +307,135 @@ class CensusTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 302)
             self.assertEqual(response.url, '.') #redirect: /census/import-csv
             
+
+    '''
+    #######################################################################################################################################
+    #TEST CREADOS CON SELENIUM                                                                                                            #
+    #PARA QUE FUNCIONEN CORRECTAMENTE ES NECESARIO QUE SE INTRODUZCA UN USUARIO CON PERMISOS DE SUPER USER Y TENER LA BASE DE DATOS LIMPIA#
+    #######################################################################################################################################
+    
+    #TEST QUE COMPRUEBA LA FEATURE #34 PARA EL CENSO: Automatizar el proceso de creacion de votos
+    #de tal manera que si se crea un votante con una localidad, edad y genero se creen los censos 
+    #respectivos.
+    
+    usuarioconpermisos = ''
+    contraseñaconpermisos = ''
+    
+    def test_create_check_censuss(self):
+        if self.usuarioconpermisos=='' or self.contraseñaconpermisos=='':
+            logging.debug('NO SE HA INTRODUCIDO USUARIO O CONTRASEÑA EN EL TEST')
+        logger = logging.getLogger('selenium.webdriver.remote.remote_connection') 
+        logger.setLevel(logging.WARNING)
+        options = webdriver.ChromeOptions()
+        options.headless = False
+        driver = webdriver.Chrome(options=options)
+        driver.get("http://127.0.0.1:8081/admin")
+        username = driver.find_element_by_name('username')
+        password = driver.find_element_by_name('password')
+        username.send_keys(self.usuarioconpermisos)
+        password.send_keys(self.contraseñaconpermisos)
+        driver.find_element_by_id("login-form").submit()
+        #driver.get('http://>>>>>>> develop127.0.0.1:8081/admin/auth/user/')
+        driver.get("http://127.0.0.1:8081/admin/auth/user/add/")
+        createuser = driver.find_element_by_name('username')
+        createpassword = driver.find_element_by_name('password1')
+        confirmpassword = driver.find_element_by_name('password2')
+        createuser.send_keys('usuarioprueba0')
+        createpassword.send_keys('contrasenaprueba1')
+        confirmpassword.send_keys('contrasenaprueba1')
+        driver.find_element_by_id('user_form').submit()
+        driver.get("http://127.0.0.1:8081/admin/census/voter/add")
+        selectuser = Select(driver.find_element_by_name('user'))
+        selectuser.select_by_visible_text('usuarioprueba0')
+        selectlocation = Select(driver.find_element_by_name('location'))
+        selectlocation.select_by_visible_text('Sevilla')
+        insertedad = driver.find_element_by_name('edad')
+        insertedad.send_keys('45')
+        selectgenero = Select(driver.find_element_by_name('genero'))
+        selectgenero.select_by_visible_text('Hombre')
+        driver.find_element_by_id('voter_form').submit()
+        driver.get('http://127.0.0.1:8081/admin/census/census/')
+        censocreadoporgenero = driver.find_element_by_link_text('Hombre').text
+        censocreadoporlocation =driver.find_element_by_link_text('Sevilla').text
+        censocreadoporedad = driver.find_element_by_link_text('45').text
+        logging.debug('Censo por locacion:' + str(censocreadoporlocation))
+        logging.debug('Censo por genero:' + str(censocreadoporgenero))
+        logging.debug('Censo por edad:' + str(censocreadoporedad))
+       
+    def test_exclusive_inclusive_census(self):
+#        creamos 3 usuarios
+        if self.usuarioconpermisos=='' or self.contraseñaconpermisos=='':
+            logging.debug('NO SE HA INTRODUCIDO USUARIO O CONTRASEÑA EN EL TEST')
+        logger = logging.getLogger('selenium.webdriver.remote.remote_connection') 
+        logger.setLevel(logging.WARNING)
+        options = webdriver.ChromeOptions()
+        options.headless = False
+#        options.add_experimental_option("detach", True)
+        driver = webdriver.Chrome(options=options)
+        driver.get("http://127.0.0.1:8081/admin")
+        username = driver.find_element_by_name('username')
+        password = driver.find_element_by_name('password')
+        username.send_keys(self.usuarioconpermisos)
+        password.send_keys(self.contraseñaconpermisos)
+        driver.find_element_by_id("login-form").submit()
+#        creamos la question para la votación
+        driver.get("http://127.0.0.1:8081/admin/voting/question/add")
+        desc = driver.find_element_by_name('desc')
+        tipo = Select(driver.find_element_by_name('tipo'))
+        desc.send_keys('Pregunta de prueba')
+        tipo.select_by_visible_text('Binary')
+        driver.find_element_by_id("question_form").submit()
+#        creamos el auth para la votación
+        driver.get("http://127.0.0.1:8081/admin/base/auth/add/")
+        name = driver.find_element_by_name('name')
+        url = driver.find_element_by_name('url')
+        me = driver.find_element_by_name('me')
+        name.send_keys("authprueba")
+        url.send_keys("http://localhost:8081")
+        me.click()
+        driver.find_element_by_id('auth_form').submit()
+#        asignamos un voter a cada usuario creado
+        for i in range(3):
+            driver.get("http://127.0.0.1:8081/admin/auth/user/add/")
+            createuser = driver.find_element_by_name('username')
+            createpassword = driver.find_element_by_name('password1')
+            confirmpassword = driver.find_element_by_name('password2')
+            createuser.send_keys('usuarioprueba'+str(i+1))
+            createpassword.send_keys('contrasenaprueba')
+            confirmpassword.send_keys('contrasenaprueba')
+            driver.find_element_by_id('user_form').submit()
+            driver.get("http://127.0.0.1:8081/admin/census/voter/add")
+            selectuser = Select(driver.find_element_by_name('user'))
+            selectuser.select_by_visible_text('usuarioprueba'+str(i+1))
+            selectlocation = Select(driver.find_element_by_name('location'))
+            selectlocation.select_by_visible_text('Zaragoza')
+            insertedad = driver.find_element_by_name('edad')
+            insertedad.send_keys('2'+str(i))
+            selectgenero = Select(driver.find_element_by_name('genero'))
+            selectgenero.select_by_visible_text('Hombre')
+            driver.find_element_by_id('voter_form').submit()
+#        creamos la votación
+        driver.get("http://127.0.0.1:8081/admin/voting/voting/add")
+        name = driver.find_element_by_name('name')
+        desc = driver.find_element_by_name('desc')
+        question = Select(driver.find_element_by_name('question'))
+        auth = Select(driver.find_element_by_name('auths'))
+        location = Select(driver.find_element_by_name('location'))
+        excl_census = Select(driver.find_element_by_name('excl_census'))
+        name.send_keys('Votacion0')
+        desc.send_keys('Votacion0')
+        question.select_by_visible_text('Pregunta de prueba')
+        auth.select_by_index(0)
+        location.select_by_visible_text('Zaragoza')
+        excl_census.select_by_visible_text('21')
+        excl_census.select_by_visible_text('22')
+        driver.find_element_by_id('voting_form').submit()
+#        comprobamos que todo está en orden
+        driver.get('http://127.0.0.1:8081/admin/census/census/')
+        censofinal = driver.find_element_by_link_text('Con: Zaragoza Sin: 21|22').text
+        voters = driver.find_element_by_class_name('row1').find_element_by_class_name('field-voters').text
+        votings = driver.find_element_by_class_name('row1').find_element_by_class_name('field-votings').text
+        logging.debug('Censo final: ' + str(censofinal))
+        logging.debug('Votantes del censo: ' + str(voters))
+        logging.debug('Votaciones asignadas al censo: ' + str(votings))
+        '''
