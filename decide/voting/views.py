@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
@@ -16,6 +17,10 @@ from base.models import Auth
 from census.models import Census
 from django.forms.models import inlineformset_factory
 
+from voting.models import *
+from mixnet.mixcrypt import *
+import json
+from base import mods
 class SuccessView(TemplateView):
     template_name = 'voting/success.html'
 
@@ -166,3 +171,36 @@ class VotingUpdate(generics.RetrieveUpdateDestroyAPIView):
             msg = 'Action not found, try with start, stop or tally'
             st = status.HTTP_400_BAD_REQUEST
         return Response(msg, status=st)
+class GiveMeAB(APIView):
+
+    queryset = Voting.objects.all()
+    serializer_class = VotingSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('id', )
+
+    def encrypt_msg(self, msg, v, bits = settings.KEYBITS):
+        pk = v.pub_key
+        p, g, y = (pk.p, pk.g, pk.y)
+        k = MixCrypt(bits=bits)
+        k.k = ElGamal.construct((p, g, y))
+        return k.encrypt(msg)
+
+    def post(self, request, *args, **kwargs):
+        for data in ['id_v', 'question_opt']:
+            if not data in request.data:
+                return Response({'Falta algo miarma'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        votacion = Voting.objects.get(id=request.data.get('id_v'))
+        question = votacion.question
+        dicc = str(request.data.get('question_opt')).replace('\'', '\"')
+        diccionario = json.loads(dicc)
+        opt = QuestionOption(question=question, option=diccionario['option'], number=diccionario['number'])
+        auth, _ = Auth.objects.get_or_create(url=settings.BASEURL, defaults={'me': True, 'name': 'test auth'})
+        
+        ''' ====== Encriptado del voto ======'''
+        a, b = self.encrypt_msg(opt.number, votacion)
+        ''' ================================='''
+        return Response({
+            'a': a,
+            'b': b
+        })
