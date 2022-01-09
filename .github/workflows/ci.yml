@@ -35,6 +35,7 @@ jobs:
       run: cd decide;python manage.py makemigrations;python manage.py migrate
     - name: Run test
       run: cd decide;coverage run --branch --source=. ./manage.py test census --keepdb; coverage xml;
+
     # - name: Codacy Coverage Reporter
     #   uses: codacy/codacy-coverage-reporter-action@v1.1.0
     #   with:
