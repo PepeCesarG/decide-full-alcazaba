@@ -21,14 +21,6 @@ attrs==21.3.0
 arabic-reshaper==2.1.1
 django-heroku
 gunicorn
-
-
-psycopg2==2.8.4
-
-
-django-allauth==0.38.0
-
-
 xhtml2pdf==0.2.4
 
 beautifulsoup4==4.9.3
@@ -57,4 +49,8 @@ selenium==3.141.0
 soupsieve==2.2
 urllib3==1.26.3
 Werkzeug==1.0.1
+
+
+django-allauth==0.38.0
+
 
