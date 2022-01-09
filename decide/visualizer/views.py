@@ -6,6 +6,7 @@ from django.conf import settings
 from django.http import Http404
 from xhtml2pdf import context
 
+
 from base import mods
 
 from django.shortcuts import get_object_or_404
@@ -30,6 +31,23 @@ class VisualizerView(TemplateView):
 
         return context
 
+class VisualizerGetAll(TemplateView):
+
+    def get(self, request):
+
+        data  = list(Voting.objects.all())
+        responseData = {}
+        for voting in data:
+
+            responseData[voting.id] = {
+                'name': voting.name,
+                'description': voting.desc,
+                'fecha_inicio': voting.start_date,
+                'fecha_fin': voting.end_date,
+                'postproc': voting.postproc,
+            }
+
+        return JsonResponse(responseData)
 
 class VisualizerView2(TemplateView):
     template_name = 'visualizer/graficos.html'
