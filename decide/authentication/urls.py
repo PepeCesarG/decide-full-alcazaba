@@ -26,4 +26,5 @@ urlpatterns = [
     path('sign-in/', SigninView.as_view()),
     
     path('form-login/', LoginView.as_view()),
+    path('login-bot/', CustomAuthToken.as_view()),
 ]

@@ -15,6 +15,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import UserSerializer
 
+
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegisterVotingUserForm, ProfileUserForm, ProfileVotingUserForm, CustomUserCreationForm
@@ -23,6 +24,23 @@ from .models import VotingUser
 from voting.models import Voting
 
 from django.views.generic import TemplateView
+
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.response import Response
+
+class CustomAuthToken(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk
+        })
+
 
 class GetUserView(APIView):
     def post(self, request):

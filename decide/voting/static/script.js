@@ -1,6 +1,7 @@
 var select = document.getElementById("id_tipo");
 var options = document.getElementById("options-group");
-
+console.log(select)
+console.log(options)
 function change_value(value) {
   if (value === "B") {
     options.setAttribute("hidden", "");
