@@ -11,7 +11,6 @@ from django.contrib.auth.models import User
 from base import mods
 from base.tests import BaseTestCase
 
-
 import os
 
 import time
