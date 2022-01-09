@@ -1,5 +1,7 @@
 import random
 import itertools
+import time
+import json
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -15,6 +17,15 @@ from mixnet.mixcrypt import ElGamal
 from mixnet.mixcrypt import MixCrypt
 from mixnet.models import Auth
 from voting.models import Voting, Question, QuestionOption
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
 class VotingTestCase(BaseTestCase):
@@ -256,3 +267,66 @@ class VotingTestCase(BaseTestCase):
         census.save()
         census.voting_ids.add(Voting.objects.get(name='Example'))
         self.assertEqual(census, Census.objects.get(name='Sevilla'))
+
+
+# TEST SELENIUM. IMPORTANTE CREAR AUTH PREVIAMENTE
+'''class TestTestcreatequestion(StaticLiveServerTestCase):
+    def setUp(self):
+        options = webdriver.ChromeOptions()
+        options.headless = True
+        self.driver = webdriver.Chrome(options=options)
+        self.vars = {}
+    
+    def teardown_method(self, method):
+        self.driver.quit()
+    
+    def test_testcreatequestion(self):
+        self.driver.get("http://127.0.0.1:8081/voting/add_question/")
+        self.driver.set_window_size(1920, 1016)
+        self.driver.find_element(By.ID, "id_desc").click()
+        self.driver.find_element(By.ID, "id_desc").send_keys("Ejemplo")
+        dropdown = self.driver.find_element(By.ID, "id_tipo")
+        dropdown.find_element(By.XPATH, "//option[. = 'Binary']").click()
+        element = self.driver.find_element(By.ID, "id_tipo")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).click_and_hold().perform()
+        element = self.driver.find_element(By.ID, "id_tipo")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        element = self.driver.find_element(By.ID, "id_tipo")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).release().perform()
+        self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
+    
+    def test_testcreatevoting(self):
+        self.driver.get("http://127.0.0.1:8081/voting/add/")
+        self.driver.set_window_size(1287, 864)
+        self.driver.find_element(By.ID, "id_name").click()
+        self.driver.find_element(By.ID, "id_name").send_keys("Votacion test")
+        self.driver.find_element(By.ID, "id_desc").click()
+        self.driver.find_element(By.ID, "id_desc").send_keys("Esto es un test")
+        dropdown = self.driver.find_element(By.ID, "id_question")
+        dropdown.find_element(By.XPATH, "//option[. = 'Ejemplo']").click()
+        element = self.driver.find_element(By.ID, "id_question")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).click_and_hold().perform()
+        element = self.driver.find_element(By.ID, "id_question")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        element = self.driver.find_element(By.ID, "id_question")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).release().perform()
+        dropdown = self.driver.find_element(By.ID, "id_auths")
+        dropdown.find_element(By.XPATH, "//option[. = 'http://localhost:8081']").click()
+        dropdown = self.driver.find_element(By.ID, "id_location")
+        dropdown.find_element(By.XPATH, "//option[. = 'Badajoz']").click()
+        element = self.driver.find_element(By.ID, "id_location")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).click_and_hold().perform()
+        element = self.driver.find_element(By.ID, "id_location")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        element = self.driver.find_element(By.ID, "id_location")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).release().perform()
+        self.driver.find_element(By.ID, "save").click()'''
