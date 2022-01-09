@@ -9,6 +9,8 @@ from rest_framework.authtoken.models import Token
 from base import mods
 
 
+
+
 class AuthTestCase(APITestCase):
 
 
@@ -136,3 +138,4 @@ class AuthTestCase(APITestCase):
         response = self.client.get('/authentication/sign-in/', data, format='json')
         self.assertEqual(response.status_code, 200)
         token = response.json()
+
