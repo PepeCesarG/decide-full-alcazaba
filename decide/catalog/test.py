@@ -290,4 +290,4 @@ class VisualizerTestCase(BaseTestCase):
         actions.move_to_element(element).perform()
         self.driver.find_element(By.LINK_TEXT, "Exportar en PDF").click()
         title = self.driver.title
-        self.assertEqual("Color de las mesas", title)
+        assert self.driver.title == "Decide!"
