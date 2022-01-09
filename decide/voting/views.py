@@ -28,6 +28,7 @@ QuestionOptionSet = inlineformset_factory(Question, QuestionOption, fields=('num
 
 class QuestionFormView(CreateView):
     model = Question
+    serializer_class = VotingSerializer
     fields = "__all__"
 
 

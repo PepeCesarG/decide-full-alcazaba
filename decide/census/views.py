@@ -13,9 +13,11 @@ from voting.models import Voting
 from django.contrib.auth.models import User
 from base.perms import UserIsStaff
 from .models import Census, Voter
+from voting.serializers import SimpleVotingSerializer, VotingSerializer
 import logging, sys
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 class VoterCreate(generics.ListCreateAPIView):
+    serializer_class = VotingSerializer
     def create(self,request,*args,**kwargs):
         userv = User.objects.get(username=str(request.data.get('user')))
         locationv = request.data.get('location')
