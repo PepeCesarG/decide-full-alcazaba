@@ -6,18 +6,75 @@ from django.contrib import admin, messages
 from django.db import transaction
 from django.shortcuts import redirect, render
 from django.urls import path
+from .filters import StartedFilter
+
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-
-from .models import Census
 from voting.models import Voting
+from .models import Census,Voter
 import logging, sys
 
-from voting.models import Voting
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
-from .models import Census,Voter
+PROVINCIAS = [
+    ('', 'Seleccionar provincia...'),
+    ('Alava', 'Álava'),
+    ('Albacete', 'Albacete'),
+    ('Alicante', 'Alicante'),
+    ('Almeria', 'Almería'),
+    ('Asturias', 'Asturias'),
+    ('Avila', 'Ávila'),
+    ('Badajoz', 'Badajoz'),
+    ('Barcelona', 'Barcelona'),
+    ('Burgos', 'Burgos'),
+    ('Caceres', 'Cáceres'),
+    ('Cadiz', 'Cádiz'),
+    ('Cantabria', 'Cantabria'),
+    ('Castellon', 'Castellón'),
+    ('Ciudad Real', 'Ciudad Real'),
+    ('Cordoba', 'Córdoba'),
+    ('Cuenca', 'Cuenca'),
+    ('Gerona', 'Gerona'),
+    ('Granada', 'Granada'),
+    ('Guadalajara', 'Guadalajara'),
+    ('Guipuzcoa', 'Guipúzcoa'),
+    ('Huelva', 'Huelva'),
+    ('Huesca', 'Huesca'),
+    ('Islas Baleares', 'Islas Baleares'),
+    ('Jaen', 'Jaén'),
+    ('La Coruna', 'La Coruña'),
+    ('La Rioja', 'La Rioja'),
+    ('Las Palmas', 'Las Palmas'),
+    ('Leon', 'León'),
+    ('Lerida', 'Lérida'),
+    ('Lugo', 'Lugo'),
+    ('Madrid', 'Madrid'),
+    ('Malaga', 'Málaga'),
+    ('Murcia', 'Murcia'),
+    ('Navarra', 'Navarra'),
+    ('Orense', 'Orense'),
+    ('Palencia', 'Palencia'),
+    ('Pontevedra', 'Pontevedra'),
+    ('Salamanca', 'Salamanca'),
+    ('Santa Cruz de Tenerife', 'Santa Cruz de Tenerife'),
+    ('Segovia', 'Segovia'),
+    ('Sevilla', 'Sevilla'),
+    ('Soria', 'Soria'),
+    ('Tarragona', 'Tarragona'),
+    ('Teruel', 'Teruel'),
+    ('Toledo', 'Toledo'),
+    ('Valencia', 'Valencia'),
+    ('Valladolid', 'Valladolid'),
+    ('Vizcaya', 'Vizcaya'),
+    ('Zamora', 'Zamora'),
+    ('Zaragoza', 'Zaragoza'),
+]
 
+GENERO = [
+    ('Hombre', 'Hombre'),
+    ('Mujer', 'Mujer'),
+    ('Otro','Otro')
+]
 
 class CsvImportForm(forms.Form):
     csv_file = forms.FileField()
@@ -62,10 +119,12 @@ class ExportCsv:
             fila = writer.writerow([linea])
 
         '''
-        data=''
-        with open(respuesta, 'w') as file:
-            data = file.read().replace("@", "")
-            file.write(data)
+        Se implementan para concenso con la importacion de censo que
+        se anyadan en una lista separadas por ":" las distintas 
+        votaciones y los distintos votantes en el caso de haber varios
+        
+        Se van a representar mensajes de error o confirmacion en funcion
+        de importacion correcta o no.
         '''
 
         try:
@@ -95,9 +154,12 @@ class CensusAdmin(admin.ModelAdmin, ExportCsv):
     def import_csv(self, request):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
-            csvf = StringIO(csv_file.read().decode())
+            aux = csv_file.read()
+            #Decodes file if encoded (normal use), not if not encoded (test use)
+            csvf = StringIO(aux.decode()) if (type(aux) != type('str')) else StringIO(aux)
             reader = csv.reader(csvf, delimiter=',')
             try:
+                #Allows rollback in case of exception while parsing CSVs
                 with transaction.atomic():
                     next(reader)
                     for row in reader:
@@ -120,18 +182,70 @@ class CensusAdmin(admin.ModelAdmin, ExportCsv):
                                 census.voter_ids.add(voter)
                     
                 self.message_user(request, "Your csv file has been imported successfully")
+                #Redirects to census/census (list view)
                 return redirect("..")
             except Exception as e:
-                print(e)
+                logging.warning(e)
                 self.message_user(request, "Your csv file could not be imported", level = messages.ERROR)
+                #Redirects to census/census/import-csv, which just reloads the same page
                 return redirect(".")
-        
+                
+        #If not accessed through a POST petition, load the CSV form view
         form = CsvImportForm()
         payload = {"form": form}
         return render(request, "csv_form.html", payload)
 
+class VoterAdminForm(forms.ModelForm):
+    class Meta:
+        model = Voter
+        fields = "__all__"
+    edad = forms.IntegerField(required = True)    
+    location = forms.ChoiceField(widget=forms.Select, choices=PROVINCIAS, required=False)
+    genero = forms.ChoiceField(widget=forms.Select, choices=GENERO, required=False)
+
 class VoterAdmin(admin.ModelAdmin):
     list_display = ('user','location','edad','genero')
-    
+    search_fields = ('user', )
+    form = VoterAdminForm
+    def save_related(self, request, form, formsets, change):
+        location = request.POST.get("location")
+        edad = request.POST.get("edad")
+        genero = request.POST.get("genero")
+        if location == '' or edad == None or genero == None:
+            logging.debug("No se ha seleccionado la provincia, edad o genero" )
+            
+        else:
+            user = request.POST.get("user")
+            voter = Voter.objects.get(user=user)
+            try:
+                censo = Census.objects.get(name=location)
+                censo.voter_ids.add(voter)
+                censo.save()
+            except:
+                censo = Census(name = location)
+                censo.save()
+                censo.voter_ids.add(voter)
+                censo.save()
+            try:
+                censo = Census.objects.get(name=edad)
+                censo.voter_ids.add(voter)
+                censo.save()
+            except:
+                censo = Census(name = edad)
+                censo.save()
+                censo.voter_ids.add(voter)
+                censo.save()
+            try:
+                censo = Census.objects.get(name=genero)
+                censo.voter_ids.add(voter)
+                censo.save()
+            except:
+                censo = Census(name = genero)
+                censo.save()
+                censo.voter_ids.add(voter)
+                censo.save()
+                
+        super(VoterAdmin, self).save_related(request, form, formsets, change)
+
 admin.site.register(Census, CensusAdmin)
 admin.site.register(Voter, VoterAdmin)
