@@ -96,7 +96,6 @@ class StoreBotView(APIView):
         end_date = voting.end_date
         #print('\n\n\n'+end_date+'\n\n\n')
         not_started = not start_date or timezone.now() < start_date
-        print('\n\n\n'+str(not_started)+'\n\n\n')
         is_closed = end_date and end_date < timezone.now()
         if not_started or is_closed:
             return Response({'Dateeee'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -122,4 +121,4 @@ class StoreBotView(APIView):
 
         v.save()
 
-        return  Response({'Todo Okay'})
+        return  Response({'Votacion completada'})

@@ -3,9 +3,7 @@ import telebot
 from telebot import types 
 import json 
 import time 
-import requests 
- 
-from mixnet.mixcrypt import * 
+import requests
  
 from flask import Flask, request 
 TOKEN = '5094239712:AAEWOtGe55YZ1GFjwNpmyrSF_kWPtO1Y2yk'
