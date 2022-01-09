@@ -11,7 +11,6 @@ from django.contrib.auth.models import User
 from base import mods
 from base.tests import BaseTestCase
 
-
 import os
 
 
@@ -84,3 +83,4 @@ class VisualizerTestCase(BaseTestCase):
         question_desc = str(voting.question).split(':')[0]
         question_desc_response = response.json()['2']['question_desc']
         self.assertEqual(question_desc, question_desc_response)
+    
