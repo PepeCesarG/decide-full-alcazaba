@@ -31,24 +31,6 @@ class VisualizerView(TemplateView):
 
         return context
 
-class VisualizerGetAll(TemplateView):
-
-    def get(self, request):
-
-        data  = list(Voting.objects.all())
-        responseData = {}
-        for voting in data:
-
-            responseData[voting.id] = {
-                'name': voting.name,
-                'description': voting.desc,
-                'fecha_inicio': voting.start_date,
-                'fecha_fin': voting.end_date,
-                'postproc': voting.postproc,
-            }
-
-        return JsonResponse(responseData)
-
 class VisualizerView2(TemplateView):
     template_name = 'visualizer/graficos.html'
 
@@ -136,4 +118,43 @@ class VisualizerView3(TemplateView):
         
         pdf = generate_pdf('visualizer/pdf.html', context)
         return HttpResponse(pdf, content_type = 'application/pdf')
+
+class VisualizerGetAll(TemplateView):
+
+    def get(self, request):
+
+        data  = list(Voting.objects.all())
+        responseData = {}
+        for voting in data:
+
+            responseData[voting.id] = {
+                'name': voting.name,
+                'description': voting.desc,
+                'fecha_inicio': voting.start_date,
+                'fecha_fin': voting.end_date,
+                'question_desc': voting.question.desc,
+                'postproc': voting.postproc,
+            }
+
+        return JsonResponse(responseData)
+
+class VisualizerDetails(TemplateView):
+
+    def get_context_data(self, **kwargs):
+        vid = kwargs.get('voting_id', 0)
+        try:
+            voting = mods.get('voting', params={'id': vid})
+            responseData = {'Hola' : 'ey'}
+            # responseData[voting.id] = {
+            #     'name': voting.name,
+            #     'description': voting.desc,
+            #     'fecha_inicio': voting.start_date,
+            #     'fecha_fin': voting.end_date,
+            #     'question_desc': voting.question.desc,
+            #     'postproc': voting.postproc,
+            # }
+        except:
+            raise Http404
+
+        return JsonResponse(responseData)
     
