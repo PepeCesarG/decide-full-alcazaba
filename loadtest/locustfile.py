@@ -41,7 +41,7 @@ class DefVoters(SequentialTaskSet):
     def getuser(self):
         self.usr= self.client.post("/authentication/getuser/", self.token).json()
         print( str(self.user))
-    '''
+    
     @task
     def voting(self):
         headers = {
@@ -57,7 +57,7 @@ class DefVoters(SequentialTaskSet):
             "voter": self.usr.get('id'),
             "voting": VOTING
         }), headers=headers)
-    '''
+    
 
     def on_quit(self):
         self.voter = None
