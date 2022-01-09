@@ -339,3 +339,25 @@ class VisualizerTestCase(BaseTestCase):
         self.driver.find_element(By.ID, "id_password").send_keys("buenas1234")
         self.driver.find_element(By.CSS_SELECTOR, ".submit-row > input").click()
         assert self.driver.find_element(By.CSS_SELECTOR, "#content > h1").text == "Administración de Store"
+
+    def test_pdf(self):
+        self.driver = webdriver.Chrome()
+        self.driver.get("http://localhost:8000/")
+        self.driver.find_element(By.LINK_TEXT, "Color de las mesas").click()
+        element = self.driver.find_element(By.LINK_TEXT, "Exportar en PDF")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        self.driver.find_element(By.LINK_TEXT, "Exportar en PDF").click()
+        url = self.driver.current_url
+        assert url == "http://localhost:8000/visualizer/1/pdf"
+
+    def test_pdf_title(self):
+        self.driver = webdriver.Chrome()
+        self.driver.get("http://localhost:8000/")
+        self.driver.find_element(By.LINK_TEXT, "Color de las mesas").click()
+        element = self.driver.find_element(By.LINK_TEXT, "Exportar en PDF")
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        self.driver.find_element(By.LINK_TEXT, "Exportar en PDF").click()
+        title = self.driver.title
+        assert self.driver.title == "Decide!"
