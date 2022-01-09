@@ -10,6 +10,7 @@ from rest_framework.test import APITestCase
 from base import mods
 from base.tests import BaseTestCase
 from census.models import Census
+from census.models import Voter
 from mixnet.mixcrypt import ElGamal
 from mixnet.mixcrypt import MixCrypt
 from mixnet.models import Auth
@@ -38,7 +39,12 @@ class VotingTestCase(BaseTestCase):
             opt = QuestionOption(question=q, option='option {}'.format(i+1))
             opt.save()
         v = Voting(name='test voting', question=q)
+        v.location = 'Sevilla'
         v.save()
+        c = Census(name = 'Sevilla')
+        c.save()
+        c.voting_ids.add(v.id)
+        c.save()
 
         a, _ = Auth.objects.get_or_create(url=settings.BASEURL,
                                           defaults={'me': True, 'name': 'test auth'})
@@ -52,8 +58,12 @@ class VotingTestCase(BaseTestCase):
             u, _ = User.objects.get_or_create(username='testvoter{}'.format(i))
             u.is_active = True
             u.save()
-            c = Census(voter_id=u.id, voting_id=v.id)
+            voter = Voter(user=u, location='Sevilla', edad=18)
+            voter.save()
+            c = Census.objects.get(name='Sevilla')
+            c.voter_ids.add(voter.id)
             c.save()
+            print(c.voter_ids)
 
     def get_or_create_user(self, pk):
         user, _ = User.objects.get_or_create(pk=pk)
@@ -63,7 +73,7 @@ class VotingTestCase(BaseTestCase):
         return user
 
     def store_votes(self, v):
-        voters = list(Census.objects.filter(voting_id=v.id))
+        voters = list(Census.objects.filter(voting_ids__id=v.id).values_list('voter_ids', flat=True))
         voter = voters.pop()
 
         clear = {}
@@ -73,11 +83,11 @@ class VotingTestCase(BaseTestCase):
                 a, b = self.encrypt_msg(opt.number, v)
                 data = {
                     'voting': v.id,
-                    'voter': voter.voter_id,
+                    'voter': voter,
                     'vote': { 'a': a, 'b': b },
                 }
                 clear[opt.number] += 1
-                user = self.get_or_create_user(voter.voter_id)
+                user = self.get_or_create_user(voter)
                 self.login(user=user.username)
                 voter = voters.pop()
                 mods.post('store', json=data)
@@ -129,11 +139,13 @@ class VotingTestCase(BaseTestCase):
         data = {
             'name': 'Example',
             'desc': 'Description example',
+            'tipo': 'O',
             'question': 'I want a ',
             'question_opt': ['cat', 'dog', 'horse']
         }
 
         response = self.client.post('/voting/', data, format='json')
+        print(response.content)
         self.assertEqual(response.status_code, 201)
 
     def test_update_voting(self):
@@ -232,6 +244,7 @@ class VotingTestCase(BaseTestCase):
         data = {
             'name': 'Example',
             'desc': 'Description example',
+            'tipo': 'O',
             'question': 'I want a ',
             'question_opt': ['cat', 'dog', 'horse'],
             'location': 'Sevilla'
@@ -240,5 +253,6 @@ class VotingTestCase(BaseTestCase):
         response = self.client.post('/voting/', data, format='json')
         self.assertEqual(response.status_code, 201)
         census = Census(name='Sevilla')
+        census.save()
         census.voting_ids.add(Voting.objects.get(name='Example'))
         self.assertEqual(census, Census.objects.get(name='Sevilla'))
