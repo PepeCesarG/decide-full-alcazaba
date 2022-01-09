@@ -354,5 +354,5 @@ class CensusTestCase(BaseTestCase):
             req.FILES['csv_file'] = csv
             response = admin.import_csv(req)
             self.assertEqual(response.status_code, 302)
-            self.assertEqual(response.url, '.') #redirect: /census/import-csv
+            self.assertEqual(response.url, '..') #redirect: /census/import-csv
             

@@ -46,7 +46,7 @@ class CensusCreate(generics.ListCreateAPIView):
                     continue
             for voter_id in voters:
                 census.voter_ids.add(Voter.objects.get(pk=voter_id))
-        except IntegrityError:
+        except:
             return Response('Error al crear el censo', status=ST_409)
         return Response('Census created', status=ST_201)
 
