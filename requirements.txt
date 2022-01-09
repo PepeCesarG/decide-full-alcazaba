@@ -49,3 +49,6 @@ selenium==3.141.0
 soupsieve==2.2
 urllib3==1.21.1
 Werkzeug==1.0.1
+django-allauth==0.38.0
+
+

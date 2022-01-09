@@ -1,0 +1,71 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: sans-serif;
+}
+
+.container
+{
+    margin: 3rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.votes_container
+{
+    padding: 10px;
+    width: 50%;
+    height: 175px;
+
+    white-space: nowrap;
+
+    overflow-y: hidden;
+    overflow-x: scroll;
+
+    display: flex;
+}
+
+.vote
+{
+    display: flex;
+
+    margin: 5px;
+    width: 175px;
+    height: 100%;
+
+    border-radius: 5px;
+
+    text-align: center;
+
+    background-color: #dfe6e9;
+    transition: 0.4s;
+}
+
+.vote:hover
+{
+    background-color: #55efc4;
+}
+
+.vote > div
+{
+    width: 90%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    white-space: pre-wrap;
+}
+
+.vote a
+{
+    width: 100%;
+    color: black;
+    margin: auto;
+    transition: 0.2s;
+
+}
+
+.vote a:hover
+{
+    color: white;
+}

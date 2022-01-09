@@ -1,0 +1,50 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: sans-serif;
+}
+
+.container
+{
+    margin: 3rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container div
+{
+    display: flex;
+    padding: 10px;
+}
+
+.container input
+{
+    padding: 10px;
+    margin: 5px;
+}
+
+.container ul
+{
+    width: 80%;
+    margin: 10px auto;
+    list-style-type: none;
+    border-radius: 5px;
+    border-left: 10px solid #00b894;
+    box-shadow: 5px 5px 5px #ccc;
+}
+
+.container ul li
+{
+    padding: 10px;
+}
+
+p
+{
+    margin: 10px;
+}
+
+.signup
+{
+    text-align: center !important;
+}
