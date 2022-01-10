@@ -143,7 +143,7 @@ class CensusTestCase(BaseTestCase):
     
     def test_add_new_voters_conflict(self):
         self.create_census()
-        data = {'name': 'prueba creacion', 'votings': [self.voting.id], 'voters': [self.voter.id]}
+        data = {'name': 'prueba creacion', 'votings': [self.voting.id], 'voters': None}
         response = self.client.post('/census/', data, format='json')
         self.assertEqual(response.status_code, 401)
 

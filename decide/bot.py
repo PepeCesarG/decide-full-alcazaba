@@ -19,10 +19,12 @@ def comienzo(message):
  
 @bot.message_handler(commands=['help']) 
 def send_welcome(message): 
+
     with open('mensaje_help.txt', 'r') as file:
         data = file.read().replace('\n', '')
     bot.send_message(message.chat.id,"Puede utilizar los siguientes comandos: ") 
     bot.send_message(message.chat.id, data) 
+
  
 @bot.message_handler(commands=["votaciones"]) #devuelve listado de todas las votaciones 
 def resolver(message): 
@@ -136,7 +138,9 @@ def login(message):
       try: 
          user = texts[1].strip() #strip para quitarle los espacios iniciales y finales 
          password = texts[2].strip() 
+
          url = 'http://localhost:8050/authentication/login-bot/' 
+
          payload={"username":user,"password":password} 
          files=[] 
          headers = {} 
@@ -188,7 +192,9 @@ def logout(message):
       bot.reply_to(message, 'Error llamando a la API') 
  
 def getVotacion(id_votacion): 
+
    url = 'http://localhost:8050/voting/?id=' 
+
    url+=str(id_votacion) 
    payload={} 
    files={} 
@@ -253,14 +259,18 @@ def votacion(message):
                         question_opt = diccionario_asignacion[opcion] 
                         question_opt_body = str(question_opt).replace('\'', '\"') 
                          
+
                         url = "http://localhost:8050/voting/encrypt/" 
+
                         payload={"question_opt": str(question_opt),"id_v": str(id_votacion)} 
                         files=[] 
                         headers = {} 
                         respuesta = requests.request("POST", url, headers=headers, data=payload, files=files) 
                         listaclaves = list(respuesta.json().values()) 
 
+
                         url2 = 'http://localhost:8050/store/store-bot/' 
+
                         payload2={"voting_id":id_votacion,"voter_id":id_usuario, "a":str(listaclaves[0]), "b":str(listaclaves[1])} 
                         files2=[] 
                         headers2 = {} 
@@ -280,7 +290,9 @@ def votacion(message):
          else: 
             bot.send_message(message.chat.id, "No ha iniciado sesion, introduzca el comando: \"/login <usuario> <contraseña>\" para iniciar sesion") 
       else: 
+
          bot.reply_to(message, 'Por favor, use correctamente el comando /vote  (ver /help)') 
+
          print("Error en /vote, al introducir el comando: "+str(message.text)) 
    except Exception: 
       bot.reply_to(message, 'Error llamando a la API') 

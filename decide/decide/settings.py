@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'corsheaders',
     'django_filters',
@@ -47,7 +48,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'gateway',
+    
+
 ]
+
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -107,6 +112,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR,'../catalog/templates'),
             os.path.join(BASE_DIR,'../voting/templates'),
+            os.path.join(BASE_DIR,'../authentication/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -117,6 +123,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.i18n',
                 'django.contrib.messages.context_processors.messages',
+           
             ],
         },
     },

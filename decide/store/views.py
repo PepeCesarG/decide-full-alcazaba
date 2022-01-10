@@ -121,4 +121,6 @@ class StoreBotView(APIView):
 
         v.save()
 
+
         return  Response({'Votacion completada'})
+

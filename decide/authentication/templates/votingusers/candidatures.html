@@ -1,0 +1,79 @@
+<html>
+<head>
+    {% load static %}
+    {% load socialaccount %}
+    <link rel="stylesheet" type="text/css" href="{% static 'votingusers/candidatures.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index/menu.css' %}">
+    <title>DECIDE FULL GUADALFEO</title>
+</head>
+<body>
+    {% include "index/menu.html" %}
+
+  <div class="container">
+        <h1>{{candidatura.nombre}}</h1>
+
+      {% if candidatura.delegadoCentro == None %}
+        <p>Tally of votes is on course. Check Later!</p>
+      {% endif %}
+
+        <ul class="participants">
+            <li class="card">
+                <strong>Center delegate:</strong>
+                {% if candidatura.delegadoCentro != None %}
+                    {{candidatura.delegadoCentro.first_name}} {{candidatura.delegadoCentro.last_name}}
+                {% else %}
+                    None
+                {% endif %}
+             </li>
+
+            <li class="card">
+                <strong>First Course:</strong>
+                {% if candidatura.representanteDelegadoPrimero != None %}
+                    {{candidatura.representanteDelegadoPrimero.first_name}} {{candidatura.representanteDelegadoPrimero.last_name}}
+                {% else %}
+                    None
+                {% endif %}
+             </li>
+
+            <li class="card">
+                <strong>Second Course:</strong>
+                {% if candidatura.representanteDelegadoSegundo != None %}
+                    {{candidatura.representanteDelegadoSegundo.first_name}} {{candidatura.representanteDelegadoSegundo.last_name}}
+                {% else %}
+                    None
+                {% endif %}
+             </li>
+
+            <li class="card">
+                <strong>Third Course:</strong>
+                {% if candidatura.representanteDelegadoTercero != None %}
+                    {{candidatura.representanteDelegadoTercero.first_name}} {{candidatura.representanteDelegadoTercero.last_name}}
+                {% else %}
+                    None
+                {% endif %}
+             </li>
+
+            <li class="card">
+                <strong>Fourth Course:</strong>
+                {% if candidatura.representanteDelegadoCuarto != None %}
+                    {{candidatura.representanteDelegadoCuarto.first_name}} {{candidatura.representanteDelegadoCuarto.last_name}}
+                {% else %}
+                    None
+                {% endif %}
+             </li>
+
+            <li class="card">
+                <strong>Master:</strong>
+                {% if candidatura.representanteDelegadoMaster != None %}
+                    {{candidatura.representanteDelegadoMaster.first_name}} {{candidatura.representanteDelegadoMaster.last_name}}
+                {% else %}
+                    None
+                {% endif %}
+             </li>
+        </ul>
+
+      <a href="/">Return to main page</a>
+    </div>
+
+  </body>
+</html>

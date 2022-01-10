@@ -1,0 +1,17 @@
+<nav class="menu">
+   
+     <span>
+       <h1>
+           <a href="/">DECIDE</a>
+       </h1>
+     </span>
+     <ul>
+         {% if user.is_authenticated %}
+         <li>Welcome, <a href="/user/{{user.id}}">{{ user.username }}</a> !</li>
+            <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+         {% else %}
+            <li><a href="{% url 'auth_login' %}">Login</a></li>
+            <li><a href="{% url 'auth_register' %}">Register</a></li>
+         {% endif %}
+     </ul>
+</nav>

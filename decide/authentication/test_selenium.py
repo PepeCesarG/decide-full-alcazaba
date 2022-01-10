@@ -1,3 +1,5 @@
+
+
 from django.test import TestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
@@ -12,7 +14,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-"""
+
+'''
+
 class AuthTestCase(StaticLiveServerTestCase):
 
    
@@ -36,7 +40,7 @@ class AuthTestCase(StaticLiveServerTestCase):
         
         
         
-     def test_simpleWrongLogin(self):
+    def test_simpleWrongLogin(self):
 
         self.driver.get(f'{self.live_server_url}/authentication/sign-in//')
         self.driver.find_element_by_id('id_username').send_keys("WRONG")
@@ -45,6 +49,6 @@ class AuthTestCase(StaticLiveServerTestCase):
 
         #In case a incorrect login, a div with class 'errornote' is shown in red!
         self.assertTrue(len(self.driver.find_elements_by_class_name('errornote'))==1)
-        """
+    
         
-        
+        '''

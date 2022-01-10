@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
@@ -21,6 +22,10 @@ from voting.models import *
 from mixnet.mixcrypt import *
 from base import mods
 
+from voting.models import *
+from mixnet.mixcrypt import *
+import json
+from base import mods
 class SuccessView(TemplateView):
     template_name = 'voting/success.html'
 
