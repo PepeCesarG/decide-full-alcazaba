@@ -73,7 +73,7 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-full-alcazaba-main.herokuapp.com'
+BASEURL = 'https://decide-full-alcazaba-visualize.herokuapp.com'
 
 APIS = {
     'authentication': BASEURL,
@@ -90,7 +90,9 @@ APIS = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -111,7 +113,9 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.i18n',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -159,6 +163,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
 LANGUAGE_CODE = 'es'
+
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGES = [
+    ('es', _('Spanish')),
+    ('en', _('English')),
+]
 
 TIME_ZONE = 'UTC'
 

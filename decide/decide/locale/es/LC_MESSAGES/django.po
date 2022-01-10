@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-16 21:16+0000\n"
+"POT-Creation-Date: 2022-01-09 09:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,57 +18,125 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: booth/templates/booth/booth.html:19
-msgid "logout"
-msgstr ""
+#: authentication/templates/logout.html:5
+msgid "Logout"
+msgstr "Cerrar Sesion"
 
-#: booth/templates/booth/booth.html:33
-msgid "Username"
-msgstr ""
+#: authentication/templates/logout.html:8
+msgid "You have signed out."
+msgstr "Has cerrado sesion"
 
-#: booth/templates/booth/booth.html:41
-msgid "Password"
-msgstr ""
+#: catalog/templates/guia.html:9
+msgid "Inicio"
+msgstr "Inicio"
 
-#: booth/templates/booth/booth.html:49
-msgid "Login"
-msgstr ""
+#: catalog/templates/guia.html:10
+msgid "Admin"
+msgstr "Administracion"
 
-#: booth/templates/booth/booth.html:64
-msgid "Vote"
-msgstr ""
+#: catalog/templates/guia.html:13
+msgid "Manual de uso de nuevas funcionalidades"
+msgstr "Manual de uso de nuevas funcionalidades"
 
-#: booth/templates/booth/booth.html:160 booth/templates/booth/booth.html:170
-#: booth/templates/booth/booth.html:201
-msgid "Error: "
-msgstr ""
+#: catalog/templates/guia.html:23
+msgid "Cómo hacer una votación en Decide"
+msgstr "Cómo hacer una votación en Decide"
 
-#: booth/templates/booth/booth.html:198
-msgid "Conglatulations. Your vote has been sent"
-msgstr ""
+#: catalog/templates/guia.html:110
+msgid "Funcionalidades añadidas"
+msgstr "Funcionalidades añadidas"
 
-#: catalog/templates/homepage.html:19
+#: catalog/templates/homepage.html:9
 msgid "Home"
 msgstr "Inicio"
 
-#: catalog/templates/homepage.html:20
-msgid "Portfolio"
-msgstr "Portafolio"
+#: catalog/templates/homepage.html:10
+msgid "User guide"
+msgstr "Guía del usuario"
 
-#: catalog/templates/homepage.html:21
-msgid "Services"
-msgstr "Servicios"
-
-#: catalog/templates/homepage.html:22
-msgid "Contact"
-msgstr "Contacto"
-
-#: catalog/templates/homepage.html:25
+#: catalog/templates/homepage.html:13
 msgid "Voting in Decide"
 msgstr "Vota en Decide"
 
-#: catalog/templates/homepage.html:35
+#: catalog/templates/homepage.html:23
 #, fuzzy
 #| msgid "Redirección a los módulos"
-msgid "Redirection to modules"
+msgid "Redirect to modules"
 msgstr "Redirección a los módulos"
+
+#: catalog/templates/homepage.html:113
+#, fuzzy
+#| msgid "Voting in Decide"
+msgid "Votings"
+msgstr "Vota en Decide"
+
+#: decide/settings.py:167
+msgid "Spanish"
+msgstr "Español"
+
+#: decide/settings.py:168
+msgid "English"
+msgstr "Ingles"
+
+#: visualizer/templates/visualizer/pdf.html:77
+#: visualizer/templates/visualizer/visualizer.html:46
+msgid "Votación no comenzada"
+msgstr "Votación no iniciada"
+
+#: visualizer/templates/visualizer/pdf.html:79
+msgid "Votación abierta"
+msgstr "Votación abierta"
+
+#: visualizer/templates/visualizer/pdf.html:81
+#, fuzzy
+#| msgid "Results: "
+msgid "Resultados: "
+msgstr "Resultados: "
+
+#: visualizer/templates/visualizer/visualizer.html:19
+msgid "Dark"
+msgstr "Oscuro"
+
+#: visualizer/templates/visualizer/visualizer.html:20
+msgid "Light"
+msgstr "Claro"
+
+#: visualizer/templates/visualizer/visualizer.html:47
+msgid "Votación en curso"
+msgstr "Votación en curso"
+
+#: visualizer/templates/visualizer/visualizer.html:49
+#, fuzzy
+#| msgid "Results: "
+msgid "Resultados:"
+msgstr "Resultados: "
+
+#: visualizer/templates/visualizer/visualizer.html:54
+msgid "Opción"
+msgstr "Opción"
+
+#: visualizer/templates/visualizer/visualizer.html:55
+msgid "Puntuación"
+msgstr "Puntuación"
+
+#: visualizer/templates/visualizer/visualizer.html:70
+msgid "Ver Gráficas"
+msgstr "Ver Gráficas"
+
+#: visualizer/templates/visualizer/visualizer.html:73
+msgid "Exportar en PDF"
+msgstr "Exportar en PDF"
+
+#~ msgid "Portfolio"
+#~ msgstr "Portafolio"
+
+#~ msgid "Services"
+#~ msgstr "Servicios"
+
+#~ msgid "Contact"
+#~ msgstr "Contacto"
+
+#, fuzzy
+#~| msgid "Voting in Decide"
+#~ msgid "Voting not started"
+#~ msgstr "Vota en Decide"
