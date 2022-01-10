@@ -10,6 +10,7 @@ from mixnet.models import Auth
 from django.contrib.auth.models import User
 from base import mods
 from base.tests import BaseTestCase
+from census.models import Census
 
 import os
 
@@ -65,7 +66,13 @@ class VisualizerTestCase(BaseTestCase):
         user.id = pk
         user.save()
         return user
-    
+
+    def create_census(self, nameC):
+        Census.objects.all().delete()
+        self.census = Census(name=nameC)
+        self.census.id = 1
+        self.census.save()
+
     def test_enpoint_is_avaliable(self):
         self.create_voting()
         response = self.client.get('/visualizer/all', format='json')
@@ -92,3 +99,28 @@ class VisualizerTestCase(BaseTestCase):
         question_desc = str(voting.question).split(':')[0]
         question_desc_response = response.json()['2']['question_desc']
         self.assertEqual(question_desc, question_desc_response)
+
+    def test_users_ok(self):
+        pk = 1
+        self.get_or_create_user(pk)
+        user = self.get_or_create_user(pk)
+        response = self.client.get('/visualizer/allUsers', format='json')
+        user_id = user.id
+        username = user.username
+        username_response = response.json()[str(user_id)]['username']
+        self.assertEqual(username_response, username)
+
+    def test_census_ok(self):
+        cName = "Avila"
+        self.create_census(cName)
+        response = self.client.get('/visualizer/allCensus', format='json')
+        census_response = response.json()["1"]['name']
+        self.assertEqual(cName, census_response)
+    
+    def test_bot_login(self):
+        pk = 1
+        self.get_or_create_user(pk)
+        user = self.get_or_create_user(pk)
+        data={"username":"user","password":"querty"}
+        response = self.client.post('/authentication/login-bot', data, format='json')
+        self.assertEqual(response.status_code, 301)
