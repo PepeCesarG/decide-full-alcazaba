@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'corsheaders',
     'django_filters',
@@ -47,7 +48,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'gateway',
+    
+
 ]
+
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -73,7 +78,7 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-full-alcazaba-main.herokuapp.com'
+BASEURL = 'https://decide-full-alcazaba-develop.herokuapp.com'
 
 APIS = {
     'authentication': BASEURL,
@@ -105,6 +110,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR,'../catalog/templates'),
             os.path.join(BASE_DIR,'../voting/templates'),
+            os.path.join(BASE_DIR,'../authentication/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -113,6 +119,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+           
             ],
         },
     },

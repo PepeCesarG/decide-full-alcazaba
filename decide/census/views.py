@@ -12,8 +12,24 @@ from rest_framework.status import (
 from voting.models import Voting
 from django.contrib.auth.models import User
 from base.perms import UserIsStaff
-from .models import Census
-
+from .models import Census, Voter
+from voting.serializers import SimpleVotingSerializer, VotingSerializer
+import logging, sys
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+class VoterCreate(generics.ListCreateAPIView):
+    serializer_class = VotingSerializer
+    def create(self,request,*args,**kwargs):
+        userv = User.objects.get(username=str(request.data.get('user')))
+        locationv = request.data.get('location')
+        edadv = request.data.get('edad')
+        generov = request.data.get('genero')
+        try:
+            voter = Voter(user=userv, location=locationv, edad=edadv,genero=generov)
+            voter.save()
+        except IntegrityError:
+            return Response('Usuario:'+str(request.data), status=ST_401)
+                
+        return Response(voter.id, status =ST_201)
 
 class CensusCreate(generics.ListCreateAPIView):
     permission_classes = (UserIsStaff,)
@@ -26,11 +42,14 @@ class CensusCreate(generics.ListCreateAPIView):
             census = Census(name = name)
             census.save()
             for voting_id in votings:
-                census.voting_ids.add(Voting.objects.get(pk=voting_id))
+                try:
+                    census.voting_ids.add(Voting.objects.get(pk=voting_id))
+                except:
+                    continue
             for voter_id in voters:
-                census.voter_ids.add(User.objects.get(pk=voter_id))
-        except IntegrityError:
-            return Response('Error try to create census', status=ST_409)
+                census.voter_ids.add(Voter.objects.get(pk=voter_id))
+        except:
+            return Response('Error al crear el censo', status=ST_409)
         return Response('Census created', status=ST_201)
 
     def list(self, request, *args, **kwargs):
@@ -48,18 +67,17 @@ class CensusDetail(generics.RetrieveDestroyAPIView):
         return Response('Voters deleted from census', status=ST_204)
 
     def retrieve(self, request, voting_id, *args, **kwargs):
-        voter = request.GET.get('id')
-        print("La votacion es " + str(voting_id) + " y el votante es " + voter)
+        voter = request.GET.get('voter_id')
+        print('EL votante a comparar es:' +voter)  
+        print("La votacion es " + str(voting_id))
         censuss = Census.objects.all()
         for c in censuss:
             print("Se esta mirando el censo " + c.name)
             voters = c.voter_ids.all()
             votings = c.voting_ids.all()
             print("Los votantes permitidos son " + str(voters.values_list('id', flat=True)))
-            print("Las votaciones que incluye son " + str(votings.values_list('id', flat=True)))            
-                
-            if(any(person.id == int(voter) for person in voters) and any(voting.id == voting_id for voting in votings)):
+            print("Las votaciones que incluye son " + str(votings.values_list('id', flat=True)))              
+            if(any(person.user.id == int(voter) for person in voters) and any(voting.id == voting_id for voting in votings)):
                 print("El votante es valido")
                 return Response('Valid voter')
-            else:
-                return Response('Invalid voter', status=ST_401)
+        return Response('Invalid voter', status=ST_401)

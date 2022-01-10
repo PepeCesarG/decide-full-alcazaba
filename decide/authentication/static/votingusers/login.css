@@ -1,0 +1,32 @@
+.container
+{
+    margin: 3rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container div
+{
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+}
+
+.container input
+{
+    padding: 10px;
+    margin: 5px;
+}
+
+.container ul
+{
+    text-align: center;
+    list-style-type: none;
+}
+
+#error
+{
+    margin: 10px;
+    color: red;
+}

@@ -1,0 +1,133 @@
+<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'index/index.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index/menu.css' %}">
+    <title>DECIDE FULL GUADALFEO</title>
+</head>
+<body>
+    {% include "index/menu.html" %}
+
+    <section id="main">
+        {% if user.id %}
+            {% if not voting_user%}
+                <div class="container">
+                    <h3>Votings Visualizer</h3>
+
+                    {% if not votes %}
+                        <p>There are no votes</p>
+                    {% else %}
+                        <ul class="votes_container">
+                            {% for vote in votes %}
+                                <li class="vote">
+                                    <div>
+                                        <a href="/visualizer/{{vote.id}}">{{vote.name}}</a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <h3 style="margin-top: 10px"> Candidatures </h3>
+
+                {% if not candidaturas %}
+                    <p>There are no Candidatures</p>
+                {% else %}
+                    <ul class="votes_container">
+                        {% for cand in candidaturas %}
+                            {% if cand %}
+                                <li class="vote">
+                                    <div>
+                                        <a href="/candidatures/{{cand.id}}">{{cand.nombre}}</a>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                    <a href="{% url 'auth_register_complete' %}" style="margin-top: 50px">Finish setting your profile here to access the platform</a>
+                </div>
+            {% else %}
+              <div class="container">
+                <h3 style="margin: 10px;">Votings Visualizer</h3>
+
+                {% if not votes %}
+                    <p>There are no votes</p>
+                {% else %}
+                    <ul class="votes_container">
+                        {% for vote in votes %}
+                            <li class="vote">
+                                 <div>
+                                    <a href="/visualizer/{{vote.id}}">{{vote.name}}</a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                  <h3 style="margin-top: 10px"> Candidatures </h3>
+
+                {% if not candidaturas %}
+                    <p>There are no Candidatures</p>
+                {% else %}
+                    <ul class="votes_container">
+                        {% for cand in candidaturas %}
+                            {% if cand %}
+                                <li class="vote">
+                                    <div>
+                                        <a href="/candidatures/{{cand.id}}">{{cand.nombre}}</a>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                  <h3 style="margin: 10px;">Do you want to vote?</h3>
+
+                  <p>Go to <a href="/booth">booths</a> </p>
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="container">
+                <h3>Votings Visualizer</h3>
+
+                {% if not votes %}
+                    <p>There are no votes</p>
+                {% else %}
+                    <ul class="votes_container">
+                        {% for vote in votes %}
+                            <li class="vote">
+                                 <div>
+                                    <a href="/visualizer/{{vote.id}}">{{vote.name}}</a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+               <h3 style="margin-top: 10px"> Candidatures </h3>
+
+                {% if not candidaturas %}
+                    <p>There are no Candidatures</p>
+                {% else %}
+                    <ul class="votes_container">
+                        {% for cand in candidaturas %}
+                            {% if cand %}
+                                <li class="vote">
+                                    <div>
+                                        <a href="/candidatures/{{cand.id}}">{{cand.nombre}}</a>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+            </div>
+        {% endif %}
+    </section>
+
+  </body>
+</html>

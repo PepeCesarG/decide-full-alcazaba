@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
@@ -8,7 +9,10 @@ from rest_framework.authtoken.models import Token
 from base import mods
 
 
+
+
 class AuthTestCase(APITestCase):
+
 
     def setUp(self):
         self.client = APIClient()
@@ -128,3 +132,10 @@ class AuthTestCase(APITestCase):
             sorted(list(response.json().keys())),
             ['token', 'user_pk']
         )
+        
+    def test_register_user_google(self):
+        data = {'username': 'admin', 'password': 'admin'}
+        response = self.client.get('/authentication/sign-in/', data, format='json')
+        self.assertEqual(response.status_code, 200)
+        token = response.json()
+

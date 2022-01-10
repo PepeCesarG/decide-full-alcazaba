@@ -1,0 +1,17 @@
+[
+  {
+    "model": "socialaccount.socialapp",
+    "pk": 1,
+    "fields": {
+      "provider": "google",
+      "name": "Google API",
+      "client_id": "949634819550-fpt7aflj5pj52e5spjppsl940tdshojb.apps.googleusercontent.com",
+      "secret": "7_Hoj6rTtcDppv5Q1zylGZGx",
+      "key": "",
+      "sites": [
+        1
+      ]
+    }
+  }
+]
+    

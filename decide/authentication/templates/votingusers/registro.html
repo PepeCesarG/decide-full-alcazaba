@@ -1,0 +1,57 @@
+<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'index/menu.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'votingusers/registro.css' %}">
+    <title>DECIDE FULL ALCAZABA</title>
+</head>
+<body>
+{% include "index/menu.html" %}
+
+
+<h3>Accede a través de tu cuenta de google </h3>
+            <a href="/authentication/sign-in/"><<img src="{% static '/votingusers/logo_google.png' %}" width="100" height="100" alt=""></a>
+        
+
+<div class="container">
+                         
+        <h2>Formulario de Registro</h2>
+
+        {% if not user.is_authenticated %}
+
+        <div>
+            <form id="registerForm" method="post" action="">
+                {% csrf_token %}
+                <h3>Usuario</h3>
+                {{user_form.as_p}}
+
+                <h3>Usuario votante</h3>
+                {{votinguser_form.as_p}}
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+
+        {% else %}
+
+            {% if not voting_user %}
+
+                <form id="registerForm" method="post" action="">
+                    {% csrf_token %}
+
+                    <h3>Usuario votante</h3>
+                    {{votinguser_form.as_p}}
+                    <input type="submit" value="Submit">
+                </form>
+
+            {% else %}
+
+            <ul>
+                <li>You are already registered.</li>
+            </ul>
+
+            {% endif %}
+        {% endif %}
+    </div>
+
+  </body>
+</html>

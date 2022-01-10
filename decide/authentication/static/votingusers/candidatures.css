@@ -1,0 +1,34 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+.container
+{
+    margin: 3rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container div
+{
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+}
+
+
+.participants
+{
+    margin-top: 10px;
+}
+
+.card
+{
+    list-style-type: none;
+    background-color: rgba(0, 184, 148,0.4);
+    padding: 20px;
+    margin: 10px;
+    border-radius: 5px;
+}
