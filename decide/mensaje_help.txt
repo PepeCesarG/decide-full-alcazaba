@@ -1,6 +1,6 @@
 -> /login <nombre_de_usuario> <contraseña> - Inicia sesión para poder votar
 
--> /logout - Cierra sesión
+-> /logout <id_usuario> - Cierra sesión
 
 -> /vote <id_usuario> <id_votacion> <id_opcion> - Para votar en una votación si se tiene permiso
 
