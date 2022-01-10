@@ -15,6 +15,11 @@ from base.perms import UserIsStaff
 from base.models import Auth
 from census.models import Census
 from django.forms.models import inlineformset_factory
+from rest_framework.views import APIView
+import json
+from voting.models import *
+from mixnet.mixcrypt import *
+from base import mods
 
 class SuccessView(TemplateView):
     template_name = 'voting/success.html'
@@ -23,6 +28,7 @@ QuestionOptionSet = inlineformset_factory(Question, QuestionOption, fields=('num
 
 class QuestionFormView(CreateView):
     model = Question
+    serializer_class = VotingSerializer
     fields = "__all__"
 
 
@@ -166,3 +172,37 @@ class VotingUpdate(generics.RetrieveUpdateDestroyAPIView):
             msg = 'Action not found, try with start, stop or tally'
             st = status.HTTP_400_BAD_REQUEST
         return Response(msg, status=st)
+
+class GiveMeAB(APIView):
+
+    queryset = Voting.objects.all()
+    serializer_class = VotingSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('id', )
+
+    def encrypt_msg(self, msg, v, bits = settings.KEYBITS):
+        pk = v.pub_key
+        p, g, y = (pk.p, pk.g, pk.y)
+        k = MixCrypt(bits=bits)
+        k.k = ElGamal.construct((p, g, y))
+        return k.encrypt(msg)
+
+    def post(self, request, *args, **kwargs):
+        for data in ['id_v', 'question_opt']:
+            if not data in request.data:
+                return Response({'Falta algo miarma'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        votacion = Voting.objects.get(id=request.data.get('id_v'))
+        question = votacion.question
+        dicc = str(request.data.get('question_opt')).replace('\'', '\"')
+        diccionario = json.loads(dicc)
+        opt = QuestionOption(question=question, option=diccionario['option'], number=diccionario['number'])
+        auth, _ = Auth.objects.get_or_create(url=settings.BASEURL, defaults={'me': True, 'name': 'test auth'})
+        
+        ''' ====== Encriptado del voto ======'''
+        a, b = self.encrypt_msg(opt.number, votacion)
+        ''' ================================='''
+        return Response({
+            'a': a,
+            'b': b
+        })

@@ -1,0 +1,8 @@
+-> /login <nombre_de_usuario> <contraseña> - Inicia sesión para poder votar \n
+-> /logout - Cierra sesión \n
+-> /vote <id_usuario> <id_votacion> <id_opcion> - Para votar en una votación si se tiene permiso \n
+-> /votaciones - Muestra un listado con todas las votaciones y sus id \n
+-> /votacion <id_votacion> - Muestra información detallada de la votación \n
+-> /options <id_votacion> - Muestra opciones de votacion \n
+-> /censos - Muestra un listado con todos los censos \n
+-> /usuarios - Muestra un listado con todos los usuarios \n
