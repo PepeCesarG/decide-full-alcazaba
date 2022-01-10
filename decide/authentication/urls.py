@@ -3,8 +3,8 @@ from django.contrib.auth.views import logout
 from rest_framework.authtoken.views import obtain_auth_token
 
 
-from .views import *
 
+from .views import *
 
 
 urlpatterns = [

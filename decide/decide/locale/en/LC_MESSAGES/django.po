@@ -16,127 +16,104 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: authentication/templates/logout.html:5
 msgid "Logout"
-msgstr "Cerrar Sesion"
+msgstr "Logout"
 
 #: authentication/templates/logout.html:8
 msgid "You have signed out."
-msgstr "Has cerrado sesion"
+msgstr "You have signed out"
 
 #: catalog/templates/guia.html:9
 msgid "Inicio"
-msgstr "Inicio"
+msgstr "Home"
 
 #: catalog/templates/guia.html:10
 msgid "Admin"
-msgstr "Administracion"
+msgstr "Admin"
 
 #: catalog/templates/guia.html:13
 msgid "Manual de uso de nuevas funcionalidades"
-msgstr "Manual de uso de nuevas funcionalidades"
+msgstr "New features user manual"
 
 #: catalog/templates/guia.html:23
 msgid "Cómo hacer una votación en Decide"
-msgstr "Cómo hacer una votación en Decide"
+msgstr "How to vote in Decide"
 
 #: catalog/templates/guia.html:110
 msgid "Funcionalidades añadidas"
-msgstr "Funcionalidades añadidas"
+msgstr "Added functionalities"
 
 #: catalog/templates/homepage.html:9
 msgid "Home"
-msgstr "Inicio"
+msgstr "Home"
 
 #: catalog/templates/homepage.html:10
 msgid "User guide"
-msgstr "Guía del usuario"
+msgstr "User guide"
 
 #: catalog/templates/homepage.html:13
 msgid "Voting in Decide"
-msgstr "Vota en Decide"
+msgstr "Voting in Decide"
 
 #: catalog/templates/homepage.html:23
-#, fuzzy
-#| msgid "Redirección a los módulos"
 msgid "Redirect to modules"
-msgstr "Redirección a los módulos"
+msgstr "Redirection to modules"
 
 #: catalog/templates/homepage.html:113
-#, fuzzy
-#| msgid "Voting in Decide"
 msgid "Votings"
-msgstr "Vota en Decide"
+msgstr "Votings"
 
 #: decide/settings.py:167
 msgid "Spanish"
-msgstr "Español"
+msgstr "Spanish"
 
 #: decide/settings.py:168
 msgid "English"
-msgstr "Ingles"
+msgstr "English"
 
 #: visualizer/templates/visualizer/pdf.html:77
 #: visualizer/templates/visualizer/visualizer.html:46
 msgid "Votación no comenzada"
-msgstr "Votación no iniciada"
+msgstr "Voting not started"
 
 #: visualizer/templates/visualizer/pdf.html:79
 msgid "Votación abierta"
-msgstr "Votación abierta"
+msgstr "Open voting"
 
 #: visualizer/templates/visualizer/pdf.html:81
-#, fuzzy
-#| msgid "Results: "
 msgid "Resultados: "
-msgstr "Resultados: "
+msgstr "Results: "
 
 #: visualizer/templates/visualizer/visualizer.html:19
 msgid "Dark"
-msgstr "Oscuro"
+msgstr "Dark"
 
 #: visualizer/templates/visualizer/visualizer.html:20
 msgid "Light"
-msgstr "Claro"
+msgstr "Light"
 
 #: visualizer/templates/visualizer/visualizer.html:47
 msgid "Votación en curso"
-msgstr "Votación en curso"
+msgstr "Voting in progress"
 
 #: visualizer/templates/visualizer/visualizer.html:49
-#, fuzzy
-#| msgid "Results: "
 msgid "Resultados:"
-msgstr "Resultados: "
+msgstr "Results: "
 
 #: visualizer/templates/visualizer/visualizer.html:54
 msgid "Opción"
-msgstr "Opción"
+msgstr "Option"
 
 #: visualizer/templates/visualizer/visualizer.html:55
 msgid "Puntuación"
-msgstr "Puntuación"
+msgstr "Score"
 
 #: visualizer/templates/visualizer/visualizer.html:70
 msgid "Ver Gráficas"
-msgstr "Ver Gráficas"
+msgstr "See Charts"
 
 #: visualizer/templates/visualizer/visualizer.html:73
 msgid "Exportar en PDF"
-msgstr "Exportar en PDF"
-
-#~ msgid "Portfolio"
-#~ msgstr "Portafolio"
-
-#~ msgid "Services"
-#~ msgstr "Servicios"
-
-#~ msgid "Contact"
-#~ msgstr "Contacto"
-
-#, fuzzy
-#~| msgid "Voting in Decide"
-#~ msgid "Voting not started"
-#~ msgstr "Vota en Decide"
+msgstr "Export to PDF"

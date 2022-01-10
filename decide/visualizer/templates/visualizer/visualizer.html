@@ -6,7 +6,7 @@
          href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet"
          href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
-    <link type="text/css" rel="stylesheet" href="{% static "booth/style.css" %}" />
+    <link type="text/css" rel="stylesheet" href="{% static "styleVisualizer.css" %}" />
 
 {% endblock %}
 
@@ -16,8 +16,8 @@
 
         <ul>
             <li>
-                <span>Dark</span>
-                <span>Light</span>
+                <span>{% trans 'Dark' %}</span>
+                <span>{% trans 'Light' %}</span>
 
             </li>
         </ul>
@@ -43,16 +43,16 @@
         <div class="voting container">
             <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
 
-            <h2 v-if="!voting.start_date">Votación no comenzada</h2>
-            <h2 v-else-if="!voting.end_date">Votación en curso</h2>
+            <h2 v-if="!voting.start_date">{% trans 'Votación no comenzada' %}</h2>
+            <h2 v-else-if="!voting.end_date">{% trans 'Votación en curso' %}</h2>
             <div v-else>
-                <h2 class="heading">Resultados:</h2>
+                <h2 class="heading">{% trans 'Resultados:' %}</h2>
 
                 <table class="table table-algo">
                     <thead>
                         <tr class="text-muted">
-                            <th> Opción</th>
-                            <th>Puntuación</th>
+                            <th>{% trans 'Opción' %}</th>
+                            <th>{% trans 'Puntuación' %}</th>
                             <th>Votos</th>
                         </tr>
                     </thead>
@@ -64,9 +64,18 @@
                         </tr>
                     </tbody>
                 </table>
+                <br>
+                <br>
+                <div id="graphics-button">
+                    <button style="background-color: #3b83bd;"><a href="{% url 'graficos' voting_id %}" style="color:#fff;" class="btn btn-link">{% trans 'Ver Gráficas' %}</a></button>
+                </div>
+                <div id="pdf-button">
+                    <button style="background-color: #3b83bd;"><a href="{% url 'pdf' voting_id %}" style="color:#fff;" class="btn btn-link">{% trans 'Exportar en PDF' %}</a></button>
+                </div>
 
         </div>
     </div>
+
 {% endblock %}
 
 {% block extrabody %}

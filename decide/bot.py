@@ -9,8 +9,9 @@ from flask import Flask, request
 TOKEN = '5094239712:AAEWOtGe55YZ1GFjwNpmyrSF_kWPtO1Y2yk'
 bot = telebot.TeleBot(TOKEN)  #Creamos nuestra instancia "bot" a partir de ese TOKEN 
 server = Flask(__name__) 
-url = 'http://localhost:8081/' 
+url = 'http://localhost:8050/' 
 tokenSesion = {} 
+meses = {'01':'Enero', '02':'Febrero', '03':'Marzo', '04':'Abril','05':'Mayo','06':'Junio','07':'Julio','08':'Agosto','09':'Septiembre','10':'Octubre','11':'Noviembre','12':'Diciembre'}
  
 @bot.message_handler(commands=['start']) 
 def comienzo(message): 
@@ -18,38 +19,113 @@ def comienzo(message):
  
 @bot.message_handler(commands=['help']) 
 def send_welcome(message): 
-    bot.send_message(message.chat.id,"Comando 1\nComando2\nComando3\nComando4\nComando5") 
+
+    with open('mensaje_help.txt', 'r') as file:
+        data = file.read().replace('\n', '')
+    bot.send_message(message.chat.id,"Puede utilizar los siguientes comandos: ") 
+    bot.send_message(message.chat.id, data) 
+
  
 @bot.message_handler(commands=["votaciones"]) #devuelve listado de todas las votaciones 
 def resolver(message): 
     try: 
-        url = 'http://localhost:8081/visualizer/all' 
+        url = 'http://localhost:8050/visualizer/all' 
         response = requests.get(url) 
-        print(response.json()) 
+        print(response.json())
         reply = 'Votaciones: \n' 
+        n = 0
         for clave in response.json(): 
-          reply += response.json()[clave]['name'] + ' - ' + clave 
-        bot.reply_to(message, reply) 
+            reply += response.json()[clave]['name'] + ' - ' + clave +'\n'
+            n += 1
+        if(n==0):
+            bot.reply_to(message, "No hay votaciones actualmente.")
+        else:
+            bot.reply_to(message, reply) 
     except Exception: 
         bot.reply_to(message, 'Error llamando a la API') 
- 
+
+@bot.message_handler(commands=["censos"]) #devuelve listado de todos los census
+def resolver(message): 
+    try: 
+        url = 'http://localhost:8050/visualizer/allCensus' 
+        response = requests.get(url) 
+        print(response.json())
+        reply = 'Censos: \n' 
+        n = 0
+        for clave in response.json(): 
+            reply += 'Nombre: ' + response.json()[clave]['name'] + '. Numero votantes: ' + response.json()[clave]['num_voters'] + '\n'
+            n += 1
+        if(n==0):
+            bot.reply_to(message, "No hay censos actualmente.")
+        else:
+            bot.reply_to(message, reply) 
+    except Exception: 
+        bot.reply_to(message, 'Error llamando a la API') 
+
+@bot.message_handler(commands=["usuarios"]) #devuelve listado de todos los usuarios
+def resolver(message): 
+    try: 
+        url = 'http://localhost:8050/visualizer/allUsers' 
+        response = requests.get(url) 
+        print(response.json())
+        reply = 'Usuarios: \n' 
+        n = 0
+        for clave in response.json(): 
+            reply += 'Nombre de usuario: ' + response.json()[clave]['username'] + '. Email: ' + response.json()[clave]['email'] + '\n'
+            n += 1
+        if(n==0):
+            bot.reply_to(message, "No hay usuarios actualmente.")
+        else:
+            bot.reply_to(message, reply) 
+    except Exception: 
+        bot.reply_to(message, 'Error llamando a la API') 
+
+def parse_fecha(fecha):
+    partes = fecha.split('-')
+    fecha_parseada = partes[2][:2] + ' de ' + meses[partes[1]] + ' del ' + partes[0]
+    return fecha_parseada
+
+def ganador(postproc):
+    resultados = {}
+    for opcion in postproc:
+        resultados[opcion["option"]] = opcion["votes"]
+    opcion_ganadora = max(resultados, key=resultados.get)
+    return  'La opcion ganadora ha sido: ' + opcion_ganadora + ' con '+ str(resultados[opcion_ganadora]) + ' votos.' + '\n'
+
 @bot.message_handler(func=lambda msg: msg.text is not None and '/votacion' in msg.text) #devuelve detalle de votacion por su id 
 def detalle(message): 
    try: 
-      url = 'http://localhost:8081/visualizer/all' 
-      response = requests.get(url) 
-      texts = message.text.split(' ') 
-      vid = texts[1] 
-      reply = 'Nombre de la votacion: ' + response.json()[vid]['name'] + '\n' 
-      if(response.json()[vid]['description'] is not None): 
-        reply += 'Descripcion: ' + response.json()[vid]['description'] + '\n' 
-      if(response.json()[vid]['fecha_inicio'] is not None): 
-        reply += 'Fecha de inicio: ' + response.json()[vid]['fecha_inicio'] + '\n' 
-      if(response.json()[vid]['fecha_fin'] is not None): 
-        reply += 'Fecha de finalizacion: ' + response.json()[vid]['fecha_fin'] + '\n' 
-      bot.reply_to(message, reply) 
+        texts = message.text.split(' ') 
+        vid = texts[1] 
+        url = 'http://localhost:8050/visualizer/details/' + vid 
+        response = requests.get(url) 
+        n = 0
+        for atributos in response.json():
+            n += 1
+        if(n != 0):
+            reply = 'Nombre de la votacion: ' + response.json()['name'] + '\n' 
+            if(response.json()['description'] is not None): 
+                reply += 'Descripcion: ' + response.json()['description'] + '\n' 
+            if(response.json()['fecha_inicio'] is not None): 
+                reply += 'Fecha de inicio: ' + parse_fecha(str(response.json()['fecha_inicio'])) + '\n' 
+            if(response.json()['fecha_fin'] is not None): 
+                reply += 'Fecha de finalizacion: ' + parse_fecha(str(response.json()['fecha_fin'])) + '\n' 
+            if(response.json()['question_desc'] is not None):
+                reply += 'Pregunta: ' + response.json()['question_desc'] + '\n'
+            reply += '\n'
+            for opcion in response.json()['question_options']:
+                reply += 'Opcion ' + str(opcion["number"]) + ': ' + opcion["option"] + '\n'
+            reply += '\n'
+            if(response.json()['postproc'] is not None):
+                reply += ganador(response.json()['postproc'])
+            else:
+                reply += 'Aún no existen los resultados de la votación.' + '\n'
+            bot.reply_to(message, reply)
+        else: 
+            bot.reply_to(message, "Esta votación no existe. Por favor indique un id válido (vea /votaciones).")
    except Exception: 
-      bot.reply_to(message, 'Error llamando a la API') 
+        bot.reply_to(message, 'Error llamando a la API') 
+
  
 @bot.message_handler(func=lambda msg: msg.text is not None and '/login' in msg.text) 
  
@@ -62,7 +138,9 @@ def login(message):
       try: 
          user = texts[1].strip() #strip para quitarle los espacios iniciales y finales 
          password = texts[2].strip() 
-         url = 'http://localhost:8081/authentication/login-bot/' 
+
+         url = 'http://localhost:8050/authentication/login-bot/' 
+
          payload={"username":user,"password":password} 
          files=[] 
          headers = {} 
@@ -114,7 +192,9 @@ def logout(message):
       bot.reply_to(message, 'Error llamando a la API') 
  
 def getVotacion(id_votacion): 
-   url = 'http://localhost:8081/voting/?id=' 
+
+   url = 'http://localhost:8050/voting/?id=' 
+
    url+=str(id_votacion) 
    payload={} 
    files={} 
@@ -179,14 +259,18 @@ def votacion(message):
                         question_opt = diccionario_asignacion[opcion] 
                         question_opt_body = str(question_opt).replace('\'', '\"') 
                          
-                        url = "http://localhost:8081/voting/encrypt/" 
+
+                        url = "http://localhost:8050/voting/encrypt/" 
+
                         payload={"question_opt": str(question_opt),"id_v": str(id_votacion)} 
                         files=[] 
                         headers = {} 
                         respuesta = requests.request("POST", url, headers=headers, data=payload, files=files) 
                         listaclaves = list(respuesta.json().values()) 
 
-                        url2 = 'http://localhost:8081/store/store-bot/' 
+
+                        url2 = 'http://localhost:8050/store/store-bot/' 
+
                         payload2={"voting_id":id_votacion,"voter_id":id_usuario, "a":str(listaclaves[0]), "b":str(listaclaves[1])} 
                         files2=[] 
                         headers2 = {} 
@@ -206,7 +290,9 @@ def votacion(message):
          else: 
             bot.send_message(message.chat.id, "No ha iniciado sesion, introduzca el comando: \"/login <usuario> <contraseña>\" para iniciar sesion") 
       else: 
-         bot.reply_to(message, 'Por favor, use correctamente el comando /vote      (ver /help)') 
+
+         bot.reply_to(message, 'Por favor, use correctamente el comando /vote  (ver /help)') 
+
          print("Error en /vote, al introducir el comando: "+str(message.text)) 
    except Exception: 
       bot.reply_to(message, 'Error llamando a la API') 
