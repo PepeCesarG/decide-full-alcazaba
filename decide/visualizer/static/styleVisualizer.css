@@ -1,5 +1,5 @@
 body.dark{
-    background: #262626;
+    background: green;
     color: white;
 }
 body.dark.tr{
@@ -16,7 +16,7 @@ body.dark.tr{
     z-index: 1;
     border: 2px solid #FFF;
     cursor: pointer;
-    background-color: black;
+    background-color: green;
     overflow: hidden;
     border-radius: 10px;
 }
