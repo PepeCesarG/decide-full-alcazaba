@@ -154,6 +154,10 @@ class CensusAdmin(admin.ModelAdmin, ExportCsv):
     def import_csv(self, request):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
+            if (not csv_file.name.endswith('.xlsx')):
+                self.message_user(request, "Your file must have .xlsl extension", level = messages.ERROR)
+                #Redirects to census/census/import-csv, which just reloads the same page
+                return redirect(".")
             aux = csv_file.read()
             #Decodes file if encoded (normal use), not if not encoded (test use)
             csvf = StringIO(aux.decode()) if (type(aux) != type('str')) else StringIO(aux)
@@ -161,6 +165,7 @@ class CensusAdmin(admin.ModelAdmin, ExportCsv):
             try:
                 #Allows rollback in case of exception while parsing CSVs
                 with transaction.atomic():
+                    
                     next(reader)
                     for row in reader:
                         name = row[1]

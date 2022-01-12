@@ -263,7 +263,7 @@ class CensusTestCase(BaseTestCase):
         with open('./census/test_csv/positive.csv') as fp:
             csv = InMemoryUploadedFile(fp, 
                 'TextField',
-                'positive.csv',
+                'positive.xlsx',
                 'CSV',
                 sys.getsizeof(fp), None)
 
@@ -284,7 +284,7 @@ class CensusTestCase(BaseTestCase):
             #Bad census csv
             csv = InMemoryUploadedFile(neg, 
                 'TextField',
-                'negative.csv',
+                'negative.xlsx',
                 'CSV',
                 sys.getsizeof(neg), None)
 
@@ -298,7 +298,7 @@ class CensusTestCase(BaseTestCase):
             self.create_census()
             csv = InMemoryUploadedFile(pos, 
                 'TextField',
-                'positive.csv',
+                'positive.xlsx',
                 'CSV',
                 sys.getsizeof(pos), None)
 
